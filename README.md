@@ -1,6 +1,16 @@
 # NimbleBrain MCP Registry
 
+[![Live Registry](https://img.shields.io/badge/Live%20Registry-registry.nimblebrain.ai-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjE3TDEyIDIyTDIyIDE3VjdMMTIgMloiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=)](https://registry.nimblebrain.ai)
+
+![GitHub License](https://img.shields.io/github/license/NimbleBrainInc/mcp-registry)
+[![Actions status](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/NimbleBrainInc/mcp-registry/actions)
+[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white)](https://www.nimbletools.ai/discord?utm_source=github&utm_medium=readme&utm_campaign=mcp-registry&utm_content=header-badge)
+
 A curated registry of Model Context Protocol (MCP) servers optimized for the NimbleBrain runtime platform.
+
+🌐 **Live at: https://registry.nimblebrain.ai**
+
+📚 **API Docs: https://registry.nimblebrain.ai/docs**
 
 ## Overview
 
@@ -26,9 +36,24 @@ GET /schemas                           # List available schema versions
 GET /schemas/latest/{filename}         # Get latest schema
 GET /schemas/{version}/{filename}      # Get specific schema version
 GET /health                            # Health check
+GET /docs                              # Interactive API documentation (Swagger UI)
 ```
 
-Base URL: `https://registry.nimblebrain.ai`
+**Base URL:** `https://registry.nimblebrain.ai`
+**API Documentation:** `https://registry.nimblebrain.ai/docs` (Interactive Swagger UI)
+
+### Example API Calls
+
+```bash
+# List all servers
+curl https://registry.nimblebrain.ai/v0/servers
+
+# Get specific server
+curl https://registry.nimblebrain.ai/v0/servers/ai.nimblebrain%2Ffinnhub
+
+# Check health
+curl https://registry.nimblebrain.ai/health
+```
 
 ## Server Schema
 
@@ -61,6 +86,23 @@ Our servers follow the [MCP server schema](https://modelcontextprotocol.io/schem
   }
 }
 ```
+
+## Deployment
+
+This registry is automatically deployed to **https://registry.nimblebrain.ai** via GitHub Actions on every push to the main branch.
+
+### Infrastructure
+- **Hosting:** Fly.io
+- **Region:** Global (auto-scaled)
+- **API:** Fastify + Node.js 22
+- **CI/CD:** GitHub Actions
+
+### Deployment Process
+1. Push to `main` branch triggers CI/CD pipeline
+2. Tests and type checking run
+3. Docker image built and pushed to registry
+4. Automatic deployment to Fly.io
+5. Health checks verify deployment
 
 ## Development
 
