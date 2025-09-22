@@ -9,10 +9,14 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
     "generate-types": "tsx scripts/generate-types.ts",
     "validate-servers": "tsx scripts/validate-servers.ts",
     "prebuild": "npm run generate-types",
-    "clean": "rm -rf dist node_modules src/types/generated.ts"
+    "clean": "rm -rf dist node_modules src/types/generated.ts coverage"
   },
   "dependencies": {
     "@fastify/cors": "^11.1.0",
@@ -26,10 +30,14 @@
   "devDependencies": {
     "@apidevtools/swagger-parser": "^12.0.0",
     "@types/node": "^24.5.2",
+    "@types/supertest": "^6.0.3",
+    "@vitest/ui": "^3.2.4",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "quicktype": "^23.2.6",
+    "supertest": "^7.1.4",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   }
 }
