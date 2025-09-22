@@ -4,6 +4,9 @@
   "description": "NimbleBrain MCP Registry API",
   "type": "module",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
