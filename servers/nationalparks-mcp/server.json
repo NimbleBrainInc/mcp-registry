@@ -1,0 +1,193 @@
+{
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
+  "name": "ai.nimblebrain/nationalparks-mcp",
+  "version": "1.0.0",
+  "description": "National Parks Service API for U.S. park info, alerts, campgrounds, and events",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-server-nationalparks",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://github.com/NimbleBrainInc/mcp-server-nationalparks",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/universal-adapter",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "NPS_API_KEY",
+          "description": "National Park Service API key - get one at https://www.nps.gov/subjects/developer/get-started.htm",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "your_nps_api_key_here"
+        },
+        {
+          "name": "LOG_LEVEL",
+          "description": "Logging level (optional, defaults to info)",
+          "isRequired": false,
+          "example": "info"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimblebrain.mcp/v1": {
+      "container": {},
+      "capabilities": {
+        "tools": [
+          {
+            "name": "find_parks",
+            "description": "Search for national parks by state, activities, or other criteria",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "stateCode": {
+                  "type": "string",
+                  "description": "Two-letter state code (e.g., CA, NY)"
+                },
+                "limit": {
+                  "type": "number",
+                  "description": "Maximum number of parks to return (default 50)",
+                  "maximum": 50
+                },
+                "start": {
+                  "type": "number",
+                  "description": "Starting index for pagination (default 0)"
+                },
+                "q": {
+                  "type": "string",
+                  "description": "Search query for park names or descriptions"
+                }
+              }
+            }
+          },
+          {
+            "name": "get_park_details",
+            "description": "Get comprehensive information about a specific national park",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parkCode": {
+                  "type": "string",
+                  "description": "Four-letter park code (e.g., yell for Yellowstone)"
+                }
+              },
+              "required": [
+                "parkCode"
+              ]
+            }
+          },
+          {
+            "name": "get_alerts",
+            "description": "Retrieve current alerts and closures for parks",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parkCode": {
+                  "type": "string",
+                  "description": "Four-letter park code (optional, omit for all parks)"
+                },
+                "limit": {
+                  "type": "number",
+                  "description": "Maximum number of alerts to return",
+                  "maximum": 50
+                }
+              }
+            }
+          },
+          {
+            "name": "get_visitor_centers",
+            "description": "Find visitor center information for parks",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parkCode": {
+                  "type": "string",
+                  "description": "Four-letter park code (optional, omit for all parks)"
+                },
+                "limit": {
+                  "type": "number",
+                  "description": "Maximum number of visitor centers to return",
+                  "maximum": 50
+                }
+              }
+            }
+          },
+          {
+            "name": "get_campgrounds",
+            "description": "Get campground information for parks",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parkCode": {
+                  "type": "string",
+                  "description": "Four-letter park code (optional, omit for all parks)"
+                },
+                "limit": {
+                  "type": "number",
+                  "description": "Maximum number of campgrounds to return",
+                  "maximum": 50
+                }
+              }
+            }
+          },
+          {
+            "name": "get_events",
+            "description": "Search for events happening at national parks",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parkCode": {
+                  "type": "string",
+                  "description": "Four-letter park code (optional, omit for all parks)"
+                },
+                "limit": {
+                  "type": "number",
+                  "description": "Maximum number of events to return",
+                  "maximum": 50
+                },
+                "dateStart": {
+                  "type": "string",
+                  "description": "Start date for event search (YYYY-MM-DD format)"
+                },
+                "dateEnd": {
+                  "type": "string",
+                  "description": "End date for event search (YYYY-MM-DD format)"
+                }
+              }
+            }
+          }
+        ],
+        "resources": [],
+        "prompts": []
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "100m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "50m"
+        }
+      },
+      "deployment": {
+        "protocol": "stdio"
+      }
+    },
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "tool": "yaml-to-json-converter",
+      "version": "1.0.0",
+      "build_info": {
+        "timestamp": "2025-09-22T16:39:08.053047Z",
+        "source": "nimbletools-mcp-registry"
+      }
+    }
+  }
+}

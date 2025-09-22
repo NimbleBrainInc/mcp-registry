@@ -1,0 +1,154 @@
+{
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
+  "name": "ai.nimblebrain/ref-tools-mcp",
+  "version": "1.0.0",
+  "description": "Token-efficient documentation search for AI agents with web content extraction",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/ref-tools/ref-tools-mcp",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://github.com/ref-tools/ref-tools-mcp",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/ref-tools-mcp",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "REF_API_KEY",
+          "description": "API key for accessing documentation search services",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "ref_1234567890abcdef"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimblebrain.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/ping",
+          "port": 8080
+        }
+      },
+      "capabilities": {
+        "tools": [
+          {
+            "name": "ref_search_documentation",
+            "description": "Search technical documentation across web, GitHub, and private resources with intelligent filtering to minimize token usage",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "description": "The search query for documentation"
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional specific sources to search within"
+                },
+                "max_results": {
+                  "type": "integer",
+                  "description": "Maximum number of results to return",
+                  "default": 5,
+                  "minimum": 1,
+                  "maximum": 20
+                }
+              },
+              "required": [
+                "query"
+              ]
+            },
+            "examples": [
+              {
+                "input": {
+                  "query": "Figma Comment REST API",
+                  "max_results": 3
+                },
+                "output": {
+                  "results": [
+                    "Documentation excerpts with relevant API information"
+                  ],
+                  "token_count": 150,
+                  "sources_searched": [
+                    "figma.com/developers"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "ref_read_url",
+            "description": "Fetch and convert webpage content to markdown format for AI consumption",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The URL to fetch and convert to markdown"
+                },
+                "extract_main_content": {
+                  "type": "boolean",
+                  "description": "Whether to extract only main content and skip navigation/ads",
+                  "default": true
+                }
+              },
+              "required": [
+                "url"
+              ]
+            },
+            "examples": [
+              {
+                "input": {
+                  "url": "https://docs.example.com/api",
+                  "extract_main_content": true
+                },
+                "output": {
+                  "content": "# API Documentation\n\nMain content in markdown...",
+                  "word_count": 500,
+                  "title": "API Documentation"
+                }
+              }
+            ]
+          }
+        ],
+        "resources": [],
+        "prompts": []
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "100m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "50m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8080,
+        "mcpPath": "/mcp"
+      }
+    },
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "tool": "yaml-to-json-converter",
+      "version": "1.0.0",
+      "build_info": {
+        "timestamp": "2025-09-22T16:39:08.040610Z",
+        "source": "nimbletools-mcp-registry"
+      }
+    }
+  }
+}

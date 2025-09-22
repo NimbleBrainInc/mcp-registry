@@ -1,0 +1,280 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
+  "title": "NimbleBrain MCP Server",
+  "description": "Extended MCP server schema with NimbleBrain runtime requirements",
+
+  "allOf": [
+    {
+      "$ref": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "_meta": {
+          "type": "object",
+          "properties": {
+            "ai.nimblebrain.mcp/v1": {
+              "$ref": "#/definitions/NimbleToolsRuntime"
+            }
+          }
+        }
+      }
+    }
+  ],
+
+  "definitions": {
+    "NimbleToolsRuntime": {
+      "type": "object",
+      "description": "NimbleTools-specific runtime configuration",
+      "properties": {
+        "container": {
+          "type": "object",
+          "description": "Container-specific configuration (for OCI packages)",
+          "properties": {
+            "healthCheck": {
+              "type": "object",
+              "description": "Health check configuration for HTTP-based containers",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "description": "Health check endpoint path",
+                  "pattern": "^/.*",
+                  "default": "/health"
+                },
+                "port": {
+                  "type": "integer",
+                  "description": "Health check port (if different from service port)",
+                  "minimum": 1,
+                  "maximum": 65535
+                },
+                "interval": {
+                  "type": "integer",
+                  "description": "Health check interval in seconds",
+                  "minimum": 1,
+                  "default": 30
+                },
+                "timeout": {
+                  "type": "integer",
+                  "description": "Health check timeout in seconds",
+                  "minimum": 1,
+                  "default": 5
+                },
+                "retries": {
+                  "type": "integer",
+                  "description": "Number of retries before marking unhealthy",
+                  "minimum": 1,
+                  "default": 3
+                }
+              }
+            },
+            "startupProbe": {
+              "type": "object",
+              "description": "Startup probe for slow-starting containers",
+              "properties": {
+                "initialDelaySeconds": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 10
+                },
+                "periodSeconds": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 10
+                },
+                "failureThreshold": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 3
+                }
+              }
+            }
+          }
+        },
+
+        "resources": {
+          "type": "object",
+          "description": "Container resource requirements",
+          "properties": {
+            "limits": {
+              "type": "object",
+              "properties": {
+                "memory": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(Mi|Gi)$",
+                  "description": "Memory limit (e.g., 256Mi, 1Gi)",
+                  "default": "256Mi"
+                },
+                "cpu": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(m)?$",
+                  "description": "CPU limit (e.g., 100m, 1)",
+                  "default": "100m"
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "properties": {
+                "memory": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(Mi|Gi)$",
+                  "description": "Memory request",
+                  "default": "128Mi"
+                },
+                "cpu": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(m)?$",
+                  "description": "CPU request",
+                  "default": "50m"
+                }
+              }
+            }
+          }
+        },
+
+        "scaling": {
+          "type": "object",
+          "description": "Auto-scaling configuration",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "minReplicas": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 1
+            },
+            "maxReplicas": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 3
+            },
+            "targetCPUUtilizationPercentage": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 100,
+              "default": 80
+            }
+          }
+        },
+
+
+        "observability": {
+          "type": "object",
+          "description": "Monitoring and logging configuration",
+          "properties": {
+            "metrics": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "path": {
+                  "type": "string",
+                  "pattern": "^/.*",
+                  "default": "/metrics"
+                },
+                "port": {
+                  "type": "integer",
+                  "description": "Metrics port (if different from main port)",
+                  "minimum": 1,
+                  "maximum": 65535
+                }
+              }
+            },
+            "tracing": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "endpoint": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "OpenTelemetry collector endpoint"
+                }
+              }
+            }
+          }
+        },
+
+        "security": {
+          "type": "object",
+          "description": "Security configuration",
+          "properties": {
+            "runAsNonRoot": {
+              "type": "boolean",
+              "default": true
+            },
+            "runAsUser": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1000
+            },
+            "readOnlyRootFilesystem": {
+              "type": "boolean",
+              "default": false
+            },
+            "allowPrivilegeEscalation": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+
+        "networking": {
+          "type": "object",
+          "description": "Network configuration",
+          "properties": {
+            "ingress": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "hosts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "hostname"
+                  }
+                },
+                "tls": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "annotations": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "service": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+                  "default": "ClusterIP"
+                },
+                "annotations": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

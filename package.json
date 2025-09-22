@@ -1,0 +1,35 @@
+{
+  "name": "nimblebrain-mcp-registry",
+  "version": "1.0.0",
+  "description": "NimbleBrain MCP Registry API",
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "generate-types": "tsx scripts/generate-types.ts",
+    "validate-servers": "tsx scripts/validate-servers.ts",
+    "prebuild": "npm run generate-types",
+    "clean": "rm -rf dist node_modules src/types/generated.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
+    "dotenv": "^17.2.2",
+    "fastify": "^5.6.1",
+    "glob": "^11.0.3",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "^12.0.0",
+    "@types/node": "^24.5.2",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "quicktype": "^23.2.6",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
