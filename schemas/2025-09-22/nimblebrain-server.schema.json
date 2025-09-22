@@ -273,6 +273,145 @@
               }
             }
           }
+        },
+
+        "registry": {
+          "type": "object",
+          "description": "Registry-specific metadata and display configuration",
+          "properties": {
+            "categories": {
+              "type": "array",
+              "description": "Primary categories for this server",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "ai-ml",
+                  "data",
+                  "development",
+                  "productivity",
+                  "communication",
+                  "finance",
+                  "media",
+                  "security",
+                  "devops",
+                  "monitoring",
+                  "storage",
+                  "web",
+                  "blockchain",
+                  "gaming",
+                  "education",
+                  "health",
+                  "utilities",
+                  "integration",
+                  "analytics",
+                  "automation"
+                ]
+              },
+              "maxItems": 3
+            },
+            "tags": {
+              "type": "array",
+              "description": "Free-form tags for better searchability",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "maxLength": 30
+              },
+              "maxItems": 10
+            },
+            "branding": {
+              "type": "object",
+              "description": "Branding and visual assets",
+              "properties": {
+                "logoUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "URL to logo image (SVG, PNG, or WebP preferred, max 500KB)"
+                },
+                "iconUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "URL to square icon for smaller displays (64x64 or 128x128)"
+                },
+                "primaryColor": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$",
+                  "description": "Primary brand color in hex format"
+                },
+                "accentColor": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$",
+                  "description": "Accent color for highlights in hex format"
+                }
+              }
+            },
+            "documentation": {
+              "type": "object",
+              "description": "Documentation and content configuration",
+              "properties": {
+                "readmeUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "URL to README file (markdown format, auto-fetched from repository if not specified)"
+                },
+                "changelogUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "URL to changelog file"
+                },
+                "licenseUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "URL to license file"
+                },
+                "examplesUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "URL to examples or tutorials"
+                }
+              }
+            },
+            "showcase": {
+              "type": "object",
+              "description": "Showcase and promotional content",
+              "properties": {
+                "featured": {
+                  "type": "boolean",
+                  "description": "Whether this server should be featured in the registry",
+                  "default": false
+                },
+                "screenshots": {
+                  "type": "array",
+                  "description": "Screenshots or demo images",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "caption": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "thumbnail": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Optional thumbnail URL for faster loading"
+                      }
+                    },
+                    "required": ["url"]
+                  },
+                  "maxItems": 5
+                },
+                "videoUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Demo video URL (YouTube, Vimeo, or direct link)"
+                }
+              }
+            }
+          }
         }
       }
     }

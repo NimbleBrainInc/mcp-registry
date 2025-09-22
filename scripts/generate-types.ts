@@ -6,9 +6,10 @@
  */
 
 import { quicktype, InputData, JSONSchemaInput, JSONSchemaStore } from 'quicktype-core';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { existsSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -152,8 +153,14 @@ async function main() {
   try {
     const types = await generateAllTypes();
 
+    // Ensure the types directory exists
+    const typesDir = join(__dirname, '..', 'src', 'types');
+    if (!existsSync(typesDir)) {
+      await mkdir(typesDir, { recursive: true });
+    }
+
     // Write to single file
-    const outputPath = join(__dirname, '..', 'src', 'types', 'generated.ts');
+    const outputPath = join(typesDir, 'generated.ts');
     await writeFile(outputPath, types);
 
     console.log(`\n✅ Generated ${outputPath}`);
