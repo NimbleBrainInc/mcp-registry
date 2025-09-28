@@ -11,13 +11,12 @@ import { readdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import { getReadmeContent, sanitizeReadme } from './readme-fetcher.js';
 import type {
   ErrorResponse,
   MCPServerDetail,
   RegistryMetadata,
   ServerListResponse
-} from './types/generated.js';
+} from './types/api.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -63,7 +62,7 @@ async function loadServers(): Promise<Map<string, MCPServerDetail>> {
         // Add registry metadata if not present
         if (!serverData._meta) {
           serverData._meta = {
-            'ai.nimblebrain.mcp/v1': {}
+            'ai.nimbletools.mcp/v1': {}
           };
         }
 
@@ -76,34 +75,6 @@ async function loadServers(): Promise<Map<string, MCPServerDetail>> {
         };
 
         serverData._meta['io.modelcontextprotocol.registry/official'] = registryMeta;
-
-        // Fetch README content if not already cached
-        if (serverData._meta?.['ai.nimblebrain.mcp/v1']?.registry?.documentation) {
-          const docs = serverData._meta['ai.nimblebrain.mcp/v1'].registry.documentation;
-          if (!docs.readmeContent) {
-            const readmeContent = await getReadmeContent(
-              serverData.repository?.url,
-              docs.readmeUrl
-            );
-            if (readmeContent) {
-              docs.readmeContent = sanitizeReadme(readmeContent);
-            }
-          }
-        } else if (serverData.repository?.url) {
-          // Auto-fetch README from repository if no documentation section exists
-          const readmeContent = await getReadmeContent(serverData.repository.url);
-          if (readmeContent) {
-            if (!serverData._meta['ai.nimblebrain.mcp/v1']) {
-              serverData._meta['ai.nimblebrain.mcp/v1'] = {};
-            }
-            if (!serverData._meta['ai.nimblebrain.mcp/v1'].registry) {
-              serverData._meta['ai.nimblebrain.mcp/v1'].registry = {};
-            }
-            serverData._meta['ai.nimblebrain.mcp/v1'].registry.documentation = {
-              readmeContent: sanitizeReadme(readmeContent)
-            };
-          }
-        }
 
         servers.set(serverId, serverData);
       } catch (error) {
@@ -126,15 +97,17 @@ async function loadServers(): Promise<Map<string, MCPServerDetail>> {
  */
 export async function createServer(): Promise<FastifyInstance> {
   const fastify = Fastify({
-    logger: process.env.NODE_ENV !== 'test' && {
-      transport: {
-        target: 'pino-pretty',
-        options: {
-          translateTime: 'HH:MM:ss Z',
-          ignore: 'pid,hostname'
+    logger: process.env.NODE_ENV === 'production'
+      ? true  // Use default pino logger in production
+      : process.env.NODE_ENV !== 'test' && {
+          transport: {
+            target: 'pino-pretty',
+            options: {
+              translateTime: 'HH:MM:ss Z',
+              ignore: 'pid,hostname'
+            }
+          }
         }
-      }
-    }
   });
 
   // Register CORS
@@ -147,13 +120,13 @@ export async function createServer(): Promise<FastifyInstance> {
   await fastify.register(swagger, {
     openapi: {
       info: {
-        title: 'NimbleBrain MCP Registry API',
+        title: 'NimbleTools MCP Registry API',
         description: 'A curated registry of Model Context Protocol servers',
         version: 'v0'
       },
       servers: [
         {
-          url: process.env.API_URL || 'https://registry.nimblebrain.ai'
+          url: process.env.API_URL || 'https://registry.nimbletools.ai'
         }
       ]
     }
@@ -176,7 +149,7 @@ export async function createServer(): Promise<FastifyInstance> {
   // Root endpoint
   fastify.get('/', async () => {
     return {
-      name: 'NimbleBrain MCP Registry API',
+      name: 'NimbleTools MCP Registry API',
       version: 'v0',
       endpoints: {
         listServers: '/v0/servers',

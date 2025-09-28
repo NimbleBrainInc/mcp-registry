@@ -1,6 +1,6 @@
 {
-  "$schema": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
-  "name": "ai.nimblebrain/reverse-text",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/reverse-text",
   "version": "1.0.0",
   "description": "Text manipulation service with reverse and analysis tools for processing and transforming text data",
   "status": "active",
@@ -17,12 +17,13 @@
       "identifier": "nimbletools/mcp-reverse-text",
       "version": "1.0.0",
       "transport": {
-        "type": "stdio"
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
       }
     }
   ],
   "_meta": {
-    "ai.nimblebrain.mcp/v1": {
+    "ai.nimbletools.mcp/v1": {
       "container": {
         "healthCheck": {
           "path": "/health",
@@ -30,68 +31,9 @@
         }
       },
       "capabilities": {
-        "tools": [
-          {
-            "name": "reverse_text",
-            "description": "Reverse the characters in a text string",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "text": {
-                  "type": "string",
-                  "description": "The text to reverse"
-                }
-              },
-              "required": [
-                "text"
-              ]
-            },
-            "examples": [
-              {
-                "input": {
-                  "text": "Hello World"
-                },
-                "output": "dlroW olleH"
-              },
-              {
-                "input": {
-                  "text": "NimbleTools"
-                },
-                "output": "slooTelmiN"
-              }
-            ]
-          },
-          {
-            "name": "text_info",
-            "description": "Get information about a text string including character count, word count, and other statistics",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "text": {
-                  "type": "string",
-                  "description": "The text to analyze"
-                }
-              },
-              "required": [
-                "text"
-              ]
-            },
-            "examples": [
-              {
-                "input": {
-                  "text": "Hello World"
-                },
-                "output": {
-                  "characters": 11,
-                  "words": 2,
-                  "lines": 1
-                }
-              }
-            ]
-          }
-        ],
-        "resources": [],
-        "prompts": []
+       "tools": true,
+        "resources": false, 
+        "prompts": false
       },
       "resources": {
         "limits": {
@@ -107,14 +49,11 @@
         "protocol": "http",
         "port": 8000,
         "mcpPath": "/mcp"
-      }
-    },
-    "io.modelcontextprotocol.registry/publisher-provided": {
-      "tool": "yaml-to-json-converter",
-      "version": "1.0.0",
-      "build_info": {
-        "timestamp": "2025-09-22T16:39:08.055197Z",
-        "source": "nimbletools-mcp-registry"
+      },
+      "registry": {
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-reverse-text/main/README.md"
+        }
       }
     }
   }

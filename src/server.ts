@@ -1,5 +1,5 @@
 /**
- * NimbleBrain MCP Registry API Server
+ * NimbleTools MCP Registry API Server
  * Main entry point for production
  */
 
@@ -16,7 +16,7 @@ async function start() {
     await fastify.listen({ port: PORT, host: HOST });
 
     console.log(`
-🚀 NimbleBrain MCP Registry API is running!
+🚀 NimbleTools MCP Registry API is running!
 
    API:     http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}
    Docs:    http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/docs

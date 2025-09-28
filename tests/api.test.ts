@@ -124,7 +124,7 @@ describe('MCP Registry API', () => {
     it('should handle URL-encoded server names', async () => {
       const response = await app.inject({
         method: 'GET',
-        url: '/v0/servers/ai.nimblebrain%2Fecho'
+        url: '/v0/servers/ai.nimbletools%2Fecho'
       });
 
       // Either 200 (if exists) or 404 (if not), but should not error
@@ -234,14 +234,14 @@ describe('MCP Registry API', () => {
     it('should include enhanced metadata fields if present', async () => {
       const response = await app.inject({
         method: 'GET',
-        url: '/v0/servers/ai.nimblebrain%2Ffinnhub'
+        url: '/v0/servers/ai.nimbletools%2Ffinnhub'
       });
 
       if (response.statusCode === 200) {
         const body = JSON.parse(response.body);
 
-        if (body._meta?.['ai.nimblebrain.mcp/v1']?.registry) {
-          const registry = body._meta['ai.nimblebrain.mcp/v1'].registry;
+        if (body._meta?.['ai.nimbletools.mcp/v1']?.registry) {
+          const registry = body._meta['ai.nimbletools.mcp/v1'].registry;
 
           // Check for enhanced metadata fields
           if (registry.categories) {

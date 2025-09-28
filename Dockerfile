@@ -14,8 +14,8 @@ COPY src/ ./src/
 COPY scripts/ ./scripts/
 COPY schemas/ ./schemas/
 
-# Generate types and build TypeScript
-RUN npm run generate-types && npm run build
+# Build TypeScript (types generated via prebuild)
+RUN npm run build
 
 # Production stage
 FROM node:22-alpine
@@ -36,6 +36,9 @@ RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
 USER nodejs
+
+# Set production environment
+ENV NODE_ENV=production
 
 # Expose port
 EXPOSE 8080

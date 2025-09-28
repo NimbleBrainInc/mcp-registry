@@ -1,6 +1,6 @@
-# Contributing to NimbleBrain MCP Registry
+# Contributing to NimbleTools MCP Registry
 
-Thank you for your interest in contributing MCP servers to the NimbleBrain registry!
+Thank you for your interest in contributing MCP servers to the NimbleTools registry!
 
 ## Adding a New Server
 
@@ -28,8 +28,8 @@ Your `server.json` must follow our schema:
 
 ```json
 {
-  "$schema": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
-  "name": "ai.nimblebrain/your-server",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
   "description": "Brief description under 100 characters",
   "status": "active",
@@ -60,7 +60,7 @@ Your `server.json` must follow our schema:
     }
   ],
   "_meta": {
-    "ai.nimblebrain.mcp/v1": {
+    "ai.nimbletools.mcp/v1": {
       "container": {
         "healthCheck": {
           "path": "/health",
@@ -141,7 +141,7 @@ Test that your server works:
 
 ### Required Fields
 
-- `name`: Must use namespace format (e.g., `ai.nimblebrain/server-name`)
+- `name`: Must use namespace format (e.g., `ai.nimbletools/server-name`)
 - `version`: Semantic version (e.g., `1.0.0`, not `latest`)
 - `description`: Clear, concise description (max 100 characters)
 - `packages`: At least one package definition with:
@@ -150,9 +150,9 @@ Test that your server works:
   - `version`: Specific version (not `latest`)
   - `transport`: Either `"stdio"` or `"http"`
 
-### NimbleBrain Metadata
+### NimbleTools Metadata
 
-The `_meta["ai.nimblebrain.mcp/v1"]` section should include:
+The `_meta["ai.nimbletools.mcp/v1"]` section should include:
 
 - **capabilities**: List of tools, resources, and prompts your server provides
 - **resources**: Memory and CPU limits/requests for Kubernetes
@@ -188,4 +188,4 @@ If you have questions about contributing, please:
 2. Review the [MCP documentation](https://modelcontextprotocol.io)
 3. Open an issue for discussion
 
-Thank you for contributing to the NimbleBrain MCP ecosystem!
+Thank you for contributing to the NimbleTools MCP ecosystem!

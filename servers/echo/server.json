@@ -1,6 +1,6 @@
 {
-  "$schema": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
-  "name": "ai.nimblebrain/echo",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/echo",
   "version": "1.0.0",
   "description": "Simple echo service for testing MCP protocol functionality, debugging, and development workflows",
   "status": "active",
@@ -17,12 +17,13 @@
       "identifier": "nimbletools/mcp-echo",
       "version": "1.0.0",
       "transport": {
-        "type": "stdio"
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
       }
     }
   ],
   "_meta": {
-    "ai.nimblebrain.mcp/v1": {
+    "ai.nimbletools.mcp/v1": {
       "container": {
         "healthCheck": {
           "path": "/health",
@@ -30,126 +31,9 @@
         }
       },
       "capabilities": {
-        "tools": [
-          {
-            "name": "echo_message",
-            "description": "Echo back a message with optional formatting and metadata",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "description": "The message to echo back"
-                },
-                "uppercase": {
-                  "type": "boolean",
-                  "description": "Whether to convert the message to uppercase",
-                  "default": false
-                }
-              },
-              "required": [
-                "message"
-              ]
-            },
-            "examples": [
-              {
-                "input": {
-                  "message": "Hello World"
-                },
-                "output": {
-                  "original_message": "Hello World",
-                  "echoed_message": "Hello World",
-                  "uppercase_applied": false
-                }
-              },
-              {
-                "input": {
-                  "message": "test",
-                  "uppercase": true
-                },
-                "output": {
-                  "original_message": "test",
-                  "echoed_message": "TEST",
-                  "uppercase_applied": true
-                }
-              }
-            ]
-          },
-          {
-            "name": "echo_with_delay",
-            "description": "Echo back a message after a simulated delay for testing async operations",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "description": "The message to echo back"
-                },
-                "delay_seconds": {
-                  "type": "number",
-                  "description": "Simulated delay in seconds (max 5)",
-                  "default": 1,
-                  "minimum": 0,
-                  "maximum": 5
-                }
-              },
-              "required": [
-                "message"
-              ]
-            },
-            "examples": [
-              {
-                "input": {
-                  "message": "Delayed test",
-                  "delay_seconds": 2
-                },
-                "output": {
-                  "original_message": "Delayed test",
-                  "echoed_message": "Delayed test",
-                  "requested_delay": 2
-                }
-              }
-            ]
-          },
-          {
-            "name": "echo_json",
-            "description": "Echo back structured JSON data with analysis and validation",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "object",
-                  "description": "JSON data to echo back",
-                  "additionalProperties": true
-                }
-              },
-              "required": [
-                "data"
-              ]
-            },
-            "examples": [
-              {
-                "input": {
-                  "data": {
-                    "key1": "value1",
-                    "key2": 123
-                  }
-                },
-                "output": {
-                  "original_data": {
-                    "key1": "value1",
-                    "key2": 123
-                  },
-                  "analysis": {
-                    "key_count": 2
-                  }
-                }
-              }
-            ]
-          }
-        ],
-        "resources": [],
-        "prompts": []
+        "tools": true,
+        "resources": false, 
+        "prompts": false
       },
       "resources": {
         "limits": {
@@ -165,14 +49,11 @@
         "protocol": "http",
         "port": 8000,
         "mcpPath": "/mcp"
-      }
-    },
-    "io.modelcontextprotocol.registry/publisher-provided": {
-      "tool": "yaml-to-json-converter",
-      "version": "1.0.0",
-      "build_info": {
-        "timestamp": "2025-09-22T16:39:08.037181Z",
-        "source": "nimbletools-mcp-registry"
+      },
+      "registry": {
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-echo/main/README.md"
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 {
-  "name": "nimblebrain-mcp-registry",
+  "name": "nimbletools-mcp-registry",
   "version": "1.0.0",
   "description": "NimbleBrain MCP Registry API",
   "type": "module",
@@ -16,8 +16,8 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "generate-types": "tsx scripts/generate-types.ts",
     "validate-servers": "tsx scripts/validate-servers.ts",
+    "generate-types": "tsx scripts/generate-types.ts",
     "prebuild": "npm run generate-types",
     "clean": "rm -rf dist node_modules src/types/generated.ts coverage"
   },
@@ -37,6 +37,7 @@
     "@vitest/ui": "^3.2.4",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
+    "json-schema-to-typescript": "^15.0.4",
     "quicktype": "^23.2.6",
     "supertest": "^7.1.4",
     "tsx": "^4.20.5",

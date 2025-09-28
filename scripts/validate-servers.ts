@@ -4,17 +4,17 @@
  * Validate all server.json files against the nimbletools-server.schema.json
  */
 
-import { readdir, readFile } from 'fs/promises';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import { readdir, readFile } from 'fs/promises';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const SERVERS_DIR = join(__dirname, '..', 'servers');
-const SCHEMA_PATH = join(__dirname, '..', 'schemas', '2025-09-22', 'nimblebrain-server.schema.json');
+const SCHEMA_PATH = join(__dirname, '..', 'schemas', '2025-09-22', 'nimbletools-server.schema.json');
 
 // Colors for console output
 const colors = {

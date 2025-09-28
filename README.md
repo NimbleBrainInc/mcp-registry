@@ -1,6 +1,6 @@
 # NimbleBrain MCP Registry
 
-[![Live Registry](https://img.shields.io/badge/Live%20Registry-registry.nimblebrain.ai-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjE3TDEyIDIyTDIyIDE3VjdMMTIgMloiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=)](https://registry.nimblebrain.ai)
+[![Live Registry](https://img.shields.io/badge/Live%20Registry-registry.nimbletools.ai-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjE3TDEyIDIyTDIyIDE3VjdMMTIgMloiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=)](https://registry.nimbletools.ai)
 
 ![GitHub License](https://img.shields.io/github/license/NimbleBrainInc/mcp-registry)
 [![Actions status](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/NimbleBrainInc/mcp-registry/actions)
@@ -8,9 +8,9 @@
 
 A curated registry of Model Context Protocol (MCP) servers optimized for the NimbleBrain runtime platform.
 
-🌐 **Live at: https://registry.nimblebrain.ai**
+🌐 **Live at: https://registry.nimbletools.ai**
 
-📚 **API Docs: https://registry.nimblebrain.ai/docs**
+📚 **API Docs: https://registry.nimbletools.ai/docs**
 
 ## Overview
 
@@ -39,20 +39,20 @@ GET /health                            # Health check
 GET /docs                              # Interactive API documentation (Swagger UI)
 ```
 
-**Base URL:** `https://registry.nimblebrain.ai`
-**API Documentation:** `https://registry.nimblebrain.ai/docs` (Interactive Swagger UI)
+**Base URL:** `https://registry.nimbletools.ai`
+**API Documentation:** `https://registry.nimbletools.ai/docs` (Interactive Swagger UI)
 
 ### Example API Calls
 
 ```bash
 # List all servers
-curl https://registry.nimblebrain.ai/v0/servers
+curl https://registry.nimbletools.ai/v0/servers
 
 # Get specific server
-curl https://registry.nimblebrain.ai/v0/servers/ai.nimblebrain%2Ffinnhub
+curl https://registry.nimbletools.ai/v0/servers/ai.nimbletools%2Ffinnhub
 
 # Check health
-curl https://registry.nimblebrain.ai/health
+curl https://registry.nimbletools.ai/health
 ```
 
 ## Server Schema
@@ -61,8 +61,8 @@ Our servers follow the [MCP server schema](https://modelcontextprotocol.io/schem
 
 ```json
 {
-  "$schema": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
-  "name": "ai.nimblebrain/example",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/example",
   "version": "1.0.0",
   "description": "Example MCP server",
   "packages": [{
@@ -72,7 +72,7 @@ Our servers follow the [MCP server schema](https://modelcontextprotocol.io/schem
     "transport": { "type": "stdio" }
   }],
   "_meta": {
-    "ai.nimblebrain.mcp/v1": {
+    "ai.nimbletools.mcp/v1": {
       "container": {
         "healthCheck": {
           "path": "/health",
@@ -89,7 +89,7 @@ Our servers follow the [MCP server schema](https://modelcontextprotocol.io/schem
 
 ## Deployment
 
-This registry is automatically deployed to **https://registry.nimblebrain.ai** via GitHub Actions on every push to the main branch.
+This registry is automatically deployed to **https://registry.nimbletools.ai** via GitHub Actions on every push to the main branch.
 
 ### Infrastructure
 - **Hosting:** Fly.io
@@ -134,10 +134,10 @@ npm test
 
 ```bash
 # Build Docker image
-docker build -t nimblebrain-registry .
+docker build -t nimbletools-registry .
 
 # Run container
-docker run -p 8080:8080 nimblebrain-registry
+docker run -p 8080:8080 nimbletools-registry
 ```
 
 ## Contributing
