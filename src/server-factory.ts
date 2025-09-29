@@ -97,17 +97,7 @@ async function loadServers(): Promise<Map<string, MCPServerDetail>> {
  */
 export async function createServer(): Promise<FastifyInstance> {
   const fastify = Fastify({
-    logger: process.env.NODE_ENV === 'production'
-      ? true  // Use default pino logger in production
-      : process.env.NODE_ENV !== 'test' && {
-          transport: {
-            target: 'pino-pretty',
-            options: {
-              translateTime: 'HH:MM:ss Z',
-              ignore: 'pid,hostname'
-            }
-          }
-        }
+    logger: process.env.NODE_ENV !== 'test'  // Enable logging except in test environment
   });
 
   // Register CORS

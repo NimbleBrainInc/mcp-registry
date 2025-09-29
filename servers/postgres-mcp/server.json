@@ -1,25 +1,32 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
-  "name": "ai.nimbletools/echo",
+  "name": "crystaldba/postgres-mcp",
   "version": "1.0.0",
-  "description": "Simple echo service for testing MCP protocol functionality, debugging, and development workflows",
+  "description": "PostgreSQL MCP server providing configurable read/write access and performance analysis for database optimization",
   "status": "active",
   "repository": {
-    "url": "https://github.com/NimbleBrainInc/mcp-echo",
+    "url": "https://github.com/crystaldba/postgres-mcp",
     "source": "github",
     "branch": "main"
   },
-  "websiteUrl": "https://github.com/NimbleBrainInc/mcp-echo",
+  "websiteUrl": "https://github.com/crystaldba/postgres-mcp",
   "packages": [
     {
       "registryType": "oci",
-      "registryBaseUrl": "https://docker.io",
-      "identifier": "nimbletools/mcp-echo",
-      "version": "1.0.0",
+      "registryBaseUrl": "https://ghcr.io",
+      "identifier": "crystaldba/postgres-mcp",
+      "version": "latest",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
-      }
+      },
+      "environment": [
+        {
+          "name": "DATABASE_URI",
+          "description": "PostgreSQL connection string (e.g., postgresql://username:password@localhost:5432/dbname)",
+          "required": true
+        }
+      ]
     }
   ],
   "_meta": {
@@ -32,17 +39,17 @@
       },
       "capabilities": {
         "tools": true,
-        "resources": false, 
+        "resources": false,
         "prompts": false
       },
       "resources": {
         "limits": {
-          "memory": "256Mi",
-          "cpu": "100m"
+          "memory": "512Mi",
+          "cpu": "200m"
         },
         "requests": {
-          "memory": "128Mi",
-          "cpu": "50m"
+          "memory": "256Mi",
+          "cpu": "100m"
         }
       },
       "deployment": {
@@ -52,10 +59,7 @@
       },
       "registry": {
         "documentation": {
-          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-echo/main/README.md"
-        },
-        "branding": {
-          "iconUrl": "https://placehold.co/200"
+          "readmeUrl": "https://raw.githubusercontent.com/crystaldba/postgres-mcp/main/README.md"
         }
       }
     }
