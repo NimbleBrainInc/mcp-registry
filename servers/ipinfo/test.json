@@ -1,0 +1,16 @@
+{
+  "skip": false,
+  "environment": {
+    "IPINFO_API_TOKEN": "${IPINFO_API_TOKEN}"
+  },
+  "tests": [
+    {
+      "name": "Get account info",
+      "tool": "get_account_info",
+      "arguments": {},
+      "expect": {
+        "type": "json"
+      }
+    }
+  ]
+}
