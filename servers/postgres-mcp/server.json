@@ -1,8 +1,8 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
-  "name": "crystaldba/postgres-mcp",
-  "version": "1.0.0",
-  "description": "PostgreSQL MCP server providing configurable read/write access and performance analysis for database optimization",
+  "name": "ai.crystaldba/postgres-mcp",
+  "version": "0.3.0",
+  "description": "PostgreSQL MCP server with configurable read/write access and performance analysis",
   "status": "active",
   "repository": {
     "url": "https://github.com/crystaldba/postgres-mcp",
@@ -13,18 +13,29 @@
   "packages": [
     {
       "registryType": "oci",
-      "registryBaseUrl": "https://ghcr.io",
-      "identifier": "crystaldba/postgres-mcp",
-      "version": "latest",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/universal-adapter",
+      "version": "dev",
       "transport": {
-        "type": "streamable-http",
-        "url": "https://mcp.nimbletools.ai/mcp"
+        "type": "stdio"
       },
-      "environment": [
+      "runtimeHint": "uvx",
+      "runtimeArguments": [
+        {
+          "type": "positional",
+          "value": "postgres-mcp"
+        },
+        {
+          "type": "positional",
+          "value": "--access-mode=unrestricted"
+        }
+      ],
+      "environmentVariables": [
         {
           "name": "DATABASE_URI",
           "description": "PostgreSQL connection string (e.g., postgresql://username:password@localhost:5432/dbname)",
-          "required": true
+          "isRequired": true, 
+          "isSecret": true
         }
       ]
     }
@@ -33,8 +44,7 @@
     "ai.nimbletools.mcp/v1": {
       "container": {
         "healthCheck": {
-          "path": "/health",
-          "port": 8000
+          "enabled": false
         }
       },
       "capabilities": {
@@ -45,11 +55,11 @@
       "resources": {
         "limits": {
           "memory": "512Mi",
-          "cpu": "200m"
+          "cpu": "500m"
         },
         "requests": {
-          "memory": "256Mi",
-          "cpu": "100m"
+          "memory": "128Mi",
+          "cpu": "50m"
         }
       },
       "deployment": {
@@ -57,7 +67,8 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
-      "registry": {
+      "display": {
+        "name": "PostgreSQL",
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/crystaldba/postgres-mcp/main/README.md"
         }

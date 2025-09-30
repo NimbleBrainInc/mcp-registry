@@ -9,7 +9,7 @@
     "source": "github",
     "branch": "main"
   },
-  "websiteUrl": "https://github.com/NimbleBrainInc/mcp-finnhub",
+  "websiteUrl": "https://finnhub.io/",
   "packages": [
     {
       "registryType": "oci",
@@ -59,7 +59,8 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
-      "registry": {
+      "display": {
+        "name": "Finnhub",
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-finnhub/main/README.md"
         }

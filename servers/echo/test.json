@@ -1,0 +1,17 @@
+{
+  "skip": false,
+  "tests": [
+    {
+      "name": "Echo basic message",
+      "tool": "echo_message",
+      "arguments": {
+        "message": "Hello E2E Test"
+      },
+      "expect": {
+        "type": "json",
+        "field": "echoed_message",
+        "equals": "Hello E2E Test"
+      }
+    }
+  ]
+}

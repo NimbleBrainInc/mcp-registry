@@ -1,0 +1,15 @@
+{
+  "environment": {
+    "NPS_API_KEY": "${NPS_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Find Parks",
+      "tool": "findParks",
+      "arguments": {},
+      "expect": {
+        "type": "any"
+      }
+    }
+  ]
+}

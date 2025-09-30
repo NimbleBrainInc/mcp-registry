@@ -9,7 +9,7 @@
     "source": "github",
     "branch": "main"
   },
-  "websiteUrl": "https://github.com/NimbleBrainInc/mcp-server-nationalparks",
+  "websiteUrl": "https://www.nps.gov/subjects/developer/api-documentation.htm",
   "packages": [
     {
       "registryType": "oci",
@@ -57,8 +57,8 @@
       },
       "resources": {
         "limits": {
-          "memory": "256Mi",
-          "cpu": "100m"
+          "memory": "512Mi",
+          "cpu": "500m"
         },
         "requests": {
           "memory": "128Mi",
@@ -68,7 +68,8 @@
       "deployment": {
         "protocol": "stdio"
       },
-      "registry": {
+      "display": {
+        "name": "National Parks",
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-server-nationalparks/main/README.md"
         }

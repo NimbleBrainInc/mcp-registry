@@ -128,7 +128,57 @@ npm run build
 
 # Run tests
 npm test
+
+# Run end-to-end tests
+npm run test:e2e                    # Test all servers
+npm run test:e2e -- --server=echo   # Test specific server
 ```
+
+### End-to-End Testing
+
+The registry includes a comprehensive E2E testing framework that validates servers from deployment through MCP connectivity:
+
+```bash
+# Test all servers
+npm run test:e2e
+
+# Test a specific server
+npm run test:e2e -- --server=echo
+
+# Test against a different API endpoint
+npm run test:e2e http://api.custom.dev
+```
+
+**Test Fixtures**: Each server can define custom tests in `servers/{name}/test.json`:
+
+```json
+{
+  "environment": {
+    "API_KEY": "${API_KEY}"
+  },
+  "tests": [{
+    "name": "Test description",
+    "tool": "tool_name",
+    "arguments": { "param": "value" },
+    "expect": { "type": "text", "contains": "expected" }
+  }]
+}
+```
+
+**Environment Variables**: Create `.env.e2e` for secrets:
+
+```bash
+cp .env.e2e.example .env.e2e
+# Edit .env.e2e with your API keys
+```
+
+The test runner automatically:
+- Creates workspaces
+- Sets secrets from fixtures
+- Deploys servers
+- Validates MCP connectivity
+- Runs custom tool tests
+- Cleans up resources
 
 ### Docker
 

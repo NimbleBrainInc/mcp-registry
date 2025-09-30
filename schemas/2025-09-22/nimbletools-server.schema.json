@@ -36,6 +36,11 @@
               "type": "object",
               "description": "Health check configuration for HTTP-based containers",
               "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Whether health checks are enabled",
+                  "default": true
+                },
                 "path": {
                   "type": "string",
                   "description": "Health check endpoint path",
@@ -295,10 +300,15 @@
           }
         },
 
-        "registry": {
+        "display": {
           "type": "object",
-          "description": "Registry-specific metadata and display configuration",
+          "description": "Display configuration for how the server is presented in the registry",
           "properties": {
+            "name": {
+              "type": "string",
+              "description": "Human-readable display name for the server (e.g., 'Echo', 'Finnhub')",
+              "maxLength": 50
+            },
             "categories": {
               "type": "array",
               "description": "Primary categories for this server",

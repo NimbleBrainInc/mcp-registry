@@ -50,7 +50,8 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
-      "registry": {
+      "display": {
+        "name": "Reverse Text",
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-reverse-text/main/README.md"
         }

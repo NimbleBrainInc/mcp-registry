@@ -59,7 +59,8 @@
         "port": 8080,
         "mcpPath": "/mcp"
       },
-      "registry": {
+      "display": {
+        "name": "Ref Tools",
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/ref-tools/ref-tools-mcp/main/README.md"
         }

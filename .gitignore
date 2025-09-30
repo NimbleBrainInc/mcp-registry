@@ -14,6 +14,7 @@ src/types/generated.ts
 .env
 .env.local
 .env.*.local
+.env.e2e
 
 # OS
 .DS_Store
@@ -46,4 +47,4 @@ coverage/
 *.tmp
 temp/
 
-.cache
+.cache.env.e2e

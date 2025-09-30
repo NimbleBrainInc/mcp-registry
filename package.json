@@ -16,6 +16,7 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
+    "test:e2e": "tsx e2e/test.ts",
     "validate-servers": "tsx scripts/validate-servers.ts",
     "generate-types": "tsx scripts/generate-types.ts",
     "prebuild": "npm run generate-types",

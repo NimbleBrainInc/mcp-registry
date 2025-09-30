@@ -1,6 +1,6 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
-  "name": "ai.nimbletools/tavily-mcp",
+  "name": "com.tavily/tavily-mcp",
   "version": "0.2.9",
   "description": "Real-time web search, extract, map & crawl capabilities for web intelligence",
   "status": "active",
@@ -53,13 +53,13 @@
       "container": {},
       "capabilities": {
         "tools": true,
-        "resources": false, 
+        "resources": false,
         "prompts": false
       },
       "resources": {
         "limits": {
-          "memory": "256Mi",
-          "cpu": "100m"
+          "memory": "512Mi",
+          "cpu": "500m"
         },
         "requests": {
           "memory": "128Mi",
@@ -69,7 +69,8 @@
       "deployment": {
         "protocol": "stdio"
       },
-      "registry": {
+      "display": {
+        "name": "Tavily",
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/tavily-ai/tavily-mcp/main/README.md"
         }

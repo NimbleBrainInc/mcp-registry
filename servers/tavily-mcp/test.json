@@ -1,0 +1,19 @@
+{
+  "skip": false,
+  "skipReason": "Requires TAVILY_API_KEY",
+  "environment": {
+    "TAVILY_API_KEY": "${TAVILY_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Search web for AI news",
+      "tool": "tavily-search",
+      "arguments": {
+        "query": "artificial intelligence"
+      },
+      "expect": {
+        "type": "any"
+      }
+    }
+  ]
+}
