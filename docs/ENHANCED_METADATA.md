@@ -40,12 +40,12 @@ The registry supports the following standard categories:
 
 ## Usage Example
 
-Add the enhanced metadata to your `server.json` file within the `_meta["ai.nimblebrain.mcp/v1"].registry` section:
+Add the enhanced metadata to your `server.json` file within the `_meta["ai.nimbletools.mcp/v1"].registry` section:
 
 ```json
 {
-  "$schema": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
-  "name": "ai.nimblebrain/your-server",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
   "description": "Your MCP server description",
   "repository": {
@@ -54,7 +54,7 @@ Add the enhanced metadata to your `server.json` file within the `_meta["ai.nimbl
     "branch": "main"
   },
   "_meta": {
-    "ai.nimblebrain.mcp/v1": {
+    "ai.nimbletools.mcp/v1": {
       "registry": {
         "categories": ["development", "productivity"],
         "tags": ["code", "automation", "assistant", "tools"],
@@ -128,11 +128,11 @@ When fetching server details, the enhanced metadata is included in the response:
 
 ```json
 {
-  "name": "ai.nimblebrain/your-server",
+  "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
   "description": "Your server description",
   "_meta": {
-    "ai.nimblebrain.mcp/v1": {
+    "ai.nimbletools.mcp/v1": {
       "registry": {
         "categories": ["development"],
         "tags": ["code", "tools"],
@@ -152,7 +152,7 @@ When fetching server details, the enhanced metadata is included in the response:
 To migrate existing servers to use enhanced metadata:
 
 1. Update your `server.json` schema reference to the latest version
-2. Add the `registry` section under `_meta["ai.nimblebrain.mcp/v1"]`
+2. Add the `registry` section under `_meta["ai.nimbletools.mcp/v1"]`
 3. Start with categories and tags (most important for discoverability)
 4. Add branding assets as they become available
 5. The README will be fetched automatically if you have a repository URL

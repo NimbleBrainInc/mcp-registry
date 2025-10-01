@@ -1,0 +1,19 @@
+{
+  "skip": false,
+  "skipReason": "Requires FINNHUB_API_KEY",
+  "environment": {
+    "FINNHUB_API_KEY": "${FINNHUB_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Get stock quote",
+      "tool": "get_stock_quote",
+      "arguments": {
+        "symbol": "AAPL"
+      },
+      "expect": {
+        "type": "json"
+      }
+    }
+  ]
+}

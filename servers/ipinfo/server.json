@@ -1,32 +1,32 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
-  "name": "ai.nimbletools/finnhub",
-  "version": "1.0.0",
-  "description": "Financial market data API with real-time quotes, company profiles, and news",
+  "name": "ai.nimbletools/ipinfo",
+  "version": "0.2.0",
+  "description": "IP geolocation, network intelligence, ASN lookup, privacy detection, and WHOIS queries",
   "status": "active",
   "repository": {
-    "url": "https://github.com/NimbleBrainInc/mcp-finnhub",
+    "url": "https://github.com/NimbleBrainInc/mcp-ipinfo",
     "source": "github",
     "branch": "main"
   },
-  "websiteUrl": "https://finnhub.io/",
+  "websiteUrl": "https://ipinfo.io/",
   "packages": [
     {
       "registryType": "oci",
       "registryBaseUrl": "https://docker.io",
-      "identifier": "nimbletools/mcp-finnhub",
-      "version": "1.0.0",
+      "identifier": "nimbletools/mcp-ipinfo",
+      "version": "0.2.0",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
       },
       "environmentVariables": [
         {
-          "name": "FINNHUB_API_KEY",
-          "description": "Finnhub API key for accessing financial data (get free key at finnhub.io)",
-          "isRequired": true,
+          "name": "IPINFO_API_TOKEN",
+          "description": "IPInfo API token for accessing geolocation services (get free token at ipinfo.io)",
+          "isRequired": false,
           "isSecret": true,
-          "example": "your_finnhub_api_key_here"
+          "example": "your_ipinfo_token_here"
         }
       ]
     }
@@ -60,18 +60,22 @@
         "mcpPath": "/mcp"
       },
       "display": {
-        "name": "Finnhub",
+        "name": "IPInfo",
         "category": "data-intelligence",
         "tags": [
-          "finance",
-          "stocks",
-          "market-data",
-          "real-time",
-          "news",
-          "requires-api-key"
+          "geolocation",
+          "network",
+          "ip-lookup",
+          "privacy",
+          "whois",
+          "requires-api-key",
+          "free-tier"
         ],
         "documentation": {
-          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-finnhub/main/README.md"
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-ipinfo/main/README.md"
+        },
+        "branding": {
+          "iconUrl": "https://ipinfo.io/static/images/favicon.ico"
         }
       }
     }

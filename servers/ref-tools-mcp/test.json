@@ -1,0 +1,19 @@
+{
+  "skip": false,
+  "skipReason": "Requires REF_API_KEY",
+  "environment": {
+    "REF_API_KEY": "${REF_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Search Figma documentation",
+      "tool": "ref_search_documentation",
+      "arguments": {
+        "query": "Figma Comment REST API"
+      },
+      "expect": {
+        "type": "any"
+      }
+    }
+  ]
+}

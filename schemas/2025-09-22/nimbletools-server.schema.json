@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://registry.nimblebrain.ai/schemas/2025-09-22/nimblebrain-server.schema.json",
-  "title": "NimbleBrain MCP Server",
-  "description": "Extended MCP server schema with NimbleBrain runtime requirements",
+  "$id": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "title": "NimbleTools MCP Server",
+  "description": "Extended MCP server schema with NimbleTools runtime requirements",
 
   "allOf": [
     {
@@ -14,7 +14,7 @@
         "_meta": {
           "type": "object",
           "properties": {
-            "ai.nimblebrain.mcp/v1": {
+            "ai.nimbletools.mcp/v1": {
               "$ref": "#/definitions/NimbleToolsRuntime"
             }
           }
@@ -36,6 +36,11 @@
               "type": "object",
               "description": "Health check configuration for HTTP-based containers",
               "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Whether health checks are enabled",
+                  "default": true
+                },
                 "path": {
                   "type": "string",
                   "description": "Health check endpoint path",
@@ -275,39 +280,46 @@
           }
         },
 
-        "registry": {
+        "capabilities": {
           "type": "object",
-          "description": "Registry-specific metadata and display configuration",
+          "description": "MCP server capabilities",
+          "required": ["tools", "resources", "prompts"],
           "properties": {
-            "categories": {
-              "type": "array",
-              "description": "Primary categories for this server",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "ai-ml",
-                  "data",
-                  "development",
-                  "productivity",
-                  "communication",
-                  "finance",
-                  "media",
-                  "security",
-                  "devops",
-                  "monitoring",
-                  "storage",
-                  "web",
-                  "blockchain",
-                  "gaming",
-                  "education",
-                  "health",
-                  "utilities",
-                  "integration",
-                  "analytics",
-                  "automation"
-                ]
-              },
-              "maxItems": 3
+            "tools": {
+              "type": "boolean",
+              "description": "Whether the server provides tools"
+            },
+            "resources": {
+              "type": "boolean",
+              "description": "Whether the server provides resources"
+            },
+            "prompts": {
+              "type": "boolean",
+              "description": "Whether the server provides prompts"
+            }
+          }
+        },
+
+        "display": {
+          "type": "object",
+          "description": "Display configuration for how the server is presented in the registry",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Human-readable display name for the server (e.g., 'Echo', 'Finnhub')",
+              "maxLength": 50
+            },
+            "category": {
+              "type": "string",
+              "description": "Primary category for this server",
+              "enum": [
+                "ai-ml",
+                "data-intelligence",
+                "communication-collaboration",
+                "business-finance",
+                "developer-tools",
+                "infrastructure-data"
+              ]
             },
             "tags": {
               "type": "array",

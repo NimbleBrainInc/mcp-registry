@@ -1,0 +1,16 @@
+{
+  "skip": false,
+  "tests": [
+    {
+      "name": "Reverse 'hello world'",
+      "tool": "reverse_text",
+      "arguments": {
+        "text": "hello world"
+      },
+      "expect": {
+        "type": "text",
+        "contains": "dlrow olleh"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "skip": false,
+  "skipReason": "Requires DATABASE_URL",
+  "environment": {
+    "DATABASE_URI": "${DATABASE_URI}"
+  },
+  "tests": [
+    {
+      "name": "List schemas",
+      "tool": "list_schemas",
+      "arguments": {},
+      "expect": {
+        "type": "any"
+      }
+    }
+  ]
+}

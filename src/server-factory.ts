@@ -11,13 +11,12 @@ import { readdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import { getReadmeContent, sanitizeReadme } from './readme-fetcher.js';
 import type {
   ErrorResponse,
   MCPServerDetail,
   RegistryMetadata,
   ServerListResponse
-} from './types/generated.js';
+} from './types/api.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -63,7 +62,7 @@ async function loadServers(): Promise<Map<string, MCPServerDetail>> {
         // Add registry metadata if not present
         if (!serverData._meta) {
           serverData._meta = {
-            'ai.nimblebrain.mcp/v1': {}
+            'ai.nimbletools.mcp/v1': {}
           };
         }
 
@@ -76,34 +75,6 @@ async function loadServers(): Promise<Map<string, MCPServerDetail>> {
         };
 
         serverData._meta['io.modelcontextprotocol.registry/official'] = registryMeta;
-
-        // Fetch README content if not already cached
-        if (serverData._meta?.['ai.nimblebrain.mcp/v1']?.registry?.documentation) {
-          const docs = serverData._meta['ai.nimblebrain.mcp/v1'].registry.documentation;
-          if (!docs.readmeContent) {
-            const readmeContent = await getReadmeContent(
-              serverData.repository?.url,
-              docs.readmeUrl
-            );
-            if (readmeContent) {
-              docs.readmeContent = sanitizeReadme(readmeContent);
-            }
-          }
-        } else if (serverData.repository?.url) {
-          // Auto-fetch README from repository if no documentation section exists
-          const readmeContent = await getReadmeContent(serverData.repository.url);
-          if (readmeContent) {
-            if (!serverData._meta['ai.nimblebrain.mcp/v1']) {
-              serverData._meta['ai.nimblebrain.mcp/v1'] = {};
-            }
-            if (!serverData._meta['ai.nimblebrain.mcp/v1'].registry) {
-              serverData._meta['ai.nimblebrain.mcp/v1'].registry = {};
-            }
-            serverData._meta['ai.nimblebrain.mcp/v1'].registry.documentation = {
-              readmeContent: sanitizeReadme(readmeContent)
-            };
-          }
-        }
 
         servers.set(serverId, serverData);
       } catch (error) {
@@ -126,15 +97,7 @@ async function loadServers(): Promise<Map<string, MCPServerDetail>> {
  */
 export async function createServer(): Promise<FastifyInstance> {
   const fastify = Fastify({
-    logger: process.env.NODE_ENV !== 'test' && {
-      transport: {
-        target: 'pino-pretty',
-        options: {
-          translateTime: 'HH:MM:ss Z',
-          ignore: 'pid,hostname'
-        }
-      }
-    }
+    logger: process.env.NODE_ENV !== 'test'  // Enable logging except in test environment
   });
 
   // Register CORS
@@ -147,13 +110,13 @@ export async function createServer(): Promise<FastifyInstance> {
   await fastify.register(swagger, {
     openapi: {
       info: {
-        title: 'NimbleBrain MCP Registry API',
+        title: 'NimbleTools MCP Registry API',
         description: 'A curated registry of Model Context Protocol servers',
         version: 'v0'
       },
       servers: [
         {
-          url: process.env.API_URL || 'https://registry.nimblebrain.ai'
+          url: process.env.API_URL || 'https://registry.nimbletools.ai'
         }
       ]
     }
@@ -176,15 +139,15 @@ export async function createServer(): Promise<FastifyInstance> {
   // Root endpoint
   fastify.get('/', async () => {
     return {
-      name: 'NimbleBrain MCP Registry API',
+      name: 'NimbleTools MCP Registry API',
       version: 'v0',
       endpoints: {
         listServers: '/v0/servers',
         getServer: '/v0/servers/{server_id}',
         getServerVersions: '/v0/servers/{server_id}/versions',
         schemas: '/schemas',
-        schemaByVersion: '/schemas/{version}/{filename}',
-        latestSchema: '/schemas/latest/{filename}'
+        schemaByVersion: '/schemas/{filename}/{version}',
+        latestSchema: '/schemas/{filename}/latest'
       },
       documentation: '/docs'
     };
@@ -319,20 +282,45 @@ export async function createServer(): Promise<FastifyInstance> {
         .sort()
         .reverse();
 
-      return {
-        versions: schemaVersions,
-        latest: LATEST_SCHEMA_VERSION
-      };
+      // Get all unique schema filenames across all versions
+      const schemaFilesMap = new Map<string, Set<string>>();
+
+      for (const version of schemaVersions) {
+        const versionDir = join(SCHEMAS_DIR, version);
+        const files = await readdir(versionDir);
+        const schemaFiles = files.filter(f => f.endsWith('.schema.json'));
+
+        for (const file of schemaFiles) {
+          if (!schemaFilesMap.has(file)) {
+            schemaFilesMap.set(file, new Set());
+          }
+          schemaFilesMap.get(file)!.add(version);
+        }
+      }
+
+      // Build response array
+      const schemas = Array.from(schemaFilesMap.entries()).map(([filename, versions]) => {
+        const versionList = Array.from(versions).sort().reverse();
+        // Remove .schema.json extension for cleaner API
+        const name = filename.replace('.schema.json', '');
+        return {
+          name,
+          versions: versionList,
+          latest: versionList[0]
+        };
+      });
+
+      return schemas;
     } catch (error) {
-      return { versions: [], latest: LATEST_SCHEMA_VERSION };
+      return [];
     }
   });
 
   // Get schema by version
   fastify.get<{
-    Params: { version: string; filename: string };
-  }>('/schemas/:version/:filename', async (request, reply) => {
-    const { version, filename } = request.params;
+    Params: { filename: string; version: string };
+  }>('/schemas/:filename/:version', async (request, reply) => {
+    const { filename, version } = request.params;
 
     // Validate filename to prevent directory traversal
     if (filename.includes('..') || filename.includes('/')) {
@@ -341,7 +329,9 @@ export async function createServer(): Promise<FastifyInstance> {
     }
 
     try {
-      const schemaPath = join(SCHEMAS_DIR, version, filename);
+      // Append .schema.json extension
+      const fullFilename = `${filename}.schema.json`;
+      const schemaPath = join(SCHEMAS_DIR, version, fullFilename);
       const content = await readFile(schemaPath, 'utf-8');
       reply.type('application/json');
       return JSON.parse(content);
@@ -354,7 +344,7 @@ export async function createServer(): Promise<FastifyInstance> {
   // Get latest schema
   fastify.get<{
     Params: { filename: string };
-  }>('/schemas/latest/:filename', async (request, reply) => {
+  }>('/schemas/:filename/latest', async (request, reply) => {
     const { filename } = request.params;
 
     // Validate filename
@@ -364,7 +354,9 @@ export async function createServer(): Promise<FastifyInstance> {
     }
 
     try {
-      const schemaPath = join(SCHEMAS_DIR, LATEST_SCHEMA_VERSION, filename);
+      // Append .schema.json extension
+      const fullFilename = `${filename}.schema.json`;
+      const schemaPath = join(SCHEMAS_DIR, LATEST_SCHEMA_VERSION, fullFilename);
       const content = await readFile(schemaPath, 'utf-8');
       reply.type('application/json');
       return JSON.parse(content);
