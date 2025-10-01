@@ -1,0 +1,89 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/github",
+  "version": "1.0.0",
+  "description": "Interact with GitHub repos, issues, PRs, code search, and Actions through natural language",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleToolsInc/mcp-github",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://github.com/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-github",
+      "version": "0.1.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "GITHUB_PERSONAL_ACCESS_TOKEN",
+          "description": "GitHub Personal Access Token with repo, issues, and actions permissions (get one at github.com/settings/tokens)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "ghp_xxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "GITHUB_TOOLSETS",
+          "description": "Comma-separated toolsets: repos, issues, pull_requests, actions, code_security, or 'all' for everything",
+          "isRequired": false,
+          "isSecret": false,
+          "example": "all"
+        }
+      ]
+    }
+  ],
+
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "200m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "GitHub",
+        "category": "developer-tools",
+        "tags": [
+          "version-control",
+          "git",
+          "devops",
+          "ci-cd",
+          "code-review",
+          "collaboration",
+          "enterprise",
+          "requires-api-key"
+        ],
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/github/github-mcp-server/main/README.md"
+        }
+      }
+    }
+  }
+}
