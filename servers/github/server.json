@@ -2,7 +2,7 @@
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
   "name": "ai.nimbletools/github",
   "version": "1.0.0",
-  "description": "Official GitHub MCP Server - interact with repositories, issues, pull requests, code search, and GitHub Actions through natural language",
+  "description": "Interact with GitHub repos, issues, PRs, code search, and Actions through natural language",
   "status": "active",
   "repository": {
     "url": "https://github.com/github/github-mcp-server",
@@ -13,9 +13,9 @@
   "packages": [
     {
       "registryType": "oci",
-      "registryBaseUrl": "https://ghcr.io",
-      "identifier": "github/github-mcp-server",
-      "version": "latest",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-github",
+      "version": "0.1.0",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
@@ -44,7 +44,7 @@
       "container": {
         "healthCheck": {
           "path": "/health",
-          "port": 3000
+          "port": 8000
         }
       },
       "capabilities": {
@@ -64,7 +64,7 @@
       },
       "deployment": {
         "protocol": "http",
-        "port": 3000,
+        "port": 8000,
         "mcpPath": "/mcp"
       },
       "display": {
