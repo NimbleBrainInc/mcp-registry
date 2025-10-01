@@ -1,0 +1,113 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/clickhouse",
+  "version": "1.0.0",
+  "description": "OLAP database for real-time analytics and data warehousing queries",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/ClickHouse/mcp-clickhouse",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://clickhouse.com",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-clickhouse",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "CLICKHOUSE_HOST",
+          "description": "ClickHouse server hostname",
+          "isRequired": true,
+          "isSecret": false,
+          "example": "your-clickhouse-host.com"
+        },
+        {
+          "name": "CLICKHOUSE_USER",
+          "description": "ClickHouse username for authentication",
+          "isRequired": true,
+          "isSecret": false,
+          "example": "default"
+        },
+        {
+          "name": "CLICKHOUSE_PASSWORD",
+          "description": "ClickHouse password for authentication",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "your_password_here"
+        },
+        {
+          "name": "CLICKHOUSE_PORT",
+          "description": "ClickHouse server port (default: 8443 for HTTPS, 8123 for HTTP)",
+          "isRequired": false,
+          "isSecret": false,
+          "example": "8443"
+        },
+        {
+          "name": "CLICKHOUSE_DATABASE",
+          "description": "Default database to connect to",
+          "isRequired": false,
+          "isSecret": false,
+          "example": "default"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "200m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "ClickHouse",
+        "category": "infrastructure-data",
+        "tags": [
+          "database",
+          "analytics",
+          "olap",
+          "data-warehouse",
+          "sql",
+          "real-time",
+          "enterprise",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://clickhouse.com/favicon.ico",
+          "primaryColor": "#FFCC00"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/ClickHouse/mcp-clickhouse/main/README.md"
+        }
+      }
+    }
+  }
+}
