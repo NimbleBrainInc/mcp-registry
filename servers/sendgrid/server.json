@@ -1,0 +1,67 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/sendgrid",
+  "version": "1.0.0",
+  "description": "Email delivery and marketing automation via Twilio SendGrid API",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/Garoth/sendgrid-mcp",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://sendgrid.com",
+  "packages": [
+    {
+      "registryType": "remote",
+      "identifier": "sendgrid-pipedream",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.pipedream.com/app/sendgrid"
+      },
+      "environmentVariables": [
+        {
+          "name": "SENDGRID_API_KEY",
+          "description": "SendGrid API key (create at sendgrid.com/settings/api_keys - 69 characters)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "SG.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "deployment": {
+        "protocol": "http",
+        "hosted": "remote"
+      },
+      "display": {
+        "name": "SendGrid",
+        "category": "communication-collaboration",
+        "tags": [
+          "email",
+          "marketing",
+          "transactional-email",
+          "notifications",
+          "sendgrid",
+          "twilio",
+          "communications",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://sendgrid.com/favicon.ico",
+          "primaryColor": "#1A82E2"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/Garoth/sendgrid-mcp/main/README.md"
+        }
+      }
+    }
+  }
+}
