@@ -146,8 +146,8 @@ export async function createServer(): Promise<FastifyInstance> {
         getServer: '/v0/servers/{server_id}',
         getServerVersions: '/v0/servers/{server_id}/versions',
         schemas: '/schemas',
-        schemaByVersion: '/schemas/{version}/{filename}',
-        latestSchema: '/schemas/latest/{filename}'
+        schemaByVersion: '/schemas/{filename}/{version}',
+        latestSchema: '/schemas/{filename}/latest'
       },
       documentation: '/docs'
     };
@@ -282,20 +282,45 @@ export async function createServer(): Promise<FastifyInstance> {
         .sort()
         .reverse();
 
-      return {
-        versions: schemaVersions,
-        latest: LATEST_SCHEMA_VERSION
-      };
+      // Get all unique schema filenames across all versions
+      const schemaFilesMap = new Map<string, Set<string>>();
+
+      for (const version of schemaVersions) {
+        const versionDir = join(SCHEMAS_DIR, version);
+        const files = await readdir(versionDir);
+        const schemaFiles = files.filter(f => f.endsWith('.schema.json'));
+
+        for (const file of schemaFiles) {
+          if (!schemaFilesMap.has(file)) {
+            schemaFilesMap.set(file, new Set());
+          }
+          schemaFilesMap.get(file)!.add(version);
+        }
+      }
+
+      // Build response array
+      const schemas = Array.from(schemaFilesMap.entries()).map(([filename, versions]) => {
+        const versionList = Array.from(versions).sort().reverse();
+        // Remove .schema.json extension for cleaner API
+        const name = filename.replace('.schema.json', '');
+        return {
+          name,
+          versions: versionList,
+          latest: versionList[0]
+        };
+      });
+
+      return schemas;
     } catch (error) {
-      return { versions: [], latest: LATEST_SCHEMA_VERSION };
+      return [];
     }
   });
 
   // Get schema by version
   fastify.get<{
-    Params: { version: string; filename: string };
-  }>('/schemas/:version/:filename', async (request, reply) => {
-    const { version, filename } = request.params;
+    Params: { filename: string; version: string };
+  }>('/schemas/:filename/:version', async (request, reply) => {
+    const { filename, version } = request.params;
 
     // Validate filename to prevent directory traversal
     if (filename.includes('..') || filename.includes('/')) {
@@ -304,7 +329,9 @@ export async function createServer(): Promise<FastifyInstance> {
     }
 
     try {
-      const schemaPath = join(SCHEMAS_DIR, version, filename);
+      // Append .schema.json extension
+      const fullFilename = `${filename}.schema.json`;
+      const schemaPath = join(SCHEMAS_DIR, version, fullFilename);
       const content = await readFile(schemaPath, 'utf-8');
       reply.type('application/json');
       return JSON.parse(content);
@@ -317,7 +344,7 @@ export async function createServer(): Promise<FastifyInstance> {
   // Get latest schema
   fastify.get<{
     Params: { filename: string };
-  }>('/schemas/latest/:filename', async (request, reply) => {
+  }>('/schemas/:filename/latest', async (request, reply) => {
     const { filename } = request.params;
 
     // Validate filename
@@ -327,7 +354,9 @@ export async function createServer(): Promise<FastifyInstance> {
     }
 
     try {
-      const schemaPath = join(SCHEMAS_DIR, LATEST_SCHEMA_VERSION, filename);
+      // Append .schema.json extension
+      const fullFilename = `${filename}.schema.json`;
+      const schemaPath = join(SCHEMAS_DIR, LATEST_SCHEMA_VERSION, fullFilename);
       const content = await readFile(schemaPath, 'utf-8');
       reply.type('application/json');
       return JSON.parse(content);

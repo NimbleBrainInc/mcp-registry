@@ -34,7 +34,7 @@
         {
           "name": "DATABASE_URI",
           "description": "PostgreSQL connection string (e.g., postgresql://username:password@localhost:5432/dbname)",
-          "isRequired": true, 
+          "isRequired": true,
           "isSecret": true
         }
       ]
@@ -69,6 +69,14 @@
       },
       "display": {
         "name": "PostgreSQL",
+        "category": "infrastructure-data",
+        "tags": [
+          "database",
+          "sql",
+          "postgres",
+          "read-write",
+          "performance"
+        ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/crystaldba/postgres-mcp/main/README.md"
         }

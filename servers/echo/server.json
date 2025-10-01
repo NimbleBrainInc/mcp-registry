@@ -9,7 +9,7 @@
     "source": "github",
     "branch": "main"
   },
-  "websiteUrl": "https://github.com/NimbleBrainInc/mcp-echo",
+  "websiteUrl": "https://www.nimblebrain.ai",
   "packages": [
     {
       "registryType": "oci",
@@ -32,7 +32,7 @@
       },
       "capabilities": {
         "tools": true,
-        "resources": false, 
+        "resources": false,
         "prompts": false
       },
       "resources": {
@@ -52,6 +52,13 @@
       },
       "display": {
         "name": "Echo",
+        "category": "developer-tools",
+        "tags": [
+          "testing",
+          "debugging",
+          "development",
+          "utilities"
+        ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-echo/main/README.md"
         },

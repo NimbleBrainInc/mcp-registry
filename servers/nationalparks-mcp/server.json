@@ -52,7 +52,7 @@
       "container": {},
       "capabilities": {
         "tools": true,
-        "resources": false, 
+        "resources": false,
         "prompts": false
       },
       "resources": {
@@ -70,6 +70,15 @@
       },
       "display": {
         "name": "National Parks",
+        "category": "data-intelligence",
+        "tags": [
+          "government-data",
+          "parks",
+          "events",
+          "campgrounds",
+          "alerts",
+          "requires-api-key"
+        ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-server-nationalparks/main/README.md"
         }

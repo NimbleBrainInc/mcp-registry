@@ -31,8 +31,8 @@
         }
       },
       "capabilities": {
-       "tools": true,
-        "resources": false, 
+        "tools": true,
+        "resources": false,
         "prompts": false
       },
       "resources": {
@@ -52,6 +52,12 @@
       },
       "display": {
         "name": "Reverse Text",
+        "category": "developer-tools",
+        "tags": [
+          "text-processing",
+          "utilities",
+          "transformation"
+        ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-reverse-text/main/README.md"
         }

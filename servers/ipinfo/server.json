@@ -9,7 +9,7 @@
     "source": "github",
     "branch": "main"
   },
-  "websiteUrl": "https://github.com/NimbleBrainInc/mcp-ipinfo",
+  "websiteUrl": "https://ipinfo.io/",
   "packages": [
     {
       "registryType": "oci",
@@ -61,6 +61,16 @@
       },
       "display": {
         "name": "IPInfo",
+        "category": "data-intelligence",
+        "tags": [
+          "geolocation",
+          "network",
+          "ip-lookup",
+          "privacy",
+          "whois",
+          "requires-api-key",
+          "free-tier"
+        ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-ipinfo/main/README.md"
         },

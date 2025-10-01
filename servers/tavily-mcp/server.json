@@ -71,6 +71,15 @@
       },
       "display": {
         "name": "Tavily",
+        "category": "data-intelligence",
+        "tags": [
+          "search",
+          "web-scraping",
+          "extraction",
+          "crawling",
+          "real-time",
+          "requires-api-key"
+        ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/tavily-ai/tavily-mcp/main/README.md"
         }

@@ -41,7 +41,7 @@
       },
       "capabilities": {
         "tools": true,
-        "resources": false, 
+        "resources": false,
         "prompts": false
       },
       "resources": {
@@ -61,6 +61,15 @@
       },
       "display": {
         "name": "Finnhub",
+        "category": "data-intelligence",
+        "tags": [
+          "finance",
+          "stocks",
+          "market-data",
+          "real-time",
+          "news",
+          "requires-api-key"
+        ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-finnhub/main/README.md"
         }

@@ -309,35 +309,17 @@
               "description": "Human-readable display name for the server (e.g., 'Echo', 'Finnhub')",
               "maxLength": 50
             },
-            "categories": {
-              "type": "array",
-              "description": "Primary categories for this server",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "ai-ml",
-                  "data",
-                  "development",
-                  "productivity",
-                  "communication",
-                  "finance",
-                  "media",
-                  "security",
-                  "devops",
-                  "monitoring",
-                  "storage",
-                  "web",
-                  "blockchain",
-                  "gaming",
-                  "education",
-                  "health",
-                  "utilities",
-                  "integration",
-                  "analytics",
-                  "automation"
-                ]
-              },
-              "maxItems": 3
+            "category": {
+              "type": "string",
+              "description": "Primary category for this server",
+              "enum": [
+                "ai-ml",
+                "data-intelligence",
+                "communication-collaboration",
+                "business-finance",
+                "developer-tools",
+                "infrastructure-data"
+              ]
             },
             "tags": {
               "type": "array",
