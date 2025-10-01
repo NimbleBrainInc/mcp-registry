@@ -5,11 +5,11 @@
   "description": "Interact with GitHub repos, issues, PRs, code search, and Actions through natural language",
   "status": "active",
   "repository": {
-    "url": "https://github.com/github/github-mcp-server",
+    "url": "https://github.com/NimbleToolsInc/mcp-github",
     "source": "github",
     "branch": "main"
   },
-  "websiteUrl": "https://github.com/github/github-mcp-server",
+  "websiteUrl": "https://github.com/",
   "packages": [
     {
       "registryType": "oci",

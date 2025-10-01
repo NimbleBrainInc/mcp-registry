@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
+import AjvModule from 'ajv';
+import type { AnySchemaObject } from 'ajv';
+import addFormatsModule from 'ajv-formats';
+
+const Ajv = AjvModule.default || AjvModule;
+const addFormats = addFormatsModule.default || addFormatsModule;
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
@@ -17,12 +21,12 @@ describe('Server Validation', () => {
     return JSON.parse(schemaContent);
   }
 
-  async function fetchExternalSchema(url: string) {
+  async function fetchExternalSchema(url: string): Promise<AnySchemaObject> {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-    return await response.json();
+    return await response.json() as AnySchemaObject;
   }
 
   it('should validate a valid server definition', async () => {
