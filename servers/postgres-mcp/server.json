@@ -1,6 +1,6 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
-  "name": "ai.crystaldba/postgres-mcp",
+  "name": "ai.nimbletools/postgres-mcp",
   "version": "0.3.0",
   "description": "PostgreSQL MCP server with configurable read/write access and performance analysis",
   "status": "active",
@@ -77,6 +77,10 @@
           "read-write",
           "performance"
         ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/postgresql.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/postgresql.png"
+        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/crystaldba/postgres-mcp/main/README.md"
         }

@@ -80,6 +80,10 @@
           "enterprise",
           "requires-api-key"
         ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/github.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/github.png"
+        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/github/github-mcp-server/main/README.md"
         }

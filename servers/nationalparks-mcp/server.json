@@ -79,6 +79,10 @@
           "alerts",
           "requires-api-key"
         ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/nationalparks.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/nationalparks.png"
+        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-server-nationalparks/main/README.md"
         }

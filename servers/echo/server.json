@@ -63,7 +63,8 @@
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-echo/main/README.md"
         },
         "branding": {
-          "iconUrl": "https://placehold.co/200"
+          "logoUrl": "https://static.nimbletools.ai/logos/echo.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/echo.png"
         }
       }
     }
