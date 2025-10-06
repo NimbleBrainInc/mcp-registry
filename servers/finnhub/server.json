@@ -70,6 +70,10 @@
           "news",
           "requires-api-key"
         ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/finnhub.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/finnhub.png"
+        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-finnhub/main/README.md"
         }

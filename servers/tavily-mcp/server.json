@@ -1,6 +1,6 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
-  "name": "com.tavily/tavily-mcp",
+  "name": "ai.nimbletools/tavily-mcp",
   "version": "0.2.9",
   "description": "Real-time web search, extract, map & crawl capabilities for web intelligence",
   "status": "active",
@@ -80,6 +80,10 @@
           "real-time",
           "requires-api-key"
         ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/tavily.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/tavily.png"
+        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/tavily-ai/tavily-mcp/main/README.md"
         }

@@ -157,11 +157,11 @@ describe('Server Factory - API Endpoints', () => {
     });
   });
 
-  describe('GET /schemas/:filename/:version', () => {
+  describe('GET /schemas/:version/:filename', () => {
     it('should return a specific schema version', async () => {
       const response = await server.inject({
         method: 'GET',
-        url: '/schemas/nimbletools-server/2025-09-22'
+        url: '/schemas/2025-09-22/nimbletools-server.schema.json'
       });
 
       expect(response.statusCode).toBe(200);
@@ -172,7 +172,7 @@ describe('Server Factory - API Endpoints', () => {
     it('should return 404 for non-existent schema', async () => {
       const response = await server.inject({
         method: 'GET',
-        url: '/schemas/non-existent-schema/2025-09-22'
+        url: '/schemas/2025-09-22/non-existent-schema.json'
       });
 
       expect(response.statusCode).toBe(404);
@@ -183,20 +183,20 @@ describe('Server Factory - API Endpoints', () => {
     it('should reject paths with directory traversal', async () => {
       const response = await server.inject({
         method: 'GET',
-        url: '/schemas/..%2Fsecrets/2025-09-22'
+        url: '/schemas/2025-09-22/..%2Fsecrets'
       });
 
       expect(response.statusCode).toBe(400);
       const json = response.json();
-      expect(json).toHaveProperty('error', 'Invalid filename');
+      expect(json).toHaveProperty('error', 'Invalid version or filename');
     });
   });
 
-  describe('GET /schemas/:filename/latest', () => {
+  describe('GET /schemas/latest/:filename', () => {
     it('should return the latest schema version', async () => {
       const response = await server.inject({
         method: 'GET',
-        url: '/schemas/nimbletools-server/latest'
+        url: '/schemas/latest/nimbletools-server.schema.json'
       });
 
       expect(response.statusCode).toBe(200);
@@ -207,7 +207,7 @@ describe('Server Factory - API Endpoints', () => {
     it('should reject paths with directory traversal', async () => {
       const response = await server.inject({
         method: 'GET',
-        url: '/schemas/..%2Fsecrets/latest'
+        url: '/schemas/latest/..%2Fsecrets'
       });
 
       expect(response.statusCode).toBe(400);

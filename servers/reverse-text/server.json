@@ -58,6 +58,10 @@
           "utilities",
           "transformation"
         ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/reverse.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/reverse.png"
+        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-reverse-text/main/README.md"
         }
