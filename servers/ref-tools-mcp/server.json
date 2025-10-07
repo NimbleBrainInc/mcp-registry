@@ -69,6 +69,10 @@
           "code-reference",
           "requires-api-key"
         ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/ref.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/ref.png"
+        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/ref-tools/ref-tools-mcp/main/README.md"
         }

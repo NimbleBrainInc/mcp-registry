@@ -146,8 +146,8 @@ export async function createServer(): Promise<FastifyInstance> {
         getServer: '/v0/servers/{server_id}',
         getServerVersions: '/v0/servers/{server_id}/versions',
         schemas: '/schemas',
-        schemaByVersion: '/schemas/{filename}/{version}',
-        latestSchema: '/schemas/{filename}/latest'
+        schemaByVersion: '/schemas/{version}/{filename}',
+        latestSchema: '/schemas/latest/{filename}'
       },
       documentation: '/docs'
     };
@@ -301,12 +301,14 @@ export async function createServer(): Promise<FastifyInstance> {
       // Build response array
       const schemas = Array.from(schemaFilesMap.entries()).map(([filename, versions]) => {
         const versionList = Array.from(versions).sort().reverse();
-        // Remove .schema.json extension for cleaner API
-        const name = filename.replace('.schema.json', '');
         return {
-          name,
+          name: filename,
           versions: versionList,
-          latest: versionList[0]
+          latest: versionList[0],
+          urls: {
+            latest: `/schemas/latest/${filename}`,
+            versioned: versionList.map(v => `/schemas/${v}/${filename}`)
+          }
         };
       });
 
@@ -318,20 +320,18 @@ export async function createServer(): Promise<FastifyInstance> {
 
   // Get schema by version
   fastify.get<{
-    Params: { filename: string; version: string };
-  }>('/schemas/:filename/:version', async (request, reply) => {
-    const { filename, version } = request.params;
+    Params: { version: string; filename: string };
+  }>('/schemas/:version/:filename', async (request, reply) => {
+    const { version, filename } = request.params;
 
-    // Validate filename to prevent directory traversal
-    if (filename.includes('..') || filename.includes('/')) {
+    // Validate version and filename to prevent directory traversal
+    if (version.includes('..') || version.includes('/') || filename.includes('..') || filename.includes('/')) {
       reply.code(400);
-      return { error: 'Invalid filename' };
+      return { error: 'Invalid version or filename' };
     }
 
     try {
-      // Append .schema.json extension
-      const fullFilename = `${filename}.schema.json`;
-      const schemaPath = join(SCHEMAS_DIR, version, fullFilename);
+      const schemaPath = join(SCHEMAS_DIR, version, filename);
       const content = await readFile(schemaPath, 'utf-8');
       reply.type('application/json');
       return JSON.parse(content);
@@ -344,7 +344,7 @@ export async function createServer(): Promise<FastifyInstance> {
   // Get latest schema
   fastify.get<{
     Params: { filename: string };
-  }>('/schemas/:filename/latest', async (request, reply) => {
+  }>('/schemas/latest/:filename', async (request, reply) => {
     const { filename } = request.params;
 
     // Validate filename
@@ -354,9 +354,7 @@ export async function createServer(): Promise<FastifyInstance> {
     }
 
     try {
-      // Append .schema.json extension
-      const fullFilename = `${filename}.schema.json`;
-      const schemaPath = join(SCHEMAS_DIR, LATEST_SCHEMA_VERSION, fullFilename);
+      const schemaPath = join(SCHEMAS_DIR, LATEST_SCHEMA_VERSION, filename);
       const content = await readFile(schemaPath, 'utf-8');
       reply.type('application/json');
       return JSON.parse(content);

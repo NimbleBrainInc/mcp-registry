@@ -19,6 +19,7 @@
     "test:e2e": "tsx e2e/test.ts",
     "validate-servers": "tsx scripts/validate-servers.ts",
     "generate-types": "tsx scripts/generate-types.ts",
+    "verify": "npm run typecheck && npm run test:run && npm run validate-servers && npm run test:e2e",
     "prebuild": "npm run generate-types",
     "clean": "rm -rf dist node_modules src/types/generated.ts coverage"
   },

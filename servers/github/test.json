@@ -1,0 +1,16 @@
+{
+  "skip": false,
+  "environment": {
+    "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+  },
+  "tests": [
+    {
+      "name": "Get me",
+      "tool": "get_me",
+      "arguments": {},
+      "expect": {
+        "type": "json"
+      }
+    }
+  ]
+}
