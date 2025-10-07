@@ -1,0 +1,43 @@
+{
+  "environment": {
+    "OPENAI_API_KEY": "${OPENAI_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Test chat completion",
+      "tool": "chat_completion",
+      "arguments": {
+        "messages": [
+          {"role": "user", "content": "Say 'test successful' and nothing else"}
+        ],
+        "model": "gpt-4o-mini",
+        "max_tokens": 10
+      },
+      "expect": {
+        "type": "text",
+        "contains": "test successful"
+      }
+    },
+    {
+      "name": "Test embedding creation",
+      "tool": "create_embedding",
+      "arguments": {
+        "text": "Hello, world!",
+        "model": "text-embedding-3-small"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["embedding", "model", "dimensions"]
+      }
+    },
+    {
+      "name": "Test model listing",
+      "tool": "list_models",
+      "arguments": {},
+      "expect": {
+        "type": "array",
+        "minLength": 1
+      }
+    }
+  ]
+}
