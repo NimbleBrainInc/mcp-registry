@@ -24,9 +24,10 @@
         {
           "name": "CLICKHOUSE_HOST",
           "description": "ClickHouse server hostname",
-          "isRequired": true,
+          "isRequired": false,
           "isSecret": false,
-          "example": "your-clickhouse-host.com"
+          "default": "0.0.0.0",
+          "example": "127.0.0.1"
         },
         {
           "name": "CLICKHOUSE_USER",
@@ -55,6 +56,22 @@
           "isRequired": false,
           "isSecret": false,
           "example": "default"
+        },
+        {
+          "name": "CLICKHOUSE_MCP_BIND_HOST",
+          "description": "The MCP transport",
+          "default": "0.0.0.0",
+          "isRequired": false,
+          "isSecret": false,
+          "example": "127.0.0.1"
+        },
+        {
+          "name": "CLICKHOUSE_MCP_SERVER_TRANSPORT",
+          "description": "The MCP transport",
+          "default": "http",
+          "isRequired": false,
+          "isSecret": false,
+          "example": "http"
         }
       ]
     }
@@ -63,8 +80,7 @@
     "ai.nimbletools.mcp/v1": {
       "container": {
         "healthCheck": {
-          "path": "/health",
-          "port": 8000
+          "enabled": false
         }
       },
       "capabilities": {
@@ -101,8 +117,8 @@
           "requires-api-key"
         ],
         "branding": {
-          "logoUrl": "https://clickhouse.com/favicon.ico",
-          "primaryColor": "#FFCC00"
+          "logoUrl": "https://static.nimbletools.ai/logos/clickhouse.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/clickhouse.png"
         },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/ClickHouse/mcp-clickhouse/main/README.md"
