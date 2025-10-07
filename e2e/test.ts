@@ -170,9 +170,10 @@ class NimbleToolsE2ETest {
 
     // Wait for MCP endpoint to be available (with retries)
     let resp: any;
-    let retries = 6; // 30 seconds total
+    let retries = 3;
     let lastError: Error | null = null;
 
+    // Initialize with retries
     while (retries > 0) {
       try {
         resp = await this.request('POST', mcpUrl, {
@@ -189,12 +190,15 @@ class NimbleToolsE2ETest {
         if (resp.result) break; // Success
       } catch (error) {
         lastError = error as Error;
-        if (error instanceof Error && !error.message.includes('503')) {
-          throw error; // Don't retry non-503 errors
-        }
-        console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
-        await new Promise((resolve) => setTimeout(resolve, 5000));
         retries--;
+        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503'))) {
+          if (retries > 0) {
+            console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+            continue;
+          }
+        }
+        throw error; // Don't retry other errors or if retries exhausted
       }
     }
 
@@ -202,29 +206,71 @@ class NimbleToolsE2ETest {
       throw new Error(`Initialize failed after retries: ${lastError?.message}`);
     }
 
-    // Send notifications/initialized (required by MCP protocol)
-    await this.request('POST', mcpUrl, {
-      jsonrpc: '2.0',
-      method: 'notifications/initialized',
-    }, true, true); // isMcp = true, isNotification = true
+    // Send notifications/initialized (required by MCP protocol) with retries
+    retries = 3;
+    while (retries > 0) {
+      try {
+        await this.request('POST', mcpUrl, {
+          jsonrpc: '2.0',
+          method: 'notifications/initialized',
+        }, true, true); // isMcp = true, isNotification = true
+        break;
+      } catch (error) {
+        retries--;
+        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
+          console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          continue;
+        }
+        throw error;
+      }
+    }
 
-    // List tools (no params field!)
-    resp = await this.request('POST', mcpUrl, {
-      jsonrpc: '2.0',
-      id: 2,
-      method: 'tools/list',
-    }, true); // isMcp = true
+    // List tools (no params field!) with retries
+    retries = 3;
+    while (retries > 0) {
+      try {
+        resp = await this.request('POST', mcpUrl, {
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'tools/list',
+        }, true); // isMcp = true
+        break;
+      } catch (error) {
+        retries--;
+        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
+          console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          continue;
+        }
+        throw error;
+      }
+    }
 
     if (!resp.result?.tools?.length) throw new Error('No tools found');
 
-    // Call first tool
+    // Call first tool with retries
     const toolName = resp.result.tools[0].name;
-    resp = await this.request('POST', mcpUrl, {
-      jsonrpc: '2.0',
-      id: 3,
-      method: 'tools/call',
-      params: { name: toolName, arguments: { message: 'Test' } },
-    }, true); // isMcp = true
+    retries = 3;
+    while (retries > 0) {
+      try {
+        resp = await this.request('POST', mcpUrl, {
+          jsonrpc: '2.0',
+          id: 3,
+          method: 'tools/call',
+          params: { name: toolName, arguments: { message: 'Test' } },
+        }, true); // isMcp = true
+        break;
+      } catch (error) {
+        retries--;
+        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
+          console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          continue;
+        }
+        throw error;
+      }
+    }
 
     if (!resp.result) throw new Error('Tool call failed');
   }
@@ -241,12 +287,29 @@ class NimbleToolsE2ETest {
 
     for (const test of fixture.tests) {
       try {
-        const resp = await this.request('POST', mcpUrl, {
-          jsonrpc: '2.0',
-          id: 99,
-          method: 'tools/call',
-          params: { name: test.tool, arguments: test.arguments },
-        }, true);
+        let resp: any;
+        let retries = 3;
+
+        // Retry logic for fixture test calls
+        while (retries > 0) {
+          try {
+            resp = await this.request('POST', mcpUrl, {
+              jsonrpc: '2.0',
+              id: 99,
+              method: 'tools/call',
+              params: { name: test.tool, arguments: test.arguments },
+            }, true);
+            break;
+          } catch (error) {
+            retries--;
+            if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
+              console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+              await new Promise((resolve) => setTimeout(resolve, 5000));
+              continue;
+            }
+            throw error;
+          }
+        }
 
         // Debug: log the actual response
         console.log(`  Response:`, JSON.stringify(resp, null, 2));
