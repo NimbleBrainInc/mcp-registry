@@ -121,11 +121,58 @@ This ensures your server:
 
 ### 5. Testing
 
-Test that your server works:
+#### Prerequisites
 
-1. **Docker Image**: Ensure your Docker image is publicly accessible
-2. **MCP Compliance**: Verify your server implements MCP correctly
-3. **Health Check**: If using HTTP transport, ensure health endpoint works
+Install NimbleTools Core:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/NimbleBrainInc/nimbletools-core/refs/heads/main/install.sh | bash
+```
+
+#### Running E2E Tests
+
+Run all tests:
+```bash
+npm run test:e2e
+```
+
+Run individual server tests:
+```bash
+npm run test:e2e -- --server=github
+```
+
+#### Test Definition
+
+Create a `test.json` file alongside your `server.json`:
+
+```json
+{
+  "skip": false,
+  "tests": [
+    {
+      "name": "Echo basic message",
+      "tool": "echo_message",
+      "arguments": {
+        "message": "Hello E2E Test"
+      },
+      "expect": {
+        "type": "json",
+        "field": "echoed_message",
+        "equals": "Hello E2E Test"
+      }
+    }
+  ]
+}
+```
+
+- `skip`: Set to `true` to skip tests for this server
+- `name`: Descriptive test name
+- `tool`: Tool name to invoke
+- `arguments`: Input parameters for the tool
+- `expect`: Expected output validation
+  - `type`: Response type (`"json"`)
+  - `field`: JSON field to validate
+  - `equals`: Expected value
 
 ### 6. Submit Pull Request
 
@@ -172,14 +219,6 @@ The `_meta["ai.nimbletools.mcp/v1"]` section should include:
 - Follow [Semantic Versioning](https://semver.org/)
 - Update version when making breaking changes
 - Never use `latest` as a version
-
-### Documentation
-
-Include in your server repository:
-- Clear README with usage examples
-- API documentation for all tools
-- Environment variable descriptions
-- Docker usage instructions
 
 ## Questions?
 
