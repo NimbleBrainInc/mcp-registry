@@ -1,0 +1,30 @@
+{
+  "environment": {
+    "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Test simple chat",
+      "tool": "chat",
+      "arguments": {
+        "prompt": "Say 'test successful' and nothing else",
+        "max_tokens": 20
+      },
+      "expect": {
+        "type": "text",
+        "contains": "test successful"
+      }
+    },
+    {
+      "name": "Test get model info",
+      "tool": "get_model_info",
+      "arguments": {
+        "model": "claude-3-5-sonnet-20241022"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["name", "context_window", "supports_vision"]
+      }
+    }
+  ]
+}

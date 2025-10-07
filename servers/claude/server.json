@@ -1,0 +1,64 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/claude",
+  "version": "1.0.0",
+  "description": "Anthropic Claude API: messages, vision, multi-turn chat, token counting, and model comparison",
+  "icon": "https://www.anthropic.com/images/icons/safari-pinned-tab.svg",
+  "homepage": "https://docs.anthropic.com/en/api/messages",
+  "license": "MIT",
+  "keywords": [
+    "anthropic",
+    "claude",
+    "claude-3",
+    "claude-3.5",
+    "sonnet",
+    "opus",
+    "haiku",
+    "chat",
+    "vision",
+    "ai",
+    "llm",
+    "conversation"
+  ],
+  "categories": ["AI & LLM"],
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "nimbletools/claude",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000,
+          "interval": 30,
+          "timeout": 10,
+          "retries": 3
+        }
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "500m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "100m"
+        }
+      },
+      "secrets": [
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "description": "Anthropic API key from https://console.anthropic.com/settings/keys",
+          "required": true
+        }
+      ]
+    }
+  }
+}
