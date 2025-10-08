@@ -1,0 +1,43 @@
+{
+  "tests": [
+    {
+      "name": "List Tasks",
+      "tool": "list_tasks",
+      "params": {},
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "type",
+          "path": "$",
+          "expectedType": "array"
+        }
+      ]
+    },
+    {
+      "name": "List Projects",
+      "tool": "list_projects",
+      "params": {},
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "type",
+          "path": "$",
+          "expectedType": "array"
+        }
+      ]
+    },
+    {
+      "name": "List Labels",
+      "tool": "list_labels",
+      "params": {},
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "type",
+          "path": "$",
+          "expectedType": "array"
+        }
+      ]
+    }
+  ]
+}
