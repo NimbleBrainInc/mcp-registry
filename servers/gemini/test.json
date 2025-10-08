@@ -1,0 +1,58 @@
+{
+  "tests": [
+    {
+      "name": "Generate Text",
+      "tool": "generate_text",
+      "params": {
+        "prompt": "Write a haiku about coding",
+        "model": "gemini-1.5-flash-latest",
+        "temperature": 0.7,
+        "max_output_tokens": 100
+      },
+      "expectedFields": [
+        "candidates"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "candidates"
+        },
+        {
+          "type": "exists",
+          "path": "candidates[0].content.parts[0].text"
+        }
+      ]
+    },
+    {
+      "name": "Count Tokens",
+      "tool": "count_tokens",
+      "params": {
+        "text": "Hello, how are you today?",
+        "model": "gemini-1.5-flash-latest"
+      },
+      "expectedFields": [
+        "totalTokens"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "totalTokens"
+        }
+      ]
+    },
+    {
+      "name": "List Models",
+      "tool": "list_models",
+      "params": {},
+      "expectedFields": [
+        "models"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "models"
+        }
+      ]
+    }
+  ]
+}
