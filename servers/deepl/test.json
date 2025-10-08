@@ -1,0 +1,54 @@
+{
+  "tests": [
+    {
+      "name": "Translate Text EN to DE",
+      "tool": "translate_text",
+      "params": {
+        "text": "Hello, world!",
+        "target_lang": "DE",
+        "source_lang": "EN"
+      },
+      "expectedFields": [
+        "translations"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "translations"
+        }
+      ]
+    },
+    {
+      "name": "Detect Language",
+      "tool": "detect_language",
+      "params": {
+        "text": "Bonjour le monde"
+      },
+      "expectedFields": [
+        "detected_language"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "detected_language"
+        }
+      ]
+    },
+    {
+      "name": "List Languages",
+      "tool": "list_languages",
+      "params": {
+        "language_type": "target"
+      },
+      "expectedFields": [
+        "languages"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "languages"
+        }
+      ]
+    }
+  ]
+}
