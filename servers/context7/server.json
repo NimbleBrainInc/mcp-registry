@@ -1,0 +1,62 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/context7",
+  "version": "1.0.0",
+  "description": "Context7 API: search docs, get examples, explain code, API references, and troubleshoot errors",
+  "icon": "https://context7.com/favicon.ico",
+  "homepage": "https://context7.com",
+  "license": "MIT",
+  "keywords": [
+    "context7",
+    "documentation",
+    "code-examples",
+    "api-reference",
+    "developer-docs",
+    "libraries",
+    "frameworks",
+    "code-search",
+    "troubleshooting",
+    "migration"
+  ],
+  "categories": ["DevOps", "AI & LLM"],
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "nimbletools/context7",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000,
+          "interval": 30,
+          "timeout": 10,
+          "retries": 3
+        }
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "100m"
+        }
+      },
+      "secrets": [
+        {
+          "name": "CONTEXT7_API_KEY",
+          "description": "Context7 API key from https://context7.com/api",
+          "required": true
+        }
+      ]
+    }
+  }
+}
