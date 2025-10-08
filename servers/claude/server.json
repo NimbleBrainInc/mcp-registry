@@ -61,7 +61,7 @@
       },
       "display": {
         "name": "Claude",
-        "category": "ai-llm",
+        "category": "ai-ml",
         "tags": [
           "anthropic",
           "claude",
