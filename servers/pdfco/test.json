@@ -1,0 +1,55 @@
+{
+  "tests": [
+    {
+      "name": "PDF to Text",
+      "tool": "pdf_to_text",
+      "params": {
+        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-to-text/sample.pdf"
+      },
+      "expectedFields": [
+        "body",
+        "url"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "body"
+        }
+      ]
+    },
+    {
+      "name": "PDF Info",
+      "tool": "pdf_info",
+      "params": {
+        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-info/sample.pdf"
+      },
+      "expectedFields": [
+        "pageCount",
+        "info"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "pageCount"
+        }
+      ]
+    },
+    {
+      "name": "HTML to PDF",
+      "tool": "html_to_pdf",
+      "params": {
+        "html": "<html><body><h1>Test Document</h1><p>This is a test.</p></body></html>",
+        "name": "test.pdf"
+      },
+      "expectedFields": [
+        "url"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "url"
+        }
+      ]
+    }
+  ]
+}
