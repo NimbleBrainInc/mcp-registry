@@ -1,0 +1,65 @@
+{
+  "name": "ai.nimbletools/coingecko",
+  "version": "1.0.0",
+  "description": "CoinGecko API: cryptocurrency prices, market data, trending coins, and global market stats",
+  "category": "data-intelligence",
+  "status": "active",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/coingecko",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-coingecko",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://www.coingecko.com/",
+  "license": "MIT",
+  "tags": [
+    "cryptocurrency",
+    "crypto",
+    "bitcoin",
+    "ethereum",
+    "market-data",
+    "prices",
+    "trading",
+    "defi",
+    "nft",
+    "requires-api-key"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.nimbletools.ai/mcp"
+  },
+  "environmentVariables": {
+    "COINGECKO_API_KEY": {
+      "description": "CoinGecko API key (get from https://www.coingecko.com/en/api/pricing)",
+      "required": true,
+      "secret": true,
+      "example": "your_coingecko_api_key_here"
+    }
+  },
+  "_meta": {
+    "display": {
+      "icon": "https://cdn.simpleicons.org/bitcoin",
+      "color": "#F7931A"
+    },
+    "deployment": {
+      "protocol": "http",
+      "registry": "ghcr.io",
+      "image": "ghcr.io/nimblebraininc/mcp-coingecko:latest",
+      "port": 8000,
+      "mcpPath": "/mcp"
+    },
+    "resources": {
+      "limits": {
+        "cpu": "250m",
+        "memory": "256Mi"
+      },
+      "requests": {
+        "cpu": "100m",
+        "memory": "128Mi"
+      }
+    },
+    "capabilities": {
+      "tools": true
+    }
+  }
+}
