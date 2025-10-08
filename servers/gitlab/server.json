@@ -1,0 +1,93 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/gitlab",
+  "version": "1.0.0",
+  "description": "GitLab API: repos, issues, merge requests, CI/CD pipelines, and DevOps automation",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-gitlab",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://gitlab.com/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-gitlab",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "GITLAB_PERSONAL_ACCESS_TOKEN",
+          "description": "GitLab Personal Access Token with api scope (get one at gitlab.com/-/profile/personal_access_tokens)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "glpat-xxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "GITLAB_URL",
+          "description": "GitLab instance URL (defaults to gitlab.com)",
+          "isRequired": false,
+          "isSecret": false,
+          "example": "https://gitlab.com"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "GitLab",
+        "category": "developer-tools",
+        "tags": [
+          "gitlab",
+          "version-control",
+          "git",
+          "devops",
+          "ci-cd",
+          "merge-requests",
+          "pipelines",
+          "collaboration",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/gitlab.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/gitlab.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-gitlab/main/README.md"
+        }
+      }
+    }
+  }
+}
