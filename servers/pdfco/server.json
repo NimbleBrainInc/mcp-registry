@@ -1,0 +1,87 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/pdfco",
+  "version": "1.0.0",
+  "description": "PDF.co API: PDF manipulation, conversion, OCR, text extraction, and document automation",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-pdfco",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://pdf.co/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-pdfco",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "PDFCO_API_KEY",
+          "description": "PDF.co API key (get from https://app.pdf.co/dashboard)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "your_pdfco_api_key_here"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "500m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "PDF.co",
+        "category": "developer-tools",
+        "tags": [
+          "pdf",
+          "documents",
+          "ocr",
+          "conversion",
+          "automation",
+          "text-extraction",
+          "barcode",
+          "watermark",
+          "merge",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/pdfco.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/pdfco.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-pdfco/main/README.md"
+        }
+      }
+    }
+  }
+}
