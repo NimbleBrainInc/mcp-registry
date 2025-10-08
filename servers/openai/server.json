@@ -61,7 +61,7 @@
       },
       "display": {
         "name": "OpenAI",
-        "category": "ai-llm",
+        "category": "ai-ml",
         "tags": [
           "openai",
           "gpt",
