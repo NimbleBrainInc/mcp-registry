@@ -3,30 +3,32 @@
   "name": "ai.nimbletools/context7",
   "version": "1.0.0",
   "description": "Context7 API: search docs, get examples, explain code, API references, and troubleshoot errors",
-  "icon": "https://context7.com/favicon.ico",
-  "homepage": "https://context7.com",
-  "license": "MIT",
-  "keywords": [
-    "context7",
-    "documentation",
-    "code-examples",
-    "api-reference",
-    "developer-docs",
-    "libraries",
-    "frameworks",
-    "code-search",
-    "troubleshooting",
-    "migration"
-  ],
-  "categories": ["DevOps", "AI & LLM"],
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-context7",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://context7.com",
   "packages": [
     {
       "registryType": "oci",
-      "identifier": "nimbletools/context7",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-context7",
       "version": "1.0.0",
       "transport": {
-        "type": "stdio"
-      }
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "CONTEXT7_API_KEY",
+          "description": "Context7 API key for accessing documentation (get key at context7.com/api)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "your_context7_api_key_here"
+        }
+      ]
     }
   ],
   "_meta": {
@@ -34,11 +36,13 @@
       "container": {
         "healthCheck": {
           "path": "/health",
-          "port": 8000,
-          "interval": 30,
-          "timeout": 10,
-          "retries": 3
+          "port": 8000
         }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
       },
       "resources": {
         "limits": {
@@ -50,13 +54,30 @@
           "cpu": "100m"
         }
       },
-      "secrets": [
-        {
-          "name": "CONTEXT7_API_KEY",
-          "description": "Context7 API key from https://context7.com/api",
-          "required": true
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "Context7",
+        "category": "developer-tools",
+        "tags": [
+          "documentation",
+          "code-examples",
+          "api-reference",
+          "troubleshooting",
+          "migration",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/context7.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/context7.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-context7/main/README.md"
         }
-      ]
+      }
     }
   }
 }
