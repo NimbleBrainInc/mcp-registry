@@ -1,0 +1,67 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/openai",
+  "version": "1.0.0",
+  "description": "OpenAI API integration: chat, embeddings, DALL-E, TTS, Whisper, vision, and moderation",
+  "icon": "https://openai.com/favicon.ico",
+  "homepage": "https://platform.openai.com/docs/api-reference",
+  "license": "MIT",
+  "keywords": [
+    "openai",
+    "gpt",
+    "gpt-4",
+    "gpt-4o",
+    "chat",
+    "embeddings",
+    "dall-e",
+    "image-generation",
+    "tts",
+    "text-to-speech",
+    "whisper",
+    "transcription",
+    "vision",
+    "ai",
+    "llm"
+  ],
+  "categories": ["AI & LLM", "Data & Analytics"],
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "nimbletools/openai",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000,
+          "interval": 30,
+          "timeout": 10,
+          "retries": 3
+        }
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "500m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "100m"
+        }
+      },
+      "secrets": [
+        {
+          "name": "OPENAI_API_KEY",
+          "description": "OpenAI API key from https://platform.openai.com/api-keys",
+          "required": true
+        }
+      ]
+    }
+  }
+}
