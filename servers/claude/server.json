@@ -65,7 +65,8 @@
         "tags": [
           "anthropic",
           "claude",
-          "claude-3.5",
+          "claude-3",
+          "claude-35",
           "chat",
           "vision",
           "conversation",
