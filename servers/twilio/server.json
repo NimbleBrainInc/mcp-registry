@@ -1,0 +1,68 @@
+{
+  "name": "ai.nimbletools/twilio",
+  "version": "1.0.0",
+  "description": "Twilio API: send SMS, WhatsApp messages, make calls, and manage communication",
+  "category": "communication-collaboration",
+  "status": "active",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/twilio",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-registry",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://www.twilio.com/",
+  "license": "MIT",
+  "tags": [
+    "twilio",
+    "sms",
+    "whatsapp",
+    "voice",
+    "calls",
+    "messaging",
+    "communication",
+    "notifications",
+    "requires-api-key"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.nimbletools.ai/mcp"
+  },
+  "environmentVariables": {
+    "TWILIO_ACCOUNT_SID": {
+      "description": "Twilio Account SID (get from https://console.twilio.com)",
+      "required": true,
+      "secret": true
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "description": "Twilio Auth Token (get from https://console.twilio.com)",
+      "required": true,
+      "secret": true
+    }
+  },
+  "_meta": {
+    "display": {
+      "icon": "https://cdn.simpleicons.org/twilio",
+      "color": "#F22F46"
+    },
+    "deployment": {
+      "protocol": "http",
+      "registry": "ghcr.io",
+      "image": "ghcr.io/nimblebraininc/mcp-twilio:latest",
+      "port": 8000,
+      "mcpPath": "/mcp"
+    },
+    "resources": {
+      "limits": {
+        "cpu": "200m",
+        "memory": "256Mi"
+      },
+      "requests": {
+        "cpu": "100m",
+        "memory": "128Mi"
+      }
+    },
+    "capabilities": {
+      "tools": true
+    }
+  }
+}
