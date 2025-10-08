@@ -1,0 +1,59 @@
+{
+  "tests": [
+    {
+      "name": "List Indexes",
+      "tool": "list_indexes",
+      "params": {},
+      "expectedFields": [
+        "indexes"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "indexes"
+        }
+      ]
+    },
+    {
+      "name": "Describe Index Stats",
+      "tool": "describe_index_stats",
+      "params": {
+        "index_name": "test-index"
+      },
+      "expectedFields": [
+        "dimension",
+        "indexFullness",
+        "totalVectorCount"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "dimension"
+        },
+        {
+          "type": "exists",
+          "path": "totalVectorCount"
+        }
+      ]
+    },
+    {
+      "name": "Query Vectors",
+      "tool": "query_vectors",
+      "params": {
+        "index_name": "test-index",
+        "vector": [0.1, 0.2, 0.3],
+        "top_k": 5,
+        "include_metadata": true
+      },
+      "expectedFields": [
+        "matches"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "matches"
+        }
+      ]
+    }
+  ]
+}
