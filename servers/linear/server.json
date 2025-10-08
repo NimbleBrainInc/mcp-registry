@@ -1,0 +1,86 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/linear",
+  "version": "1.0.0",
+  "description": "Linear API: issue tracking, project management, sprints, roadmaps, and team collaboration",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-linear",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://linear.app/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-linear",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "LINEAR_API_KEY",
+          "description": "Linear API key (get from https://linear.app/settings/api)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "lin_api_xxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "Linear",
+        "category": "developer-tools",
+        "tags": [
+          "linear",
+          "issue-tracking",
+          "project-management",
+          "agile",
+          "sprints",
+          "roadmap",
+          "collaboration",
+          "graphql",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/linear.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/linear.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-linear/main/README.md"
+        }
+      }
+    }
+  }
+}
