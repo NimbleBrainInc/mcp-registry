@@ -1,0 +1,50 @@
+{
+  "tests": [
+    {
+      "name": "List Workspaces",
+      "tool": "list_workspaces",
+      "params": {},
+      "expectedFields": [
+        "teams"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "teams"
+        }
+      ]
+    },
+    {
+      "name": "List Spaces",
+      "tool": "list_spaces",
+      "params": {
+        "workspace_id": "test_workspace_id"
+      },
+      "expectedFields": [
+        "spaces"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "spaces"
+        }
+      ]
+    },
+    {
+      "name": "List Tasks",
+      "tool": "list_tasks",
+      "params": {
+        "list_id": "test_list_id"
+      },
+      "expectedFields": [
+        "tasks"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "tasks"
+        }
+      ]
+    }
+  ]
+}
