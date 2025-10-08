@@ -1,0 +1,48 @@
+{
+  "tests": [
+    {
+      "name": "List Organizations",
+      "tool": "list_organizations",
+      "params": {},
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "type",
+          "path": "$",
+          "expectedType": "array"
+        }
+      ]
+    },
+    {
+      "name": "List Projects",
+      "tool": "list_projects",
+      "params": {
+        "organization_slug": "test-org"
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "type",
+          "path": "$",
+          "expectedType": "array"
+        }
+      ]
+    },
+    {
+      "name": "List Issues",
+      "tool": "list_issues",
+      "params": {
+        "organization_slug": "test-org",
+        "limit": 10
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "type",
+          "path": "$",
+          "expectedType": "array"
+        }
+      ]
+    }
+  ]
+}
