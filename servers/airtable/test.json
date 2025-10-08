@@ -1,0 +1,53 @@
+{
+  "tests": [
+    {
+      "name": "List Accessible Bases",
+      "tool": "list_bases",
+      "params": {},
+      "expectedFields": [
+        "bases"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "bases"
+        }
+      ]
+    },
+    {
+      "name": "Get Base Schema",
+      "tool": "get_base_schema",
+      "params": {
+        "base_id": "appXXXXXXXXXXXXXX"
+      },
+      "expectedFields": [
+        "tables"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "tables"
+        }
+      ]
+    },
+    {
+      "name": "List Records with Filter",
+      "tool": "list_records",
+      "params": {
+        "base_id": "appXXXXXXXXXXXXXX",
+        "table_id_or_name": "Table1",
+        "max_records": 10,
+        "page_size": 10
+      },
+      "expectedFields": [
+        "records"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "records"
+        }
+      ]
+    }
+  ]
+}
