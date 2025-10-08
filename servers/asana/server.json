@@ -1,0 +1,86 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/asana",
+  "version": "1.0.0",
+  "description": "Asana API: task management, project tracking, team collaboration, and workflow automation",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-asana",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://asana.com/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-asana",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "ASANA_PERSONAL_ACCESS_TOKEN",
+          "description": "Asana Personal Access Token (get one at app.asana.com/0/my-apps)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "0/1234567890abcdef..."
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "Asana",
+        "category": "business-finance",
+        "tags": [
+          "asana",
+          "tasks",
+          "project-management",
+          "collaboration",
+          "workflow",
+          "productivity",
+          "teams",
+          "planning",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/asana.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/asana.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-asana/main/README.md"
+        }
+      }
+    }
+  }
+}
