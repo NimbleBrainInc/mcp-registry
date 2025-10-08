@@ -2,36 +2,33 @@
   "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
   "name": "ai.nimbletools/openai",
   "version": "1.0.0",
-  "description": "OpenAI API integration: chat, embeddings, DALL-E, TTS, Whisper, vision, and moderation",
-  "icon": "https://openai.com/favicon.ico",
-  "homepage": "https://platform.openai.com/docs/api-reference",
-  "license": "MIT",
-  "keywords": [
-    "openai",
-    "gpt",
-    "gpt-4",
-    "gpt-4o",
-    "chat",
-    "embeddings",
-    "dall-e",
-    "image-generation",
-    "tts",
-    "text-to-speech",
-    "whisper",
-    "transcription",
-    "vision",
-    "ai",
-    "llm"
-  ],
-  "categories": ["AI & LLM", "Data & Analytics"],
+  "description": "OpenAI API: chat, embeddings, DALL-E, TTS, Whisper, vision, and moderation",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-openai",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://platform.openai.com/",
   "packages": [
     {
       "registryType": "oci",
-      "identifier": "nimbletools/openai",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-openai",
       "version": "1.0.0",
       "transport": {
-        "type": "stdio"
-      }
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "OPENAI_API_KEY",
+          "description": "OpenAI API key for accessing GPT models (get key at platform.openai.com/api-keys)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "sk-..."
+        }
+      ]
     }
   ],
   "_meta": {
@@ -39,11 +36,13 @@
       "container": {
         "healthCheck": {
           "path": "/health",
-          "port": 8000,
-          "interval": 30,
-          "timeout": 10,
-          "retries": 3
+          "port": 8000
         }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
       },
       "resources": {
         "limits": {
@@ -55,13 +54,34 @@
           "cpu": "100m"
         }
       },
-      "secrets": [
-        {
-          "name": "OPENAI_API_KEY",
-          "description": "OpenAI API key from https://platform.openai.com/api-keys",
-          "required": true
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "OpenAI",
+        "category": "ai-llm",
+        "tags": [
+          "openai",
+          "gpt",
+          "gpt-4",
+          "chat",
+          "embeddings",
+          "dall-e",
+          "whisper",
+          "tts",
+          "vision",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/openai.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/openai.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-openai/main/README.md"
         }
-      ]
+      }
     }
   }
 }
