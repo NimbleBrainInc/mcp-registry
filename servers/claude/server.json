@@ -1,0 +1,85 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/claude",
+  "version": "1.0.0",
+  "description": "Anthropic Claude API: messages, vision, multi-turn chat, token counting, and model comparison",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-claude",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://www.anthropic.com/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-claude",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "description": "Anthropic API key for accessing Claude models (get key at console.anthropic.com/settings/keys)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "sk-ant-..."
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "500m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "Claude",
+        "category": "ai-ml",
+        "tags": [
+          "anthropic",
+          "claude",
+          "claude-3",
+          "claude-35",
+          "chat",
+          "vision",
+          "conversation",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/claude.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/claude.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-claude/main/README.md"
+        }
+      }
+    }
+  }
+}

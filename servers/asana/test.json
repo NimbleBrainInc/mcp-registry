@@ -1,0 +1,54 @@
+{
+  "tests": [
+    {
+      "name": "List Workspaces",
+      "tool": "list_workspaces",
+      "params": {
+        "limit": 10
+      },
+      "expectedFields": [
+        "data"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "data"
+        }
+      ]
+    },
+    {
+      "name": "List Projects",
+      "tool": "list_projects",
+      "params": {
+        "workspace": "1234567890",
+        "limit": 10
+      },
+      "expectedFields": [
+        "data"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "data"
+        }
+      ]
+    },
+    {
+      "name": "List Tasks",
+      "tool": "list_tasks",
+      "params": {
+        "workspace": "1234567890",
+        "limit": 10
+      },
+      "expectedFields": [
+        "data"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "data"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "name": "ai.nimbletools/airtable",
+  "version": "1.0.0",
+  "description": "Airtable API: manage bases, tables, records, and views with flexible database operations",
+  "category": "business-finance",
+  "status": "active",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/airtable",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-airtable",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://airtable.com/",
+  "license": "MIT",
+  "tags": [
+    "airtable",
+    "database",
+    "spreadsheet",
+    "crm",
+    "records",
+    "tables",
+    "data-management",
+    "collaboration",
+    "requires-api-key"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.nimbletools.ai/mcp"
+  },
+  "environmentVariables": {
+    "AIRTABLE_ACCESS_TOKEN": {
+      "description": "Airtable access token (create at https://airtable.com/create/tokens)",
+      "required": true,
+      "secret": true,
+      "example": "your_airtable_access_token_here"
+    }
+  },
+  "_meta": {
+    "display": {
+      "icon": "https://cdn.simpleicons.org/airtable",
+      "color": "#18BFFF"
+    },
+    "deployment": {
+      "protocol": "http",
+      "registry": "ghcr.io",
+      "image": "ghcr.io/nimblebraininc/mcp-airtable:latest",
+      "port": 8000,
+      "mcpPath": "/mcp"
+    },
+    "resources": {
+      "limits": {
+        "cpu": "250m",
+        "memory": "256Mi"
+      },
+      "requests": {
+        "cpu": "100m",
+        "memory": "128Mi"
+      }
+    },
+    "capabilities": {
+      "tools": true
+    }
+  }
+}

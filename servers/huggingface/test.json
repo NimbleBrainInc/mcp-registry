@@ -1,0 +1,64 @@
+{
+  "tests": [
+    {
+      "name": "Text Generation",
+      "tool": "text_generation",
+      "params": {
+        "prompt": "Once upon a time",
+        "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
+        "max_new_tokens": 50,
+        "temperature": 0.7
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "[0].generated_text"
+        }
+      ]
+    },
+    {
+      "name": "Text Classification",
+      "tool": "text_classification",
+      "params": {
+        "text": "I love this product! It's amazing!",
+        "model_id": "distilbert-base-uncased-finetuned-sst-2-english"
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "[0]"
+        },
+        {
+          "type": "exists",
+          "path": "[0][0].label"
+        },
+        {
+          "type": "exists",
+          "path": "[0][0].score"
+        }
+      ]
+    },
+    {
+      "name": "Sentence Similarity",
+      "tool": "sentence_similarity",
+      "params": {
+        "source_sentence": "That is a happy person",
+        "sentences": [
+          "That is a happy dog",
+          "That is a very happy person",
+          "Today is a sunny day"
+        ],
+        "model_id": "sentence-transformers/all-MiniLM-L6-v2"
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "[0]"
+        }
+      ]
+    }
+  ]
+}

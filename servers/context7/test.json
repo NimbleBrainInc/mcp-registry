@@ -1,0 +1,30 @@
+{
+  "environment": {
+    "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Test documentation search",
+      "tool": "search_documentation",
+      "arguments": {
+        "query": "React hooks",
+        "limit": 5
+      },
+      "expect": {
+        "type": "array",
+        "minLength": 1
+      }
+    },
+    {
+      "name": "Test list supported libraries",
+      "tool": "list_supported_libraries",
+      "arguments": {
+        "language": "javascript"
+      },
+      "expect": {
+        "type": "array",
+        "minLength": 1
+      }
+    }
+  ]
+}

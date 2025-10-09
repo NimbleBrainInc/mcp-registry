@@ -1,0 +1,64 @@
+{
+  "name": "ai.nimbletools/news-api",
+  "version": "1.0.0",
+  "description": "News API: search articles, top headlines, breaking news from 80,000+ sources worldwide",
+  "category": "data-intelligence",
+  "status": "active",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/news-api",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-news-api",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://newsapi.org/",
+  "license": "MIT",
+  "tags": [
+    "news",
+    "articles",
+    "headlines",
+    "journalism",
+    "media",
+    "breaking-news",
+    "current-events",
+    "sources",
+    "requires-api-key"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.nimbletools.ai/mcp"
+  },
+  "environmentVariables": {
+    "NEWS_API_KEY": {
+      "description": "News API key (get from https://newsapi.org/register)",
+      "required": true,
+      "secret": true,
+      "example": "your_news_api_key_here"
+    }
+  },
+  "_meta": {
+    "display": {
+      "icon": "https://cdn.simpleicons.org/google-news",
+      "color": "#4285F4"
+    },
+    "deployment": {
+      "protocol": "http",
+      "registry": "ghcr.io",
+      "image": "ghcr.io/nimblebraininc/mcp-news-api:latest",
+      "port": 8000,
+      "mcpPath": "/mcp"
+    },
+    "resources": {
+      "limits": {
+        "cpu": "200m",
+        "memory": "256Mi"
+      },
+      "requests": {
+        "cpu": "100m",
+        "memory": "128Mi"
+      }
+    },
+    "capabilities": {
+      "tools": true
+    }
+  }
+}

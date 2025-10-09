@@ -1,0 +1,77 @@
+{
+  "tests": [
+    {
+      "name": "Search Everything",
+      "tool": "search_everything",
+      "params": {
+        "q": "technology",
+        "language": "en",
+        "page_size": 5,
+        "sort_by": "publishedAt"
+      },
+      "expectedFields": [
+        "status",
+        "totalResults",
+        "articles"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "status",
+          "value": "ok"
+        },
+        {
+          "type": "exists",
+          "path": "articles"
+        }
+      ]
+    },
+    {
+      "name": "Get Top Headlines",
+      "tool": "get_top_headlines",
+      "params": {
+        "country": "us",
+        "page_size": 5
+      },
+      "expectedFields": [
+        "status",
+        "totalResults",
+        "articles"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "status",
+          "value": "ok"
+        },
+        {
+          "type": "exists",
+          "path": "articles"
+        }
+      ]
+    },
+    {
+      "name": "Get Sources",
+      "tool": "get_sources",
+      "params": {
+        "language": "en",
+        "country": "us"
+      },
+      "expectedFields": [
+        "status",
+        "sources"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "status",
+          "value": "ok"
+        },
+        {
+          "type": "exists",
+          "path": "sources"
+        }
+      ]
+    }
+  ]
+}

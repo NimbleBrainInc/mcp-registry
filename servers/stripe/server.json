@@ -1,0 +1,48 @@
+{
+  "name": "ai.nimbletools/stripe",
+  "version": "1.0.0",
+  "description": "Stripe payment API - manage customers, payments, subscriptions, invoices, and products",
+  "category": "business-finance",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/stripe",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-registry",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://stripe.com",
+  "license": "MIT",
+  "tags": [
+    "stripe",
+    "payments",
+    "billing",
+    "subscriptions",
+    "invoices",
+    "e-commerce"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.nimbletools.ai/mcp"
+  },
+  "environmentVariables": {
+    "STRIPE_API_KEY": {
+      "description": "Stripe API key (get from https://stripe.com/dashboard/apikeys)",
+      "required": true,
+      "secret": true
+    }
+  },
+  "_meta": {
+    "display": {
+      "icon": "https://cdn.simpleicons.org/stripe",
+      "color": "#635BFF"
+    },
+    "deployment": {
+      "registry": "ghcr.io",
+      "image": "ghcr.io/nimblebraininc/mcp-stripe:latest",
+      "port": 8000
+    },
+    "resources": {
+      "cpu": "100m",
+      "memory": "128Mi"
+    }
+  }
+}

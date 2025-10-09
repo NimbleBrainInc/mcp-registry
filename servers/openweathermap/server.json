@@ -1,0 +1,64 @@
+{
+  "name": "ai.nimbletools/openweathermap",
+  "version": "1.0.0",
+  "description": "OpenWeatherMap API: current weather, forecasts, alerts, air quality, and historical data",
+  "category": "data-intelligence",
+  "status": "active",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/openweathermap",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-openweathermap",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://openweathermap.org/",
+  "license": "MIT",
+  "tags": [
+    "weather",
+    "forecast",
+    "climate",
+    "temperature",
+    "alerts",
+    "air-quality",
+    "meteorology",
+    "uv-index",
+    "requires-api-key"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.nimbletools.ai/mcp"
+  },
+  "environmentVariables": {
+    "OPENWEATHERMAP_API_KEY": {
+      "description": "OpenWeatherMap API key (get from https://openweathermap.org/api)",
+      "required": true,
+      "secret": true,
+      "example": "your_openweathermap_api_key_here"
+    }
+  },
+  "_meta": {
+    "display": {
+      "icon": "https://cdn.simpleicons.org/openweathermap",
+      "color": "#EB6E4B"
+    },
+    "deployment": {
+      "protocol": "http",
+      "registry": "ghcr.io",
+      "image": "ghcr.io/nimblebraininc/mcp-openweathermap:latest",
+      "port": 8000,
+      "mcpPath": "/mcp"
+    },
+    "resources": {
+      "limits": {
+        "cpu": "250m",
+        "memory": "256Mi"
+      },
+      "requests": {
+        "cpu": "100m",
+        "memory": "128Mi"
+      }
+    },
+    "capabilities": {
+      "tools": true
+    }
+  }
+}

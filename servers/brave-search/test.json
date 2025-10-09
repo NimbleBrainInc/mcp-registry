@@ -1,0 +1,42 @@
+{
+  "environment": {
+    "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Test web search",
+      "tool": "web_search",
+      "arguments": {
+        "query": "artificial intelligence",
+        "count": 5
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["web"]
+      }
+    },
+    {
+      "name": "Test news search",
+      "tool": "news_search",
+      "arguments": {
+        "query": "technology news",
+        "count": 5
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["results"]
+      }
+    },
+    {
+      "name": "Test search suggestions",
+      "tool": "suggest",
+      "arguments": {
+        "query": "python"
+      },
+      "expect": {
+        "type": "array",
+        "minLength": 1
+      }
+    }
+  ]
+}
