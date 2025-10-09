@@ -1,0 +1,90 @@
+{
+  "tests": [
+    {
+      "name": "Get Current Weather for London",
+      "tool": "get_current_weather",
+      "params": {
+        "city": "London,GB",
+        "units": "metric"
+      },
+      "expectedFields": [
+        "coord",
+        "weather",
+        "main",
+        "wind",
+        "clouds",
+        "sys",
+        "name"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "main.temp"
+        },
+        {
+          "type": "exists",
+          "path": "weather"
+        },
+        {
+          "type": "equals",
+          "path": "name",
+          "value": "London"
+        }
+      ]
+    },
+    {
+      "name": "Get 5-Day Forecast for New York",
+      "tool": "get_forecast",
+      "params": {
+        "city": "New York,US",
+        "units": "imperial"
+      },
+      "expectedFields": [
+        "cod",
+        "list",
+        "city"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "cod",
+          "value": "200"
+        },
+        {
+          "type": "exists",
+          "path": "list"
+        },
+        {
+          "type": "exists",
+          "path": "city.name"
+        }
+      ]
+    },
+    {
+      "name": "Get Air Quality for Tokyo",
+      "tool": "get_air_quality",
+      "params": {
+        "lat": 35.6762,
+        "lon": 139.6503
+      },
+      "expectedFields": [
+        "coord",
+        "list"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "list"
+        },
+        {
+          "type": "exists",
+          "path": "coord.lat"
+        },
+        {
+          "type": "exists",
+          "path": "coord.lon"
+        }
+      ]
+    }
+  ]
+}

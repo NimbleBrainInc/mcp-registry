@@ -1,0 +1,50 @@
+{
+  "tests": [
+    {
+      "name": "List Issues",
+      "tool": "list_issues",
+      "params": {
+        "first": 10
+      },
+      "expectedFields": [
+        "data"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "data"
+        }
+      ]
+    },
+    {
+      "name": "List Projects",
+      "tool": "list_projects",
+      "params": {
+        "first": 10
+      },
+      "expectedFields": [
+        "data"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "data"
+        }
+      ]
+    },
+    {
+      "name": "List Teams",
+      "tool": "list_teams",
+      "params": {},
+      "expectedFields": [
+        "data"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "data"
+        }
+      ]
+    }
+  ]
+}

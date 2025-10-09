@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "List Projects",
+      "tool": "list_projects",
+      "params": {
+        "per_page": 10
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "name": "List Issues",
+      "tool": "list_issues",
+      "params": {
+        "per_page": 10
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "array"
+        }
+      ]
+    },
+    {
+      "name": "List Pipelines (requires project)",
+      "tool": "list_pipelines",
+      "params": {
+        "project_id": "278964",
+        "per_page": 10
+      },
+      "expectedFields": [],
+      "assertions": [
+        {
+          "type": "array"
+        }
+      ]
+    }
+  ]
+}

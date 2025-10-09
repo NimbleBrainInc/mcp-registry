@@ -1,0 +1,64 @@
+{
+  "tests": [
+    {
+      "name": "Get Bitcoin Price",
+      "tool": "get_coin_price",
+      "params": {
+        "ids": "bitcoin",
+        "vs_currencies": "usd,eur",
+        "include_market_cap": true,
+        "include_24hr_vol": true,
+        "include_24hr_change": true
+      },
+      "expectedFields": [
+        "bitcoin"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "bitcoin.usd"
+        },
+        {
+          "type": "exists",
+          "path": "bitcoin.eur"
+        }
+      ]
+    },
+    {
+      "name": "Get Trending Coins",
+      "tool": "get_trending_coins",
+      "params": {},
+      "expectedFields": [
+        "coins"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "coins"
+        }
+      ]
+    },
+    {
+      "name": "Get Global Market Data",
+      "tool": "get_global_market_data",
+      "params": {},
+      "expectedFields": [
+        "data"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "data"
+        },
+        {
+          "type": "exists",
+          "path": "data.total_market_cap"
+        },
+        {
+          "type": "exists",
+          "path": "data.total_volume"
+        }
+      ]
+    }
+  ]
+}

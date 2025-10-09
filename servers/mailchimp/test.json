@@ -1,0 +1,55 @@
+{
+  "tests": [
+    {
+      "name": "List Audiences",
+      "tool": "list_audiences",
+      "params": {
+        "count": 10
+      },
+      "expectedFields": [
+        "lists",
+        "total_items"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "lists"
+        }
+      ]
+    },
+    {
+      "name": "List Campaigns",
+      "tool": "list_campaigns",
+      "params": {
+        "count": 10
+      },
+      "expectedFields": [
+        "campaigns",
+        "total_items"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "campaigns"
+        }
+      ]
+    },
+    {
+      "name": "Get Campaign Reports",
+      "tool": "get_campaign_reports",
+      "params": {
+        "campaign_id": "test_campaign_id"
+      },
+      "expectedFields": [
+        "id",
+        "type"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "id"
+        }
+      ]
+    }
+  ]
+}

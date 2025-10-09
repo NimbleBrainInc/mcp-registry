@@ -1,0 +1,65 @@
+{
+  "tests": [
+    {
+      "name": "Get Stock Quote for AAPL",
+      "tool": "get_stock_quote",
+      "params": {
+        "symbol": "AAPL"
+      },
+      "expectedFields": [
+        "Global Quote"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "Global Quote"
+        },
+        {
+          "type": "exists",
+          "path": "Global Quote.01. symbol"
+        },
+        {
+          "type": "exists",
+          "path": "Global Quote.05. price"
+        }
+      ]
+    },
+    {
+      "name": "Search Symbol for Apple",
+      "tool": "search_symbol",
+      "params": {
+        "keywords": "Apple"
+      },
+      "expectedFields": [
+        "bestMatches"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "bestMatches"
+        }
+      ]
+    },
+    {
+      "name": "Get Forex Rate USD to EUR",
+      "tool": "get_forex_rate",
+      "params": {
+        "from_currency": "USD",
+        "to_currency": "EUR"
+      },
+      "expectedFields": [
+        "Realtime Currency Exchange Rate"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "Realtime Currency Exchange Rate"
+        },
+        {
+          "type": "exists",
+          "path": "Realtime Currency Exchange Rate.5. Exchange Rate"
+        }
+      ]
+    }
+  ]
+}

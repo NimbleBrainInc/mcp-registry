@@ -1,0 +1,68 @@
+{
+  "tests": [
+    {
+      "name": "Get Account Balance",
+      "tool": "get_account_balance",
+      "params": {},
+      "expectedFields": [
+        "account_sid",
+        "balance",
+        "currency"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "account_sid"
+        },
+        {
+          "type": "exists",
+          "path": "currency"
+        }
+      ]
+    },
+    {
+      "name": "List Phone Numbers",
+      "tool": "list_phone_numbers",
+      "params": {
+        "page_size": 5
+      },
+      "expectedFields": [
+        "incoming_phone_numbers",
+        "uri",
+        "first_page_uri",
+        "next_page_uri",
+        "previous_page_uri",
+        "page",
+        "page_size"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "incoming_phone_numbers"
+        }
+      ]
+    },
+    {
+      "name": "List Messages",
+      "tool": "list_messages",
+      "params": {
+        "page_size": 5
+      },
+      "expectedFields": [
+        "messages",
+        "uri",
+        "first_page_uri",
+        "next_page_uri",
+        "previous_page_uri",
+        "page",
+        "page_size"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "messages"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "tests": [
+    {
+      "name": "List Customers",
+      "tool": "list_customers",
+      "params": {
+        "limit": 5
+      },
+      "expectedFields": [
+        "object",
+        "data",
+        "has_more",
+        "url"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "object",
+          "value": "list"
+        }
+      ]
+    },
+    {
+      "name": "List Charges",
+      "tool": "list_charges",
+      "params": {
+        "limit": 5
+      },
+      "expectedFields": [
+        "object",
+        "data",
+        "has_more",
+        "url"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "object",
+          "value": "list"
+        }
+      ]
+    },
+    {
+      "name": "List Subscriptions",
+      "tool": "list_subscriptions",
+      "params": {
+        "limit": 5
+      },
+      "expectedFields": [
+        "object",
+        "data",
+        "has_more",
+        "url"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "object",
+          "value": "list"
+        }
+      ]
+    },
+    {
+      "name": "List Products",
+      "tool": "list_products",
+      "params": {
+        "limit": 5
+      },
+      "expectedFields": [
+        "object",
+        "data",
+        "has_more",
+        "url"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "object",
+          "value": "list"
+        }
+      ]
+    },
+    {
+      "name": "List Invoices",
+      "tool": "list_invoices",
+      "params": {
+        "limit": 5
+      },
+      "expectedFields": [
+        "object",
+        "data",
+        "has_more",
+        "url"
+      ],
+      "assertions": [
+        {
+          "type": "equals",
+          "path": "object",
+          "value": "list"
+        }
+      ]
+    }
+  ]
+}
