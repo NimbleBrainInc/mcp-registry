@@ -5,12 +5,12 @@
       "name": "Echo basic message",
       "tool": "echo_message",
       "arguments": {
-        "message": "Hello E2E Test"
+        "message": "Hello E2E Test (10132025)"
       },
       "expect": {
         "type": "json",
         "field": "echoed_message",
-        "equals": "Hello E2E Test"
+        "equals": "Hello E2E Test (10132025)"
       }
     }
   ]
