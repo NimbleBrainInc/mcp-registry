@@ -76,6 +76,12 @@ class NimbleToolsQATest {
         'Authorization': `Bearer ${this.bearerToken}`,
       };
 
+      // Debug first request
+      if (url.includes('/v1/workspaces') && method === 'POST' && !isMcp) {
+        console.log(`DEBUG: Making request to ${url}`);
+        console.log(`DEBUG: Authorization header: Bearer ${this.bearerToken.substring(0, 20)}...${this.bearerToken.substring(this.bearerToken.length - 10)}`);
+      }
+
       if (body) {
         headers['Content-Type'] = 'application/json';
       }
@@ -474,6 +480,13 @@ async function main() {
   }
 
   const protocol = insecure ? 'http' : 'https';
+
+  // Debug token parsing
+  if (bearerToken) {
+    console.log(`DEBUG: Token length: ${bearerToken.length}`);
+    console.log(`DEBUG: Token starts with: ${bearerToken.substring(0, 20)}...`);
+    console.log(`DEBUG: Token ends with: ...${bearerToken.substring(bearerToken.length - 10)}`);
+  }
 
   // Validate required arguments
   if (!bearerToken) {
