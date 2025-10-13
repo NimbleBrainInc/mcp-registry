@@ -180,6 +180,38 @@ The test runner automatically:
 - Runs custom tool tests
 - Cleans up resources
 
+#### QA Environment Testing
+
+For testing in QA/CI environments that use bearer token authentication instead of Clerk:
+
+```bash
+# Test all servers on default QA domain (qa.nimbletools.ai)
+./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN
+
+# Test all servers on custom domain
+./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=qa.nimbletools.dev
+
+# Test specific server
+./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --server=echo
+
+# Test with HTTP and custom port for local development
+./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=nt.dev --port=8080 --insecure
+
+# Test with custom port on HTTPS
+./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=qa.nimbletools.ai --port=8443
+
+# In CI/CD pipelines
+./e2e/test-qa.ts --token=$QA_BEARER_TOKEN --domain=$QA_DOMAIN
+```
+
+The QA test script (`test-qa.ts`) provides the same functionality as the standard test script but:
+- Uses bearer token authentication for all API requests
+- Takes a base domain and automatically constructs API (`api.<domain>`) and MCP (`mcp.<domain>`) URLs
+- Defaults to `qa.nimbletools.ai` domain
+- Supports `--insecure` flag to use HTTP instead of HTTPS for local testing
+- Supports `--port` flag to specify a custom port
+- Suitable for automated CI/CD testing environments
+
 ### Docker
 
 ```bash
