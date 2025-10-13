@@ -461,14 +461,13 @@ async function main() {
 
   for (const arg of args) {
     if (arg.startsWith('--token=')) {
-      bearerToken = arg.split('=')[1];
-    } else if (arg.startsWith('--domain=') || arg.startsWith('--url=')) {
-      // Support both --domain and --url for flexibility
-      domain = arg.split('=')[1];
+      bearerToken = arg.substring('--token='.length);
+    } else if (arg.startsWith('--domain=')) {
+      domain = arg.substring('--domain='.length);
     } else if (arg.startsWith('--server=')) {
-      serverFilter = arg.split('=')[1];
+      serverFilter = arg.substring('--server='.length);
     } else if (arg.startsWith('--port=')) {
-      port = arg.split('=')[1];
+      port = arg.substring('--port='.length);
     } else if (arg === '--insecure') {
       insecure = true;
     }
