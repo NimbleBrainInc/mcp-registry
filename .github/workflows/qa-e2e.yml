@@ -1,0 +1,137 @@
+name: QA E2E Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'servers/**/server.json'
+      - 'servers/**/test.json'
+  workflow_dispatch:
+    inputs:
+      test_all:
+        description: 'Test all servers (full verification)'
+        required: false
+        type: boolean
+        default: false
+      domain:
+        description: 'QA domain (default: qa.nimbletools.ai)'
+        required: false
+        type: string
+        default: 'qa.nimbletools.ai'
+
+jobs:
+  detect-changes:
+    name: Detect Changed Servers
+    runs-on: ubuntu-latest
+    outputs:
+      servers: ${{ steps.get-servers.outputs.servers }}
+      test_all: ${{ steps.check-mode.outputs.test_all }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Check test mode
+        id: check-mode
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.test_all }}" = "true" ]; then
+            echo "test_all=true" >> $GITHUB_OUTPUT
+          else
+            echo "test_all=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get changed or all servers
+        id: get-servers
+        run: |
+          if [ "${{ steps.check-mode.outputs.test_all }}" = "true" ]; then
+            # Get all active servers
+            echo "Getting all servers for full verification..."
+            servers=$(find servers -name "server.json" -type f | sed 's|servers/\(.*\)/server.json|\1|' | jq -R -s -c 'split("\n")[:-1]')
+          else
+            # Get only changed servers
+            echo "Getting changed servers from PR..."
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E "^servers/.*/(server|test)\.json$" || true)
+            else
+              changed_files=$(git diff --name-only HEAD~1 HEAD | grep -E "^servers/.*/(server|test)\.json$" || true)
+            fi
+
+            if [ -z "$changed_files" ]; then
+              echo "No server.json or test.json files changed"
+              servers="[]"
+            else
+              echo "Changed files:"
+              echo "$changed_files"
+              # Extract unique server names from paths (handles both server.json and test.json)
+              servers=$(echo "$changed_files" | awk -F'/' '{print $2}' | sort -u | jq -R -s -c 'split("\n")[:-1]')
+            fi
+          fi
+
+          echo "servers=$servers" >> $GITHUB_OUTPUT
+          echo "Servers to test: $servers"
+
+  qa-test:
+    name: Test Server in QA
+    needs: detect-changes
+    if: needs.detect-changes.outputs.servers != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        server: ${{ fromJson(needs.detect-changes.outputs.servers) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run QA E2E test for ${{ matrix.server }}
+        timeout-minutes: 15
+        env:
+          QA_BEARER_TOKEN: ${{ secrets.QA_BEARER_TOKEN }}
+          QA_DOMAIN: ${{ secrets.QA_DOMAIN || inputs.domain || 'qa.nimbletools.ai' }}
+        run: |
+          npx tsx ./e2e/test-qa.ts \
+            --token="${QA_BEARER_TOKEN}" \
+            --domain="${QA_DOMAIN}" \
+            --server="${{ matrix.server }}"
+
+      - name: Report test result
+        if: always()
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ ${{ matrix.server }} passed QA testing"
+          else
+            echo "❌ ${{ matrix.server }} failed QA testing"
+            exit 1
+          fi
+
+  qa-summary:
+    name: QA Test Summary
+    needs: [detect-changes, qa-test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.qa-test.result }}" = "success" ] || [ "${{ needs.qa-test.result }}" = "skipped" ]; then
+            echo "✅ All QA tests passed"
+          else
+            echo "❌ Some QA tests failed"
+            exit 1
+          fi
+
+      - name: No servers to test
+        if: needs.detect-changes.outputs.servers == '[]'
+        run: |
+          echo "ℹ️ No servers to test (no server.json or test.json files changed)"
