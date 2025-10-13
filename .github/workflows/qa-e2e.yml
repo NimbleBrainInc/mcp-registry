@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'servers/**/server.json'
+      - 'servers/**/test.json'
   workflow_dispatch:
     inputs:
       test_all:
