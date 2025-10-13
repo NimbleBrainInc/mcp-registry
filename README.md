@@ -4,6 +4,7 @@
 
 ![GitHub License](https://img.shields.io/github/license/NimbleBrainInc/mcp-registry)
 [![Actions status](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/NimbleBrainInc/mcp-registry/actions)
+[![E2E Tests](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/qa-e2e.yml/badge.svg)](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/qa-e2e.yml)
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white)](https://www.nimbletools.ai/discord?utm_source=github&utm_medium=readme&utm_campaign=mcp-registry&utm_content=header-badge)
 
 A curated registry of Model Context Protocol (MCP) servers optimized for the NimbleBrain runtime platform.

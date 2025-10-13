@@ -76,12 +76,6 @@ class NimbleToolsQATest {
         'Authorization': `Bearer ${this.bearerToken}`,
       };
 
-      // Debug first request
-      if (url.includes('/v1/workspaces') && method === 'POST' && !isMcp) {
-        console.log(`DEBUG: Making request to ${url}`);
-        console.log(`DEBUG: Authorization header: Bearer ${this.bearerToken.substring(0, 20)}...${this.bearerToken.substring(this.bearerToken.length - 10)}`);
-      }
-
       if (body) {
         headers['Content-Type'] = 'application/json';
       }
@@ -479,31 +473,30 @@ async function main() {
     }
   }
 
-  const protocol = insecure ? 'http' : 'https';
-
-  // Debug token parsing
-  if (bearerToken) {
-    console.log(`DEBUG: Token length: ${bearerToken.length}`);
-    console.log(`DEBUG: Token starts with: ${bearerToken.substring(0, 20)}...`);
-    console.log(`DEBUG: Token ends with: ...${bearerToken.substring(bearerToken.length - 10)}`);
+  // Fall back to environment variable if token not provided via CLI
+  if (!bearerToken) {
+    bearerToken = process.env.QA_BEARER_TOKEN || null;
   }
+
+  const protocol = insecure ? 'http' : 'https';
 
   // Validate required arguments
   if (!bearerToken) {
-    console.error('Error: Bearer token is required');
+    console.error('Error: Bearer token is required (provide via --token flag or QA_BEARER_TOKEN env var)');
     console.error('\nUsage:');
     console.error('  ./e2e/test-qa.ts --token=<bearer-token> [--domain=<base-domain>] [--port=<port>] [--server=<server-name>] [--insecure]');
     console.error('\nExamples:');
     console.error('  # Test all servers on default QA domain (qa.nimbletools.ai)');
     console.error('  ./e2e/test-qa.ts --token=my-bearer-token');
+    console.error('\n  # Use environment variable for token');
+    console.error('  export QA_BEARER_TOKEN=my-bearer-token');
+    console.error('  ./e2e/test-qa.ts --server=echo');
     console.error('\n  # Test all servers on custom domain');
     console.error('  ./e2e/test-qa.ts --token=my-bearer-token --domain=qa.nimbletools.dev');
     console.error('\n  # Test specific server');
     console.error('  ./e2e/test-qa.ts --token=my-bearer-token --server=echo');
     console.error('\n  # Test with HTTP and custom port for local development');
     console.error('  ./e2e/test-qa.ts --token=my-bearer-token --domain=nt.dev --port=8080 --insecure');
-    console.error('\n  # Test with custom port on HTTPS');
-    console.error('  ./e2e/test-qa.ts --token=my-bearer-token --domain=qa.nimbletools.ai --port=8443');
     process.exit(1);
   }
 
