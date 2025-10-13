@@ -52,18 +52,19 @@ jobs:
             # Get only changed servers
             echo "Getting changed servers from PR..."
             if [ "${{ github.event_name }}" = "pull_request" ]; then
-              changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep "^servers/.*/server.json$" || true)
+              changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E "^servers/.*/(server|test)\.json$" || true)
             else
-              changed_files=$(git diff --name-only HEAD~1 HEAD | grep "^servers/.*/server.json$" || true)
+              changed_files=$(git diff --name-only HEAD~1 HEAD | grep -E "^servers/.*/(server|test)\.json$" || true)
             fi
 
             if [ -z "$changed_files" ]; then
-              echo "No server.json files changed"
+              echo "No server.json or test.json files changed"
               servers="[]"
             else
               echo "Changed files:"
               echo "$changed_files"
-              servers=$(echo "$changed_files" | sed 's|servers/\(.*\)/server.json|\1|' | jq -R -s -c 'split("\n")[:-1]')
+              # Extract unique server names from paths (handles both server.json and test.json)
+              servers=$(echo "$changed_files" | sed -E 's|servers/([^/]+)/(server|test)\.json|\1|' | sort -u | jq -R -s -c 'split("\n")[:-1]')
             fi
           fi
 
@@ -131,4 +132,4 @@ jobs:
       - name: No servers to test
         if: needs.detect-changes.outputs.servers == '[]'
         run: |
-          echo "ℹ️ No servers to test (no server.json files changed)"
+          echo "ℹ️ No servers to test (no server.json or test.json files changed)"
