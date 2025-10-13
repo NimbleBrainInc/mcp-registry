@@ -64,7 +64,7 @@ jobs:
               echo "Changed files:"
               echo "$changed_files"
               # Extract unique server names from paths (handles both server.json and test.json)
-              servers=$(echo "$changed_files" | sed -E 's|servers/([^/]+)/(server|test)\.json|\1|' | sort -u | jq -R -s -c 'split("\n")[:-1]')
+              servers=$(echo "$changed_files" | awk -F'/' '{print $2}' | sort -u | jq -R -s -c 'split("\n")[:-1]')
             fi
           fi
 
@@ -76,6 +76,7 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.servers != '[]'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -95,6 +96,7 @@ jobs:
         run: npm ci
 
       - name: Run QA E2E test for ${{ matrix.server }}
+        timeout-minutes: 15
         env:
           QA_BEARER_TOKEN: ${{ secrets.QA_BEARER_TOKEN }}
           QA_DOMAIN: ${{ inputs.domain || 'qa.nimbletools.ai' }}
