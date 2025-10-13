@@ -99,7 +99,7 @@ jobs:
         timeout-minutes: 15
         env:
           QA_BEARER_TOKEN: ${{ secrets.QA_BEARER_TOKEN }}
-          QA_DOMAIN: ${{ inputs.domain || 'qa.nimbletools.ai' }}
+          QA_DOMAIN: ${{ secrets.QA_DOMAIN || inputs.domain || 'qa.nimbletools.ai' }}
         run: |
           npx tsx ./e2e/test-qa.ts \
             --token="${QA_BEARER_TOKEN}" \
