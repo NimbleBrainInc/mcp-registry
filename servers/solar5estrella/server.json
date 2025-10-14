@@ -1,82 +1,85 @@
 {
-  "name": "mcp-solar5estrella",
-  "version": "0.1.0",
-  "description": "MCP server for Solar5Estrella solar energy quote generation in Panama. Calculates system sizing, equipment requirements, costs, and ROI for residential, commercial, and industrial solar installations.",
-  "icon": "https://raw.githubusercontent.com/yourusername/mcp-solar5estrella/main/icon.svg",
-  "homepage": "https://github.com/yourusername/mcp-solar5estrella",
-  "license": "MIT",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/solar5estrella",
+  "version": "1.0.0",
+  "description": "Solar5Estrella: Solar energy quote builder for Panama with equipment selection and ROI",
+  "status": "active",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/mcp-solar5estrella.git"
+    "url": "https://github.com/NimbleBrainInc/mcp-solar5estrella",
+    "source": "github",
+    "branch": "main"
   },
-  "author": {
-    "name": "Solar5Estrella",
-    "url": "https://github.com/yourusername"
-  },
-  "categories": ["business", "energy", "finance"],
-  "keywords": [
-    "solar",
-    "energy",
-    "quotes",
-    "panama",
-    "renewable-energy",
-    "roi",
-    "solar-panels",
-    "inverters",
-    "cost-calculator"
-  ],
-  "sourceType": "python",
-  "config": {
-    "command": "uvicorn",
-    "args": [
-      "mcp_solar5estrella.server:app",
-      "--host",
-      "0.0.0.0",
-      "--port",
-      "8000"
-    ],
-    "env": {
-      "OPENWEATHER_MCP_URL": "http://localhost:8001"
-    }
-  },
-  "tools": [
+  "websiteUrl": "https://nimblebrain.ai",
+  "packages": [
     {
-      "name": "calculate_system_size",
-      "description": "Calculate optimal solar system capacity based on daily consumption and peak sun hours"
-    },
-    {
-      "name": "validate_roof_capacity",
-      "description": "Check if available roof space can accommodate the required solar panel array"
-    },
-    {
-      "name": "calculate_equipment_requirements",
-      "description": "Calculate complete equipment list including panels, inverters, mounting, and accessories"
-    },
-    {
-      "name": "generate_solar_quote",
-      "description": "Generate a complete formal solar energy system quote with costs, ROI, and terms"
-    },
-    {
-      "name": "get_equipment_inventory",
-      "description": "Query distributor equipment inventory with filtering by type, brand, and stock levels"
-    },
-    {
-      "name": "calculate_roi_metrics",
-      "description": "Calculate financial return on investment metrics including payback period and 25-year savings"
-    },
-    {
-      "name": "get_location_solar_data",
-      "description": "Retrieve solar radiation and weather data for specific Panama locations"
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-solar5estrella",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "OPENWEATHER_MCP_URL",
+          "description": "OpenWeatherMap MCP server URL (optional, defaults to localhost:8001)",
+          "isRequired": false,
+          "isSecret": false,
+          "example": "http://localhost:8001"
+        }
+      ]
     }
   ],
-  "resources": [],
-  "prompts": [],
-  "dockerConfig": {
-    "image": "mcp-solar5estrella",
-    "dockerfile": "Dockerfile",
-    "buildArgs": {},
-    "ports": {
-      "8000": "8000"
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "500m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "Solar5Estrella",
+        "category": "business",
+        "tags": [
+          "solar",
+          "energy",
+          "quotes",
+          "panama",
+          "roi",
+          "renewable-energy",
+          "equipment",
+          "financial-analysis"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/solar5estrella.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/solar5estrella.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-solar5estrella/main/README.md"
+        }
+      }
     }
   }
 }
