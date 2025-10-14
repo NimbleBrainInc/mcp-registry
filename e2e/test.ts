@@ -314,6 +314,12 @@ class NimbleToolsE2ETest {
         // Debug: log the actual response
         console.log(`  Response:`, JSON.stringify(resp, null, 2));
 
+        // Check for error response
+        if (resp.result?.isError) {
+          const errorText = resp.result.content?.[0]?.text || 'Unknown error';
+          throw new Error(`Tool returned error: ${errorText}`);
+        }
+
         if (test.expect && !validateResponse(resp, test.expect)) {
           throw new Error(`Test failed validation: ${test.name}`);
         }
@@ -326,13 +332,13 @@ class NimbleToolsE2ETest {
   }
 
   async cleanup(): Promise<void> {
-    // if (this.workspaceId) {
-    //   try {
-    //     await this.request('DELETE', `${this.baseUrl}/v1/workspaces/${this.workspaceId}`);
-    //   } catch (e) {
-    //     console.warn(`Warning: Cleanup failed: ${e}`);
-    //   }
-    // }
+    if (this.workspaceId) {
+      try {
+        await this.request('DELETE', `${this.baseUrl}/v1/workspaces/${this.workspaceId}`);
+      } catch (e) {
+        console.warn(`Warning: Cleanup failed: ${e}`);
+      }
+    }
   }
 
   async testServer(serverPath: string, envVars: Record<string, string>): Promise<boolean> {

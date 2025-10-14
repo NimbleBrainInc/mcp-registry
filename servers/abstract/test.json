@@ -1,0 +1,18 @@
+{
+  "environment": {
+    "ABSTRACT_EMAIL_API_KEY": "${ABSTRACT_EMAIL_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Validate Email",
+      "tool": "validate_email",
+      "arguments": {
+        "email": "test@example.com"
+      },
+      "expect": {
+        "type": "json",
+        "field": "is_valid_format"
+      }
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/abstract",
+  "version": "1.0.0",
+  "description": "Abstract API: email validation, phone validation, IP geolocation, VAT validation, and utilities",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-abstract",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://www.abstractapi.com/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-abstract",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "ABSTRACT_EMAIL_API_KEY",
+          "description": "Abstract API key for email validation service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_email_validation_key"
+        },
+        {
+          "name": "ABSTRACT_PHONE_API_KEY",
+          "description": "Abstract API key for phone validation service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_phone_validation_key"
+        },
+        {
+          "name": "ABSTRACT_VAT_API_KEY",
+          "description": "Abstract API key for VAT validation service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_vat_validation_key"
+        },
+        {
+          "name": "ABSTRACT_IP_API_KEY",
+          "description": "Abstract API key for IP geolocation service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_ip_geolocation_key"
+        },
+        {
+          "name": "ABSTRACT_TIMEZONE_API_KEY",
+          "description": "Abstract API key for timezone service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_timezone_key"
+        },
+        {
+          "name": "ABSTRACT_HOLIDAYS_API_KEY",
+          "description": "Abstract API key for holidays service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_holidays_key"
+        },
+        {
+          "name": "ABSTRACT_EXCHANGE_API_KEY",
+          "description": "Abstract API key for exchange rates service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_exchange_rates_key"
+        },
+        {
+          "name": "ABSTRACT_COMPANY_API_KEY",
+          "description": "Abstract API key for company enrichment service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_company_enrichment_key"
+        },
+        {
+          "name": "ABSTRACT_SCRAPE_API_KEY",
+          "description": "Abstract API key for web scraping service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_web_scraping_key"
+        },
+        {
+          "name": "ABSTRACT_SCREENSHOT_API_KEY",
+          "description": "Abstract API key for screenshot service",
+          "isRequired": false,
+          "isSecret": true,
+          "example": "your_screenshot_key"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "Abstract API",
+        "category": "data-intelligence",
+        "tags": [
+          "abstract-api",
+          "validation",
+          "email",
+          "phone",
+          "ip-geolocation",
+          "vat",
+          "timezone",
+          "holidays",
+          "exchange-rates",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/abstract.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/abstract.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-abstract/main/README.md"
+        }
+      }
+    }
+  }
+}
