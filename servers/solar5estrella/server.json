@@ -1,0 +1,82 @@
+{
+  "name": "mcp-solar5estrella",
+  "version": "0.1.0",
+  "description": "MCP server for Solar5Estrella solar energy quote generation in Panama. Calculates system sizing, equipment requirements, costs, and ROI for residential, commercial, and industrial solar installations.",
+  "icon": "https://raw.githubusercontent.com/yourusername/mcp-solar5estrella/main/icon.svg",
+  "homepage": "https://github.com/yourusername/mcp-solar5estrella",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mcp-solar5estrella.git"
+  },
+  "author": {
+    "name": "Solar5Estrella",
+    "url": "https://github.com/yourusername"
+  },
+  "categories": ["business", "energy", "finance"],
+  "keywords": [
+    "solar",
+    "energy",
+    "quotes",
+    "panama",
+    "renewable-energy",
+    "roi",
+    "solar-panels",
+    "inverters",
+    "cost-calculator"
+  ],
+  "sourceType": "python",
+  "config": {
+    "command": "uvicorn",
+    "args": [
+      "mcp_solar5estrella.server:app",
+      "--host",
+      "0.0.0.0",
+      "--port",
+      "8000"
+    ],
+    "env": {
+      "OPENWEATHER_MCP_URL": "http://localhost:8001"
+    }
+  },
+  "tools": [
+    {
+      "name": "calculate_system_size",
+      "description": "Calculate optimal solar system capacity based on daily consumption and peak sun hours"
+    },
+    {
+      "name": "validate_roof_capacity",
+      "description": "Check if available roof space can accommodate the required solar panel array"
+    },
+    {
+      "name": "calculate_equipment_requirements",
+      "description": "Calculate complete equipment list including panels, inverters, mounting, and accessories"
+    },
+    {
+      "name": "generate_solar_quote",
+      "description": "Generate a complete formal solar energy system quote with costs, ROI, and terms"
+    },
+    {
+      "name": "get_equipment_inventory",
+      "description": "Query distributor equipment inventory with filtering by type, brand, and stock levels"
+    },
+    {
+      "name": "calculate_roi_metrics",
+      "description": "Calculate financial return on investment metrics including payback period and 25-year savings"
+    },
+    {
+      "name": "get_location_solar_data",
+      "description": "Retrieve solar radiation and weather data for specific Panama locations"
+    }
+  ],
+  "resources": [],
+  "prompts": [],
+  "dockerConfig": {
+    "image": "mcp-solar5estrella",
+    "dockerfile": "Dockerfile",
+    "buildArgs": {},
+    "ports": {
+      "8000": "8000"
+    }
+  }
+}

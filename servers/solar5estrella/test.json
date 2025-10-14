@@ -1,0 +1,215 @@
+{
+  "name": "mcp-solar5estrella",
+  "tests": [
+    {
+      "name": "Calculate System Size",
+      "tool": "calculate_system_size",
+      "input": {
+        "avg_consumption_wh": 10000.0,
+        "peak_sun_hours": 5.2
+      },
+      "expectedOutput": {
+        "system_size_kw": 2.26,
+        "daily_consumption_wh": 10000.0,
+        "peak_sun_hours": 5.2,
+        "system_efficiency": 0.85
+      },
+      "description": "Test system sizing calculation for 10 kWh daily consumption"
+    },
+    {
+      "name": "Validate Roof Capacity - Valid",
+      "tool": "validate_roof_capacity",
+      "input": {
+        "roof_size_m2": 100.0,
+        "system_size_kw": 5.0
+      },
+      "expectedOutput": {
+        "is_valid": true,
+        "roof_utilization_percent": "<100"
+      },
+      "description": "Test roof validation with sufficient space"
+    },
+    {
+      "name": "Validate Roof Capacity - Insufficient",
+      "tool": "validate_roof_capacity",
+      "input": {
+        "roof_size_m2": 10.0,
+        "system_size_kw": 10.0
+      },
+      "expectedOutput": {
+        "is_valid": false
+      },
+      "description": "Test roof validation with insufficient space"
+    },
+    {
+      "name": "Calculate Equipment Requirements",
+      "tool": "calculate_equipment_requirements",
+      "input": {
+        "avg_consumption_wh": 10000.0,
+        "roof_size_m2": 100.0,
+        "project_type": "residential",
+        "include_battery": false
+      },
+      "expectedOutput": {
+        "system_size_kw": ">0",
+        "equipment_list": "length>=2",
+        "total_cost": ">0"
+      },
+      "description": "Test equipment requirements calculation for residential project"
+    },
+    {
+      "name": "Generate Solar Quote",
+      "tool": "generate_solar_quote",
+      "input": {
+        "client_name": "Test Client",
+        "avg_consumption_wh": 10000.0,
+        "roof_size_m2": 100.0,
+        "project_type": "residential",
+        "location": "Panama City, Panama"
+      },
+      "expectedOutput": {
+        "project_info": {
+          "client_name": "Test Client",
+          "project_type": "residential",
+          "location": "Panama City, Panama",
+          "quote_id": "startsWith:S5E-"
+        },
+        "system_specifications": {
+          "total_capacity_kw": ">0",
+          "panel_count": ">0"
+        },
+        "cost_breakdown": {
+          "total": ">0"
+        },
+        "financial_analysis": {
+          "payback_period_years": ">0",
+          "roi_percent": ">0"
+        }
+      },
+      "description": "Test complete quote generation with all sections"
+    },
+    {
+      "name": "Generate Quote with Bills",
+      "tool": "generate_solar_quote",
+      "input": {
+        "client_name": "Maria Rodriguez",
+        "avg_consumption_wh": 0.0,
+        "roof_size_m2": 80.0,
+        "project_type": "residential",
+        "electricity_bills": [500.0, 520.0, 480.0]
+      },
+      "expectedOutput": {
+        "project_info": {
+          "client_name": "Maria Rodriguez"
+        },
+        "financial_analysis": {
+          "avg_monthly_consumption_kwh": ">0"
+        }
+      },
+      "description": "Test quote generation with electricity bills"
+    },
+    {
+      "name": "Get Equipment Inventory - All",
+      "tool": "get_equipment_inventory",
+      "input": {},
+      "expectedOutput": {
+        "length": ">0"
+      },
+      "description": "Test retrieving all equipment from inventory"
+    },
+    {
+      "name": "Get Equipment Inventory - Solar Panels Only",
+      "tool": "get_equipment_inventory",
+      "input": {
+        "type": "solar_panel"
+      },
+      "expectedOutput": {
+        "length": ">0",
+        "all_items_type": "solar_panel"
+      },
+      "description": "Test filtering equipment by type"
+    },
+    {
+      "name": "Get Equipment Inventory - High Stock",
+      "tool": "get_equipment_inventory",
+      "input": {
+        "min_stock": 100
+      },
+      "expectedOutput": {
+        "all_items_stock": ">=100"
+      },
+      "description": "Test filtering equipment by minimum stock level"
+    },
+    {
+      "name": "Calculate ROI Metrics",
+      "tool": "calculate_roi_metrics",
+      "input": {
+        "system_cost": 15000.0,
+        "avg_monthly_consumption_kwh": 300.0
+      },
+      "expectedOutput": {
+        "monthly_savings": ">0",
+        "payback_period_years": ">0",
+        "twenty_five_year_savings": ">15000",
+        "roi_percent": ">0"
+      },
+      "description": "Test ROI calculation with typical system cost"
+    },
+    {
+      "name": "Get Location Solar Data - Panama City",
+      "tool": "get_location_solar_data",
+      "input": {
+        "location": "Panama City, Panama"
+      },
+      "expectedOutput": {
+        "location": "Panama City, Panama",
+        "avg_daily_kwh_m2": ">0",
+        "peak_sun_hours": ">0",
+        "monthly_averages": "hasKeys:12"
+      },
+      "description": "Test retrieving solar data for Panama City"
+    },
+    {
+      "name": "Get Location Solar Data - David",
+      "tool": "get_location_solar_data",
+      "input": {
+        "location": "David, Panama",
+        "lat": 8.4270,
+        "lon": -82.4278
+      },
+      "expectedOutput": {
+        "coordinates": {
+          "lat": 8.4270,
+          "lon": -82.4278
+        }
+      },
+      "description": "Test retrieving solar data with specific coordinates"
+    },
+    {
+      "name": "Calculate Equipment - Commercial Project",
+      "tool": "calculate_equipment_requirements",
+      "input": {
+        "avg_consumption_wh": 50000.0,
+        "roof_size_m2": 500.0,
+        "project_type": "commercial",
+        "include_battery": true
+      },
+      "expectedOutput": {
+        "system_size_kw": ">10",
+        "roof_utilization_percent": "<100"
+      },
+      "description": "Test equipment calculation for large commercial project with battery"
+    },
+    {
+      "name": "System Size - High Consumption",
+      "tool": "calculate_system_size",
+      "input": {
+        "avg_consumption_wh": 30000.0
+      },
+      "expectedOutput": {
+        "system_size_kw": ">5"
+      },
+      "description": "Test system sizing for high consumption scenario"
+    }
+  ]
+}
