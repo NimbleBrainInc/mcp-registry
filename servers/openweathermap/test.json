@@ -1,90 +1,63 @@
 {
+  "environment": {
+    "OPENWEATHERMAP_API_KEY": "${OPENWEATHERMAP_API_KEY}"
+  },
   "tests": [
     {
-      "name": "Get Current Weather for London",
+      "name": "Test current weather",
       "tool": "get_current_weather",
-      "params": {
-        "city": "London,GB",
-        "units": "metric"
+      "arguments": {
+        "location": "Panama City, Panama"
       },
-      "expectedFields": [
-        "coord",
-        "weather",
-        "main",
-        "wind",
-        "clouds",
-        "sys",
-        "name"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "main.temp"
-        },
-        {
-          "type": "exists",
-          "path": "weather"
-        },
-        {
-          "type": "equals",
-          "path": "name",
-          "value": "London"
-        }
-      ]
+      "expect": {
+        "type": "object",
+        "hasKeys": ["location", "temperature", "weather"]
+      }
     },
     {
-      "name": "Get 5-Day Forecast for New York",
-      "tool": "get_forecast",
-      "params": {
-        "city": "New York,US",
-        "units": "imperial"
+      "name": "Test weather forecast",
+      "tool": "get_weather_forecast",
+      "arguments": {
+        "location": "David, Panama",
+        "days": 3
       },
-      "expectedFields": [
-        "cod",
-        "list",
-        "city"
-      ],
-      "assertions": [
-        {
-          "type": "equals",
-          "path": "cod",
-          "value": "200"
-        },
-        {
-          "type": "exists",
-          "path": "list"
-        },
-        {
-          "type": "exists",
-          "path": "city.name"
-        }
-      ]
+      "expect": {
+        "type": "object",
+        "hasKeys": ["location", "forecast_list"]
+      }
     },
     {
-      "name": "Get Air Quality for Tokyo",
+      "name": "Test solar radiation",
+      "tool": "get_solar_radiation",
+      "arguments": {
+        "location": "Panama City, Panama"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["location", "avg_daily_kwh_m2", "peak_sun_hours"]
+      }
+    },
+    {
+      "name": "Test location coordinates",
+      "tool": "get_location_coordinates",
+      "arguments": {
+        "location": "Colón, Panama"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["lat", "lon", "location"]
+      }
+    },
+    {
+      "name": "Test air quality",
       "tool": "get_air_quality",
-      "params": {
-        "lat": 35.6762,
-        "lon": 139.6503
+      "arguments": {
+        "location": "Panama City, Panama"
       },
-      "expectedFields": [
-        "coord",
-        "list"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "list"
-        },
-        {
-          "type": "exists",
-          "path": "coord.lat"
-        },
-        {
-          "type": "exists",
-          "path": "coord.lon"
-        }
-      ]
+      "expect": {
+        "type": "object",
+        "hasKeys": ["location", "aqi"]
+      }
     }
   ]
 }
