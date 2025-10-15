@@ -95,6 +95,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Setup test environment
+        run: |
+          # Create .env.e2e file from secrets
+          cat > .env.e2e << 'EOF'
+          ${{ secrets.E2E_TEST_ENV }}
+          EOF
+
       - name: Run QA E2E test for ${{ matrix.server }}
         timeout-minutes: 15
         env:
