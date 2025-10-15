@@ -1,26 +1,26 @@
 {
   "name": "ai.nimbletools/openweathermap",
   "version": "1.0.0",
-  "description": "OpenWeatherMap API: current weather, forecasts, alerts, air quality, and historical data",
+  "description": "OpenWeatherMap API: weather forecasts, solar radiation, air quality, and UV index data",
   "category": "data-intelligence",
   "status": "active",
   "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/openweathermap",
   "repository": {
     "url": "https://github.com/NimbleBrainInc/mcp-openweathermap",
     "source": "github",
-    "branch": "main"
+    "branch": "s-tier-architecture"
   },
   "websiteUrl": "https://openweathermap.org/",
   "license": "MIT",
   "tags": [
     "weather",
     "forecast",
+    "solar-radiation",
     "climate",
     "temperature",
-    "alerts",
     "air-quality",
-    "meteorology",
     "uv-index",
+    "meteorology",
     "requires-api-key"
   ],
   "transport": {
