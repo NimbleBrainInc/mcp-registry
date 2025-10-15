@@ -1,55 +1,91 @@
 {
+  "environment": {
+    "PDFCO_API_KEY": "${PDFCO_API_KEY}"
+  },
   "tests": [
     {
-      "name": "PDF to Text",
+      "name": "Test PDF to text conversion",
       "tool": "pdf_to_text",
-      "params": {
+      "arguments": {
         "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-to-text/sample.pdf"
       },
-      "expectedFields": [
-        "body",
-        "url"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "body"
-        }
-      ]
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url", "text"]
+      }
     },
     {
-      "name": "PDF Info",
+      "name": "Test PDF info retrieval",
       "tool": "pdf_info",
-      "params": {
+      "arguments": {
         "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-info/sample.pdf"
       },
-      "expectedFields": [
-        "pageCount",
-        "info"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "pageCount"
-        }
-      ]
+      "expect": {
+        "type": "object",
+        "hasKeys": ["pageCount", "info"]
+      }
     },
     {
-      "name": "HTML to PDF",
+      "name": "Test HTML to PDF conversion",
       "tool": "html_to_pdf",
-      "params": {
+      "arguments": {
         "html": "<html><body><h1>Test Document</h1><p>This is a test.</p></body></html>",
         "name": "test.pdf"
       },
-      "expectedFields": [
-        "url"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "url"
-        }
-      ]
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url"]
+      }
+    },
+    {
+      "name": "Test PDF merge",
+      "tool": "pdf_merge",
+      "arguments": {
+        "urls": [
+          "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-merge/sample1.pdf",
+          "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-merge/sample2.pdf"
+        ],
+        "name": "merged.pdf"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url"]
+      }
+    },
+    {
+      "name": "Test PDF split",
+      "tool": "pdf_split",
+      "arguments": {
+        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-split/sample.pdf",
+        "pages": "1-2"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["urls"]
+      }
+    },
+    {
+      "name": "Test barcode generation",
+      "tool": "barcode_generate",
+      "arguments": {
+        "type": "qrcode",
+        "value": "https://nimblebrain.ai"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url"]
+      }
+    },
+    {
+      "name": "Test barcode reading",
+      "tool": "barcode_read",
+      "arguments": {
+        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/barcode-reader/sample-barcode.png"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["barcodes"]
+      }
     }
   ]
 }
