@@ -1,0 +1,38 @@
+{
+  "environment": {
+    "DEEPL_API_KEY": "${DEEPL_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Translate Text EN to DE",
+      "tool": "translate_text",
+      "arguments": {
+        "text": "Hello, world!",
+        "target_lang": "DE"
+      },
+      "expect": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "Detect Language",
+      "tool": "detect_language",
+      "arguments": {
+        "text": "Bonjour le monde"
+      },
+      "expect": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "List Languages",
+      "tool": "list_languages",
+      "arguments": {
+        "language_type": "target"
+      },
+      "expect": {
+        "type": "any"
+      }
+    }
+  ]
+}
