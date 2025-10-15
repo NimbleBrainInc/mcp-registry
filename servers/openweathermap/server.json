@@ -1,4 +1,5 @@
 {
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
   "name": "ai.nimbletools/openweathermap",
   "version": "1.0.0",
   "description": "OpenWeatherMap API: weather forecasts, solar radiation, air quality, and UV index data",
