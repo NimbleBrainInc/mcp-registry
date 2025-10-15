@@ -69,6 +69,11 @@ export function interpolateEnv(fixture: ServerTestFixture, envVars: Record<strin
  * Validate tool response against expectation
  */
 export function validateResponse(response: any, expect?: TestExpectation): boolean {
+  // Always fail if response indicates an error
+  if (response.result?.isError === true) {
+    return false;
+  }
+
   if (!expect) return true; // No expectation = pass
 
   const content = response.result?.content?.[0];

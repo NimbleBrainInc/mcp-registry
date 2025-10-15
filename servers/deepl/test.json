@@ -1,54 +1,38 @@
 {
+  "environment": {
+    "DEEPL_API_KEY": "${DEEPL_API_KEY}"
+  },
   "tests": [
     {
       "name": "Translate Text EN to DE",
       "tool": "translate_text",
-      "params": {
+      "arguments": {
         "text": "Hello, world!",
-        "target_lang": "DE",
-        "source_lang": "EN"
+        "target_lang": "DE"
       },
-      "expectedFields": [
-        "translations"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "translations"
-        }
-      ]
+      "expect": {
+        "type": "any"
+      }
     },
     {
       "name": "Detect Language",
       "tool": "detect_language",
-      "params": {
+      "arguments": {
         "text": "Bonjour le monde"
       },
-      "expectedFields": [
-        "detected_language"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "detected_language"
-        }
-      ]
+      "expect": {
+        "type": "any"
+      }
     },
     {
       "name": "List Languages",
       "tool": "list_languages",
-      "params": {
+      "arguments": {
         "language_type": "target"
       },
-      "expectedFields": [
-        "languages"
-      ],
-      "assertions": [
-        {
-          "type": "exists",
-          "path": "languages"
-        }
-      ]
+      "expect": {
+        "type": "any"
+      }
     }
   ]
 }

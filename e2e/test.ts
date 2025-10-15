@@ -326,13 +326,13 @@ class NimbleToolsE2ETest {
   }
 
   async cleanup(): Promise<void> {
-    // if (this.workspaceId) {
-    //   try {
-    //     await this.request('DELETE', `${this.baseUrl}/v1/workspaces/${this.workspaceId}`);
-    //   } catch (e) {
-    //     console.warn(`Warning: Cleanup failed: ${e}`);
-    //   }
-    // }
+    if (this.workspaceId) {
+      try {
+        await this.request('DELETE', `${this.baseUrl}/v1/workspaces/${this.workspaceId}`);
+      } catch (e) {
+        console.warn(`Warning: Cleanup failed: ${e}`);
+      }
+    }
   }
 
   async testServer(serverPath: string, envVars: Record<string, string>): Promise<boolean> {
