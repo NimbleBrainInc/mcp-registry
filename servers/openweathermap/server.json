@@ -1,0 +1,85 @@
+{
+    "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+    "name": "ai.nimbletools/openweathermap",
+    "version": "1.0.0",
+    "description": "OpenWeatherMap API: weather forecasts, solar radiation, air quality, and UV index data",
+    "status": "active",
+    "repository": {
+        "url": "https://github.com/NimbleBrainInc/mcp-openweathermap",
+        "source": "github",
+        "branch": "main"
+    },
+    "websiteUrl": "https://openweathermap.org/",
+    "packages": [
+        {
+            "registryType": "oci",
+            "registryBaseUrl": "https://docker.io",
+            "identifier": "nimbletools/mcp-openweathermap",
+            "version": "1.0.0",
+            "transport": {
+                "type": "streamable-http",
+                "url": "https://mcp.nimbletools.ai/mcp"
+            },
+            "environmentVariables": [
+                {
+                    "name": "OPENWEATHERMAP_API_KEY",
+                    "description": "OpenWeatherMap API key (get from https://openweathermap.org/api)",
+                    "isRequired": true,
+                    "isSecret": true,
+                    "example": "your_openweathermap_api_key_here"
+                }
+            ]
+        }
+    ],
+    "_meta": {
+        "ai.nimbletools.mcp/v1": {
+            "container": {
+                "healthCheck": {
+                    "path": "/health",
+                    "port": 8000
+                }
+            },
+            "capabilities": {
+                "tools": true,
+                "resources": false,
+                "prompts": false
+            },
+            "resources": {
+                "limits": {
+                    "memory": "256Mi",
+                    "cpu": "250m"
+                },
+                "requests": {
+                    "memory": "128Mi",
+                    "cpu": "100m"
+                }
+            },
+            "deployment": {
+                "protocol": "http",
+                "port": 8000,
+                "mcpPath": "/mcp"
+            },
+            "display": {
+                "name": "OpenWeather",
+                "category": "data-intelligence",
+                "tags": [
+                    "weather",
+                    "forecast",
+                    "solar-radiation",
+                    "climate",
+                    "temperature",
+                    "air-quality",
+                    "uv-index",
+                    "meteorology"
+                ],
+                "branding": {
+                    "logoUrl": "https://static.nimbletools.ai/logos/openweathermap.png",
+                    "iconUrl": "https://static.nimbletools.ai/icons/openweathermap.png"
+                },
+                "documentation": {
+                    "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-openweathermap/main/README.md"
+                }
+            }
+        }
+    }
+}

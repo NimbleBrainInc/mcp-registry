@@ -1,0 +1,63 @@
+{
+    "environment": {
+        "OPENWEATHERMAP_API_KEY": "${OPENWEATHERMAP_API_KEY}"
+    },
+    "tests": [
+        {
+            "name": "Test current weather",
+            "tool": "get_current_weather",
+            "arguments": {
+                "location": "Panama City, Panama"
+            },
+            "expect": {
+                "type": "json",
+                "field": "location"
+            }
+        },
+        {
+            "name": "Test weather forecast",
+            "tool": "get_weather_forecast",
+            "arguments": {
+                "location": "David, Panama",
+                "days": 3
+            },
+            "expect": {
+                "type": "json",
+                "field": "forecast_list"
+            }
+        },
+        {
+            "name": "Test solar radiation",
+            "tool": "get_solar_radiation",
+            "arguments": {
+                "location": "Panama City, Panama"
+            },
+            "expect": {
+                "type": "json",
+                "field": "avg_daily_kwh_m2"
+            }
+        },
+        {
+            "name": "Test location coordinates",
+            "tool": "get_location_coordinates",
+            "arguments": {
+                "location": "Colón, Panama"
+            },
+            "expect": {
+                "type": "json",
+                "field": "lat"
+            }
+        },
+        {
+            "name": "Test air quality",
+            "tool": "get_air_quality",
+            "arguments": {
+                "location": "Panama City, Panama"
+            },
+            "expect": {
+                "type": "json",
+                "field": "aqi"
+            }
+        }
+    ]
+}
