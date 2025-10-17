@@ -34,7 +34,7 @@
       },
       "expect": {
         "type": "object",
-        "hasKeys": ["url"]
+        "hasKeys": ["uri", "name", "mimeType", "type"]
       }
     },
     {
@@ -49,7 +49,7 @@
       },
       "expect": {
         "type": "object",
-        "hasKeys": ["url"]
+        "hasKeys": ["uri", "name", "mimeType", "type"]
       }
     },
     {
@@ -61,7 +61,7 @@
       },
       "expect": {
         "type": "object",
-        "hasKeys": ["urls"]
+        "hasKeys": ["result"]
       }
     },
     {

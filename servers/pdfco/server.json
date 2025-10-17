@@ -15,7 +15,7 @@
       "registryType": "oci",
       "registryBaseUrl": "https://docker.io",
       "identifier": "nimbletools/mcp-pdfco",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
