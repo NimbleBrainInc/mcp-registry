@@ -3,11 +3,12 @@
  */
 
 export interface TestExpectation {
-  type: 'text' | 'json' | 'any';
+  type: 'text' | 'json' | 'any' | 'object';
   contains?: string;
   equals?: any;
   schema?: Record<string, any>;
   field?: string; // For JSON: check specific field value
+  hasKeys?: string[]; // For object: check if specific keys exist
 }
 
 export interface ToolTest {
@@ -115,6 +116,18 @@ export function validateResponse(response: any, expect?: TestExpectation): boole
       }
 
     case 'any':
+      return true;
+
+    case 'object':
+      // Check structuredContent for object validation
+      const structuredContent = response.result?.structuredContent;
+      if (!structuredContent) return false;
+
+      // If hasKeys is specified, check all keys exist
+      if (expect.hasKeys) {
+        return expect.hasKeys.every(key => key in structuredContent);
+      }
+
       return true;
 
     default:

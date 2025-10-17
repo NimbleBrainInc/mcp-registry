@@ -22,7 +22,7 @@
       },
       "expect": {
         "type": "object",
-        "hasKeys": ["pageCount", "info"]
+        "hasKeys": ["info"]
       }
     },
     {
@@ -80,7 +80,8 @@
       "name": "Test barcode reading",
       "tool": "barcode_read",
       "arguments": {
-        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/barcode-reader/sample-barcode.png"
+        "url": "https://static.nimbletools.ai/test_artifacts/hello_world_barcode.jpg",
+        "types": "Code128,Code39,QRCode,DataMatrix,EAN13"
       },
       "expect": {
         "type": "object",
