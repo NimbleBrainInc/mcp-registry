@@ -15,7 +15,7 @@
             "registryType": "oci",
             "registryBaseUrl": "https://docker.io",
             "identifier": "nimbletools/mcp-openweathermap",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "transport": {
                 "type": "streamable-http",
                 "url": "https://mcp.nimbletools.ai/mcp"
