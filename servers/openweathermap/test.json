@@ -1,0 +1,30 @@
+{
+    "environment": {
+        "OPENWEATHERMAP_API_KEY": "${OPENWEATHERMAP_API_KEY}"
+    },
+    "tests": [
+        {
+            "name": "Test current weather",
+            "tool": "get_current_weather",
+            "arguments": {
+                "location": "Panama City, Panama"
+            },
+            "expect": {
+                "type": "json",
+                "field": "name"
+            }
+        },
+        {
+            "name": "Test air quality",
+            "tool": "get_air_quality",
+            "arguments": {
+                "lat": 8.9824,
+                "lon": -79.5199
+            },
+            "expect": {
+                "type": "json",
+                "field": "list"
+            }
+        }
+    ]
+}
