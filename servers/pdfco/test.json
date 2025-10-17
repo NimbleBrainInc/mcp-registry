@@ -1,0 +1,92 @@
+{
+  "environment": {
+    "PDFCO_API_KEY": "${PDFCO_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Test PDF to text conversion",
+      "tool": "pdf_to_text",
+      "arguments": {
+        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-to-text/sample.pdf"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url", "text"]
+      }
+    },
+    {
+      "name": "Test PDF info retrieval",
+      "tool": "pdf_info",
+      "arguments": {
+        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-info/sample.pdf"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["info"]
+      }
+    },
+    {
+      "name": "Test HTML to PDF conversion",
+      "tool": "html_to_pdf",
+      "arguments": {
+        "html": "<html><body><h1>Test Document</h1><p>This is a test.</p></body></html>",
+        "name": "test.pdf"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url"]
+      }
+    },
+    {
+      "name": "Test PDF merge",
+      "tool": "pdf_merge",
+      "arguments": {
+        "urls": [
+          "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-merge/sample1.pdf",
+          "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-merge/sample2.pdf"
+        ],
+        "name": "merged.pdf"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url"]
+      }
+    },
+    {
+      "name": "Test PDF split",
+      "tool": "pdf_split",
+      "arguments": {
+        "url": "https://bytescout-com.s3.amazonaws.com/files/demo-files/cloud-api/pdf-split/sample.pdf",
+        "pages": "1-2"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["urls"]
+      }
+    },
+    {
+      "name": "Test barcode generation",
+      "tool": "barcode_generate",
+      "arguments": {
+        "type": "qrcode",
+        "value": "https://nimblebrain.ai"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["url"]
+      }
+    },
+    {
+      "name": "Test barcode reading",
+      "tool": "barcode_read",
+      "arguments": {
+        "url": "https://static.nimbletools.ai/test_artifacts/hello_world_barcode.jpg",
+        "types": "Code128,Code39,QRCode,DataMatrix,EAN13"
+      },
+      "expect": {
+        "type": "object",
+        "hasKeys": ["barcodes"]
+      }
+    }
+  ]
+}
