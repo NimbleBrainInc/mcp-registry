@@ -1,0 +1,65 @@
+{
+  "name": "ai.nimbletools/huggingface",
+  "version": "1.0.0",
+  "description": "Hugging Face API: LLMs, image generation, text classification, embeddings, and 200,000+ models",
+  "category": "ai-ml",
+  "status": "active",
+  "homepage": "https://github.com/NimbleBrainInc/mcp-registry/tree/main/servers/huggingface",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-huggingface",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://huggingface.co/",
+  "license": "MIT",
+  "tags": [
+    "huggingface",
+    "llm",
+    "machine-learning",
+    "text-generation",
+    "image-generation",
+    "stable-diffusion",
+    "embeddings",
+    "nlp",
+    "computer-vision",
+    "requires-api-key"
+  ],
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.nimbletools.ai/mcp"
+  },
+  "environmentVariables": {
+    "HUGGINGFACE_API_TOKEN": {
+      "description": "Hugging Face API token (get from https://huggingface.co/settings/tokens)",
+      "required": true,
+      "secret": true,
+      "example": "hf_..."
+    }
+  },
+  "_meta": {
+    "display": {
+      "icon": "https://cdn.simpleicons.org/huggingface",
+      "color": "#FFD21E"
+    },
+    "deployment": {
+      "protocol": "http",
+      "registry": "ghcr.io",
+      "image": "ghcr.io/nimblebraininc/mcp-huggingface:latest",
+      "port": 8000,
+      "mcpPath": "/mcp"
+    },
+    "resources": {
+      "limits": {
+        "cpu": "500m",
+        "memory": "512Mi"
+      },
+      "requests": {
+        "cpu": "250m",
+        "memory": "256Mi"
+      }
+    },
+    "capabilities": {
+      "tools": true
+    }
+  }
+}
