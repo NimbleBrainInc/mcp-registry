@@ -1,0 +1,87 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/gemini",
+  "version": "1.0.0",
+  "description": "Google Gemini API: multimodal AI for text, images, video, audio, and PDFs with 2M token context",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-gemini",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://ai.google.dev/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-gemini",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "GEMINI_API_KEY",
+          "description": "Google Gemini API key (get from https://aistudio.google.com/app/apikey)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "AIza..."
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "512Mi",
+          "cpu": "500m"
+        },
+        "requests": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "Google Gemini",
+        "category": "ai-ml",
+        "tags": [
+          "google",
+          "gemini",
+          "ai",
+          "llm",
+          "multimodal",
+          "vision",
+          "video-analysis",
+          "function-calling",
+          "embeddings",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/gemini.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/gemini.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-gemini/main/README.md"
+        }
+      }
+    }
+  }
+}
