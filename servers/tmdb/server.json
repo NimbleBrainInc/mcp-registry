@@ -1,0 +1,87 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/tmdb",
+  "version": "1.0.0",
+  "description": "TMDB API: movies, TV shows, cast info, ratings, and streaming availability from 1M+ titles",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-tmdb",
+    "source": "github",
+    "branch": "main"
+  },
+  "websiteUrl": "https://www.themoviedb.org/",
+  "packages": [
+    {
+      "registryType": "oci",
+      "registryBaseUrl": "https://docker.io",
+      "identifier": "nimbletools/mcp-tmdb",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "TMDB_API_KEY",
+          "description": "TMDB API key (get from https://www.themoviedb.org/settings/api)",
+          "isRequired": true,
+          "isSecret": true,
+          "example": "your_tmdb_api_key_here"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000
+        }
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "resources": {
+        "limits": {
+          "memory": "256Mi",
+          "cpu": "250m"
+        },
+        "requests": {
+          "memory": "128Mi",
+          "cpu": "100m"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "display": {
+        "name": "TMDB",
+        "category": "data-intelligence",
+        "tags": [
+          "tmdb",
+          "movies",
+          "tv-shows",
+          "entertainment",
+          "streaming",
+          "cast",
+          "ratings",
+          "recommendations",
+          "cinema",
+          "requires-api-key"
+        ],
+        "branding": {
+          "logoUrl": "https://static.nimbletools.ai/logos/tmdb.png",
+          "iconUrl": "https://static.nimbletools.ai/icons/tmdb.png"
+        },
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-tmdb/main/README.md"
+        }
+      }
+    }
+  }
+}

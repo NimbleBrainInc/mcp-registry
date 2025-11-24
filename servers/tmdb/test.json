@@ -1,0 +1,64 @@
+{
+  "tests": [
+    {
+      "name": "Search Movies",
+      "tool": "search_movies",
+      "params": {
+        "query": "The Matrix",
+        "language": "en-US",
+        "page": 1
+      },
+      "expectedFields": [
+        "results",
+        "page",
+        "total_results"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "results"
+        },
+        {
+          "type": "exists",
+          "path": "page"
+        }
+      ]
+    },
+    {
+      "name": "Get Trending Movies",
+      "tool": "get_trending",
+      "params": {
+        "media_type": "movie",
+        "time_window": "day",
+        "language": "en-US"
+      },
+      "expectedFields": [
+        "results",
+        "page"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "results"
+        }
+      ]
+    },
+    {
+      "name": "Get Movie Genres",
+      "tool": "get_genres",
+      "params": {
+        "media_type": "movie",
+        "language": "en-US"
+      },
+      "expectedFields": [
+        "genres"
+      ],
+      "assertions": [
+        {
+          "type": "exists",
+          "path": "genres"
+        }
+      ]
+    }
+  ]
+}
