@@ -20,7 +20,7 @@ async function start() {
 
    API:     http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}
    Docs:    http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/docs
-   Health:  http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/health
+   Health:  http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/v0.1/health
     `);
   } catch (err) {
     console.error('Failed to start server:', err);
