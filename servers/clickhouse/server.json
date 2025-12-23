@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/clickhouse",
   "version": "1.0.0",
+  "title": "ClickHouse",
   "description": "OLAP database for real-time analytics and data warehousing queries",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/clickhouse.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/clickhouse.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/ClickHouse/mcp-clickhouse",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://clickhouse.com",
   "packages": [
@@ -27,35 +40,35 @@
           "isRequired": false,
           "isSecret": false,
           "default": "0.0.0.0",
-          "example": "127.0.0.1"
+          "placeholder": "127.0.0.1"
         },
         {
           "name": "CLICKHOUSE_USER",
           "description": "ClickHouse username for authentication",
           "isRequired": true,
           "isSecret": false,
-          "example": "default"
+          "placeholder": "default"
         },
         {
           "name": "CLICKHOUSE_PASSWORD",
           "description": "ClickHouse password for authentication",
           "isRequired": true,
           "isSecret": true,
-          "example": "your_password_here"
+          "placeholder": "your_password_here"
         },
         {
           "name": "CLICKHOUSE_PORT",
           "description": "ClickHouse server port (default: 8443 for HTTPS, 8123 for HTTP)",
           "isRequired": false,
           "isSecret": false,
-          "example": "8443"
+          "placeholder": "8443"
         },
         {
           "name": "CLICKHOUSE_DATABASE",
           "description": "Default database to connect to",
           "isRequired": false,
           "isSecret": false,
-          "example": "default"
+          "placeholder": "default"
         },
         {
           "name": "CLICKHOUSE_MCP_BIND_HOST",
@@ -63,7 +76,7 @@
           "default": "0.0.0.0",
           "isRequired": false,
           "isSecret": false,
-          "example": "127.0.0.1"
+          "placeholder": "127.0.0.1"
         },
         {
           "name": "CLICKHOUSE_MCP_SERVER_TRANSPORT",
@@ -71,22 +84,21 @@
           "default": "http",
           "isRequired": false,
           "isSecret": false,
-          "example": "http"
+          "placeholder": "http"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "enabled": false
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -103,8 +115,12 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "ClickHouse",
         "category": "infrastructure-data",
         "tags": [
           "database",
@@ -116,10 +132,6 @@
           "enterprise",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/clickhouse.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/clickhouse.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/ClickHouse/mcp-clickhouse/main/README.md"
         }

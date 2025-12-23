@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/deepl",
   "version": "1.0.0",
+  "title": "DeepL",
   "description": "DeepL API: professional translation for 30+ languages with document support and glossaries",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/deepl.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/deepl.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/NimbleBrainInc/mcp-deepl",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://www.deepl.com/",
   "packages": [
@@ -26,23 +39,22 @@
           "description": "DeepL API key (get from https://www.deepl.com/pro-api)",
           "isRequired": true,
           "isSecret": true,
-          "example": "your_deepl_api_key:fx"
+          "placeholder": "your_deepl_api_key:fx"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/health",
           "port": 8000
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -59,8 +71,12 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "DeepL",
         "category": "communication-collaboration",
         "tags": [
           "deepl",
@@ -73,10 +89,6 @@
           "glossary",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/deepl.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/deepl.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-deepl/main/README.md"
         }

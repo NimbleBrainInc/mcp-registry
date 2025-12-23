@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/postgres-mcp",
   "version": "0.3.0",
+  "title": "PostgreSQL",
   "description": "PostgreSQL MCP server with configurable read/write access and performance analysis",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/postgresql.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/postgresql.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/crystaldba/postgres-mcp",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://github.com/crystaldba/postgres-mcp",
   "packages": [
@@ -42,15 +55,14 @@
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "enabled": false
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -67,8 +79,12 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "PostgreSQL",
         "category": "infrastructure-data",
         "tags": [
           "database",
@@ -77,10 +93,6 @@
           "read-write",
           "performance"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/postgresql.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/postgresql.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/crystaldba/postgres-mcp/main/README.md"
         }

@@ -8,9 +8,13 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { interpolateEnv, loadEnvFile, loadFixture, ServerTestFixture, validateResponse } from './fixtures.js';
+import dotenv from 'dotenv';
+import { interpolateEnv, loadFixture, ServerTestFixture, validateResponse } from './fixtures.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Load .env.e2e at startup
+dotenv.config({ path: path.join(__dirname, '..', '.env.e2e') });
 
 // Allow self-signed certificates for local testing
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
@@ -18,10 +22,16 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 interface ServerDefinition {
   name: string;
   version: string;
+  title?: string;
   description: string;
-  status: string;
   packages: any[];
-  _meta: any;
+  _meta?: {
+    'ai.nimbletools.mcp/v1'?: {
+      status?: string;
+      [key: string]: any;
+    };
+    [key: string]: any;
+  };
 }
 
 class NimbleToolsE2ETest {
@@ -353,9 +363,10 @@ class NimbleToolsE2ETest {
       // Load server definition
       const serverDef = JSON.parse(await fs.readFile(serverPath, 'utf-8')) as ServerDefinition;
 
-      // Skip non-active servers
-      if (serverDef.status !== 'active') {
-        console.log(`⊘ ${serverName}: Skipped (status: ${serverDef.status})`);
+      // Skip non-active servers (status is in _meta.ai.nimbletools.mcp/v1.status)
+      const serverStatus = serverDef._meta?.['ai.nimbletools.mcp/v1']?.status;
+      if (serverStatus !== 'active') {
+        console.log(`⊘ ${serverName}: Skipped (status: ${serverStatus})`);
         return true;
       }
 
@@ -438,9 +449,6 @@ async function main() {
   if (serverFilter) console.log(`Filter: ${serverFilter}`);
   console.log();
 
-  // Load environment variables for tests
-  const envVars = { ...process.env, ...await loadEnvFile() } as Record<string, string>;
-
   // Test each server
   const tester = new NimbleToolsE2ETest(baseUrl);
   const results: Array<[string, boolean]> = [];
@@ -486,7 +494,7 @@ async function main() {
   }
 
   for (const serverFile of validServerFiles.sort()) {
-    const passed = await tester.testServer(serverFile, envVars);
+    const passed = await tester.testServer(serverFile, process.env as Record<string, string>);
     results.push([path.basename(path.dirname(serverFile)), passed]);
     console.log();
   }

@@ -26,19 +26,29 @@ This registry provides a REST API for discovering MCP servers, implementing a su
 
 ## API Endpoints
 
-The registry provides the following REST endpoints:
+The registry implements the [MCP Registry API v0.1](https://github.com/modelcontextprotocol/registry/) specification:
 
 ```
-GET /                                    # API info and available endpoints
-GET /v0/servers                         # List all servers
-GET /v0/servers/{server_id}            # Get specific server details
-GET /v0/servers/{server_id}/versions   # Get server versions
-GET /schemas                           # List available schema versions
-GET /schemas/latest/{filename}         # Get latest schema
-GET /schemas/{version}/{filename}      # Get specific schema version
-GET /health                            # Health check
-GET /docs                              # Interactive API documentation (Swagger UI)
+GET /                                              # API info and available endpoints
+GET /v0.1/servers                                  # List all servers (with search, pagination)
+GET /v0.1/servers/{name}/versions/{version}        # Get specific server version
+GET /v0.1/servers/{server_id}                      # Get server by ID (legacy)
+GET /v0.1/health                                   # Health check
+GET /schemas                                       # List available schema versions
+GET /schemas/latest/{filename}                     # Get latest schema
+GET /schemas/{version}/{filename}                  # Get specific schema version
+GET /docs                                          # Interactive API documentation (Swagger UI)
 ```
+
+### Query Parameters (GET /v0.1/servers)
+
+| Parameter | Description |
+|-----------|-------------|
+| `search` | Case-insensitive search on name, title, description |
+| `version` | Filter by version (`latest` supported) |
+| `updated_since` | RFC3339 timestamp filter |
+| `cursor` | Pagination cursor |
+| `limit` | Results per page (default 100, max 500) |
 
 **Base URL:** `https://registry.nimbletools.ai`
 **API Documentation:** `https://registry.nimbletools.ai/docs` (Interactive Swagger UI)
@@ -47,46 +57,72 @@ GET /docs                              # Interactive API documentation (Swagger 
 
 ```bash
 # List all servers
-curl https://registry.nimbletools.ai/v0/servers
+curl https://registry.nimbletools.ai/v0.1/servers
 
-# Get specific server
-curl https://registry.nimbletools.ai/v0/servers/ai.nimbletools%2Ffinnhub
+# Search for servers
+curl "https://registry.nimbletools.ai/v0.1/servers?search=weather"
+
+# Get specific server version
+curl https://registry.nimbletools.ai/v0.1/servers/ai.nimbletools%2Ffinnhub/versions/latest
 
 # Check health
-curl https://registry.nimbletools.ai/health
+curl https://registry.nimbletools.ai/v0.1/health
 ```
 
 ## Server Schema
 
-Our servers follow the [MCP server schema](https://modelcontextprotocol.io/schemas) with additional NimbleBrain-specific metadata:
+Our servers follow the [MCP server schema (2025-12-11)](https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json) with additional NimbleBrain-specific metadata:
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/example",
   "version": "1.0.0",
+  "title": "Example Server",
   "description": "Example MCP server",
+  "icons": [
+    { "src": "https://example.com/icon.png", "sizes": ["64x64"] }
+  ],
+  "repository": {
+    "url": "https://github.com/example/repo",
+    "source": "github"
+  },
   "packages": [{
     "registryType": "oci",
     "identifier": "nimbletools/example",
     "version": "1.0.0",
-    "transport": { "type": "stdio" }
+    "transport": { "type": "streamable-http", "url": "https://mcp.example.com/mcp" },
+    "environmentVariables": [{
+      "name": "API_KEY",
+      "isRequired": true,
+      "isSecret": true,
+      "placeholder": "your_api_key"
+    }]
   }],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
       "container": {
-        "healthCheck": {
-          "path": "/health",
-          "port": 8000
-        }
+        "healthCheck": { "path": "/health", "port": 8000 }
       },
       "resources": {
         "limits": { "memory": "256Mi", "cpu": "100m" }
+      },
+      "capabilities": { "tools": true, "resources": false, "prompts": false },
+      "display": {
+        "category": "developer-tools",
+        "tags": ["example", "demo"]
       }
     }
   }
 }
 ```
+
+### Schema Versions
+
+| Version | Status | Description |
+|---------|--------|-------------|
+| `2025-12-11` | **Current** | Latest MCP schema with `title`, `icons[]`, `placeholder` |
 
 ## Deployment
 
@@ -183,30 +219,36 @@ The test runner automatically:
 
 #### QA Environment Testing
 
-For testing in QA/CI environments that use bearer token authentication instead of Clerk:
+For testing in QA/CI environments that use bearer token authentication:
+
+**Setup**: Add your bearer token to `.env.e2e`:
+
+```bash
+# .env.e2e
+QA_BEARER_TOKEN=your_bearer_token_here
+```
+
+**Run tests**:
 
 ```bash
 # Test all servers on default QA domain (qa.nimbletools.ai)
-./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN
+npx tsx e2e/test-qa.ts
 
 # Test all servers on custom domain
-./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=qa.nimbletools.dev
+npx tsx e2e/test-qa.ts --domain=qa.nimbletools.dev
 
 # Test specific server
-./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --server=echo
+npx tsx e2e/test-qa.ts --domain=qa.nimbletools.dev --server=echo
 
 # Test with HTTP and custom port for local development
-./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=nt.dev --port=8080 --insecure
+npx tsx e2e/test-qa.ts --domain=nt.dev --port=8080 --insecure
 
-# Test with custom port on HTTPS
-./e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=qa.nimbletools.ai --port=8443
-
-# In CI/CD pipelines
-./e2e/test-qa.ts --token=$QA_BEARER_TOKEN --domain=$QA_DOMAIN
+# Override token via CLI (takes precedence over .env.e2e)
+npx tsx e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=qa.nimbletools.dev
 ```
 
 The QA test script (`test-qa.ts`) provides the same functionality as the standard test script but:
-- Uses bearer token authentication for all API requests
+- Uses bearer token authentication (from `QA_BEARER_TOKEN` in `.env.e2e` or `--token` flag)
 - Takes a base domain and automatically constructs API (`api.<domain>`) and MCP (`mcp.<domain>`) URLs
 - Defaults to `qa.nimbletools.ai` domain
 - Supports `--insecure` flag to use HTTP instead of HTTPS for local testing

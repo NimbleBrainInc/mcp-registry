@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/tavily-mcp",
   "version": "0.2.9",
+  "title": "Tavily",
   "description": "Real-time web search, extract, map & crawl capabilities for web intelligence",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/tavily.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/tavily.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/tavily-ai/tavily-mcp",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://github.com/tavily-ai/tavily-mcp",
   "packages": [
@@ -37,25 +50,24 @@
           "description": "Tavily API key for accessing search and extraction services (get free key at tavily.com)",
           "isRequired": true,
           "isSecret": true,
-          "example": "tvly-1234567890abcdef"
+          "placeholder": "tvly-1234567890abcdef"
         },
         {
           "name": "LOG_LEVEL",
           "description": "Logging level (optional, defaults to info)",
           "isRequired": false,
-          "example": "info"
+          "placeholder": "info"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
-      "container": {},
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
+      "status": "active",
+      "repository": {
+        "branch": "main"
       },
+      "container": {},
       "resources": {
         "limits": {
           "memory": "512Mi",
@@ -69,8 +81,12 @@
       "deployment": {
         "protocol": "stdio"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "Tavily",
         "category": "data-intelligence",
         "tags": [
           "search",
@@ -80,10 +96,6 @@
           "real-time",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/tavily.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/tavily.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/tavily-ai/tavily-mcp/main/README.md"
         }

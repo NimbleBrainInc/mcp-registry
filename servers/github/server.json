@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/github",
   "version": "1.0.0",
+  "title": "GitHub",
   "description": "Interact with GitHub repos, issues, PRs, code search, and Actions through natural language",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/github.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/github.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/NimbleToolsInc/mcp-github",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://github.com/",
   "packages": [
@@ -26,31 +39,29 @@
           "description": "GitHub Personal Access Token with repo, issues, and actions permissions (get one at github.com/settings/tokens)",
           "isRequired": true,
           "isSecret": true,
-          "example": "ghp_xxxxxxxxxxxxxxxxxxxx"
+          "placeholder": "ghp_xxxxxxxxxxxxxxxxxxxx"
         },
         {
           "name": "GITHUB_TOOLSETS",
           "description": "Comma-separated toolsets: repos, issues, pull_requests, actions, code_security, or 'all' for everything",
           "isRequired": false,
           "isSecret": false,
-          "example": "all"
+          "placeholder": "all"
         }
       ]
     }
   ],
-
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/health",
           "port": 8000
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -67,8 +78,12 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "GitHub",
         "category": "developer-tools",
         "tags": [
           "version-control",
@@ -80,10 +95,6 @@
           "enterprise",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/github.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/github.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/github/github-mcp-server/main/README.md"
         }
