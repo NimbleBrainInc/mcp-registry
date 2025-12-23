@@ -134,33 +134,3 @@ export function validateResponse(response: any, expect?: TestExpectation): boole
       return false;
   }
 }
-
-/**
- * Load environment variables from .env.e2e
- */
-export async function loadEnvFile(path: string = '.env.e2e'): Promise<Record<string, string>> {
-  try {
-    const { default: fs } = await import('fs/promises');
-    const { default: pathModule } = await import('path');
-    const { fileURLToPath } = await import('url');
-
-    const __dirname = pathModule.dirname(fileURLToPath(import.meta.url));
-    const envPath = pathModule.join(__dirname, '..', path);
-    const content = await fs.readFile(envPath, 'utf-8');
-
-    const env: Record<string, string> = {};
-    for (const line of content.split('\n')) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-
-      const [key, ...valueParts] = trimmed.split('=');
-      if (key && valueParts.length > 0) {
-        env[key.trim()] = valueParts.join('=').trim();
-      }
-    }
-
-    return env;
-  } catch {
-    return {}; // No .env.e2e file = use system env only
-  }
-}

@@ -24,19 +24,21 @@ servers/
 
 ### 3. Server JSON Structure
 
-Your `server.json` must follow our schema:
+Your `server.json` must follow the 2025-12-11 schema:
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
+  "title": "Your Server Display Name",
   "description": "Brief description under 100 characters",
-  "status": "active",
+  "icons": [
+    { "src": "https://static.nimbletools.ai/icons/your-server.png", "sizes": ["64x64"] }
+  ],
   "repository": {
     "url": "https://github.com/yourusername/your-server",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://your-documentation-site.com",
   "packages": [
@@ -46,7 +48,8 @@ Your `server.json` must follow our schema:
       "identifier": "yourdockerhub/your-server",
       "version": "1.0.0",
       "transport": {
-        "type": "stdio"
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
       },
       "environmentVariables": [
         {
@@ -54,13 +57,17 @@ Your `server.json` must follow our schema:
           "description": "Your API key description",
           "isRequired": true,
           "isSecret": true,
-          "example": "your_api_key_here"
+          "placeholder": "your_api_key_here"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/health",
@@ -68,22 +75,9 @@ Your `server.json` must follow our schema:
         }
       },
       "capabilities": {
-        "tools": [
-          {
-            "name": "tool_name",
-            "description": "What this tool does",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "input": {
-                  "type": "string",
-                  "description": "Input description"
-                }
-              },
-              "required": ["input"]
-            }
-          }
-        ]
+        "tools": true,
+        "resources": false,
+        "prompts": false
       },
       "resources": {
         "limits": {

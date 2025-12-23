@@ -24,7 +24,7 @@ const __dirname = dirname(__filename);
 // Constants
 const SERVERS_DIR = join(__dirname, '..', 'servers');
 const SCHEMAS_DIR = join(__dirname, '..', 'schemas');
-const LATEST_SCHEMA_VERSION = '2025-09-22';
+const LATEST_SCHEMA_VERSION = '2025-12-11';
 
 // Server cache
 let serversCache: Map<string, MCPServerDetail> = new Map();
@@ -111,8 +111,8 @@ export async function createServer(): Promise<FastifyInstance> {
     openapi: {
       info: {
         title: 'NimbleTools MCP Registry API',
-        description: 'A curated registry of Model Context Protocol servers',
-        version: 'v0'
+        description: 'A curated registry of Model Context Protocol servers. Compatible with MCP Registry API v0.1.',
+        version: 'v0.1'
       },
       servers: [
         {
@@ -140,11 +140,11 @@ export async function createServer(): Promise<FastifyInstance> {
   fastify.get('/', async () => {
     return {
       name: 'NimbleTools MCP Registry API',
-      version: 'v0',
+      version: 'v0.1',
       endpoints: {
-        listServers: '/v0/servers',
-        getServer: '/v0/servers/{server_id}',
-        getServerVersions: '/v0/servers/{server_id}/versions',
+        listServers: '/v0.1/servers',
+        getServer: '/v0.1/servers/{name}/versions/{version}',
+        health: '/v0.1/health',
         schemas: '/schemas',
         schemaByVersion: '/schemas/{version}/{filename}',
         latestSchema: '/schemas/latest/{filename}'
@@ -155,21 +155,56 @@ export async function createServer(): Promise<FastifyInstance> {
 
   // List servers endpoint
   fastify.get<{
-    Querystring: { cursor?: string; limit?: string };
+    Querystring: {
+      cursor?: string;
+      limit?: string;
+      search?: string;
+      version?: string;
+      updated_since?: string;
+    };
     Reply: ServerListResponse | ErrorResponse;
-  }>('/v0/servers', {
+  }>('/v0.1/servers', {
     schema: {
       querystring: {
         type: 'object',
         properties: {
-          cursor: { type: 'string' },
-          limit: { type: 'string' }
+          cursor: { type: 'string', description: 'Pagination cursor' },
+          limit: { type: 'string', description: 'Maximum number of results (default 100, max 500)' },
+          search: { type: 'string', description: 'Case-insensitive search on server name' },
+          version: { type: 'string', enum: ['latest'], description: 'Filter to latest versions only' },
+          updated_since: { type: 'string', description: 'RFC3339 timestamp to filter recently updated servers' }
         }
       }
     }
   }, async (request) => {
     const servers = await loadServers();
-    const serverList = Array.from(servers.values());
+    let serverList = Array.from(servers.values());
+
+    // Apply search filter (case-insensitive substring match on name)
+    if (request.query.search) {
+      const searchLower = request.query.search.toLowerCase();
+      serverList = serverList.filter(s =>
+        s.name.toLowerCase().includes(searchLower) ||
+        (s.title && s.title.toLowerCase().includes(searchLower)) ||
+        s.description.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Apply updated_since filter
+    if (request.query.updated_since) {
+      const sinceDate = new Date(request.query.updated_since);
+      if (!isNaN(sinceDate.getTime())) {
+        serverList = serverList.filter(s => {
+          const meta = s._meta?.['io.modelcontextprotocol.registry/official'];
+          if (meta?.updatedAt) {
+            return new Date(meta.updatedAt) >= sinceDate;
+          }
+          return true; // Include servers without update timestamp
+        });
+      }
+    }
+
+    // Note: version=latest is a no-op for us since we only serve latest versions
 
     // Parse pagination parameters
     const limit = Math.min(parseInt(request.query.limit || '100', 10), 500);
@@ -194,53 +229,48 @@ export async function createServer(): Promise<FastifyInstance> {
     return response;
   });
 
-  // Get server by ID endpoint
+  // Get server by name and version endpoint (official spec format)
   fastify.get<{
-    Params: { server_id: string };
-    Querystring: { version?: string };
+    Params: { name: string; version: string };
     Reply: MCPServerDetail | ErrorResponse;
-  }>('/v0/servers/:server_id', {
+  }>('/v0.1/servers/:name/versions/:version', {
     schema: {
       params: {
         type: 'object',
         properties: {
-          server_id: { type: 'string' }
+          name: { type: 'string', description: 'Server name (URL-encoded, e.g., ai.nimbletools%2Fecho)' },
+          version: { type: 'string', description: 'Server version (e.g., 1.0.0) or "latest"' }
         },
-        required: ['server_id']
-      },
-      querystring: {
-        type: 'object',
-        properties: {
-          version: { type: 'string' }
-        }
+        required: ['name', 'version']
       }
     }
   }, async (request, reply) => {
     const servers = await loadServers();
 
-    // Decode the server ID (which is the server name)
-    const decodedName = decodeURIComponent(request.params.server_id);
+    // Decode the server name
+    const decodedName = decodeURIComponent(request.params.name);
     const server = servers.get(decodedName);
 
     if (!server) {
       reply.code(404);
-      return { error: `Server '${request.params.server_id}' not found` };
+      return { error: `Server '${decodedName}' not found` };
     }
 
-    // Check version if specified
-    if (request.query.version && server.version !== request.query.version) {
+    // Check version (support "latest" as alias for current version)
+    const requestedVersion = request.params.version;
+    if (requestedVersion !== 'latest' && server.version !== requestedVersion) {
       reply.code(404);
-      return { error: `Version ${request.query.version} not found for this server` };
+      return { error: `Version '${requestedVersion}' not found for server '${decodedName}'` };
     }
 
     return server;
   });
 
-  // Get server versions endpoint
+  // Legacy endpoint for backwards compatibility (deprecated)
   fastify.get<{
     Params: { server_id: string };
-    Reply: ServerListResponse | ErrorResponse;
-  }>('/v0/servers/:server_id/versions', {
+    Reply: MCPServerDetail | ErrorResponse;
+  }>('/v0.1/servers/:server_id', {
     schema: {
       params: {
         type: 'object',
@@ -262,14 +292,7 @@ export async function createServer(): Promise<FastifyInstance> {
       return { error: `Server '${request.params.server_id}' not found` };
     }
 
-    // For now, return just the current version
-    // In the future, this could query a version history
-    return {
-      servers: [server],
-      metadata: {
-        count: 1
-      }
-    };
+    return server;
   });
 
   // List schemas endpoint
@@ -364,8 +387,8 @@ export async function createServer(): Promise<FastifyInstance> {
     }
   });
 
-  // Health check endpoint
-  fastify.get('/health', async () => {
+  // Health check endpoint (versioned path per official spec)
+  fastify.get('/v0.1/health', async () => {
     const servers = await loadServers();
 
     return {

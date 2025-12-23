@@ -25,23 +25,35 @@
  *   ./e2e/test-qa.ts --token=my-bearer-token --domain=nt.dev --port=8080 --insecure
  */
 
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { interpolateEnv, loadEnvFile, loadFixture, ServerTestFixture, validateResponse } from './fixtures.js';
+import dotenv from "dotenv";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import {
+  interpolateEnv,
+  loadFixture,
+  ServerTestFixture,
+  validateResponse,
+} from "./fixtures.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// // Allow self-signed certificates for local testing
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// Load .env.e2e at startup so QA_BEARER_TOKEN is available
+dotenv.config({ path: path.join(__dirname, "..", ".env.e2e") });
 
 interface ServerDefinition {
   name: string;
   version: string;
+  title?: string;
   description: string;
-  status: string;
   packages: any[];
-  _meta: any;
+  _meta?: {
+    "ai.nimbletools.mcp/v1"?: {
+      status?: string;
+      [key: string]: any;
+    };
+    [key: string]: any;
+  };
 }
 
 class NimbleToolsQATest {
@@ -53,7 +65,12 @@ class NimbleToolsQATest {
   private serverId: string | null = null;
   private mcpSessionId: string | null = null;
 
-  constructor(bearerToken: string, domain: string, protocol: string, port: string | null = null) {
+  constructor(
+    bearerToken: string,
+    domain: string,
+    protocol: string,
+    port: string | null = null
+  ) {
     this.bearerToken = bearerToken;
     this.domain = domain;
     this.protocol = protocol;
@@ -70,23 +87,29 @@ class NimbleToolsQATest {
     return this.port ? `${baseUrl}:${this.port}` : baseUrl;
   }
 
-  private async request(method: string, url: string, body?: any, isMcp = false, isNotification = false): Promise<any> {
+  private async request(
+    method: string,
+    url: string,
+    body?: any,
+    isMcp = false,
+    isNotification = false
+  ): Promise<any> {
     try {
       const headers: Record<string, string> = {
-        'Authorization': `Bearer ${this.bearerToken}`,
+        Authorization: `Bearer ${this.bearerToken}`,
       };
 
       if (body) {
-        headers['Content-Type'] = 'application/json';
+        headers["Content-Type"] = "application/json";
       }
 
       // MCP requires accepting both application/json and text/event-stream
       if (isMcp) {
-        headers['Accept'] = 'application/json, text/event-stream';
+        headers["Accept"] = "application/json, text/event-stream";
 
         // Include session ID after initialization
         if (this.mcpSessionId) {
-          headers['mcp-session-id'] = this.mcpSessionId;
+          headers["mcp-session-id"] = this.mcpSessionId;
         }
       }
 
@@ -98,12 +121,14 @@ class NimbleToolsQATest {
 
       if (!response.ok) {
         const text = await response.text();
-        throw new Error(`${method} ${url} failed: ${response.status} ${response.statusText}\n${text}`);
+        throw new Error(
+          `${method} ${url} failed: ${response.status} ${response.statusText}\n${text}`
+        );
       }
 
       // Extract session ID from response headers on first MCP call
       if (isMcp && !this.mcpSessionId) {
-        const sessionId = response.headers.get('mcp-session-id');
+        const sessionId = response.headers.get("mcp-session-id");
         if (sessionId) {
           this.mcpSessionId = sessionId;
           console.log(`  Session ID: ${sessionId}`);
@@ -118,12 +143,12 @@ class NimbleToolsQATest {
       const text = await response.text();
 
       // Handle empty responses
-      if (!text || text.trim() === '') {
+      if (!text || text.trim() === "") {
         return null;
       }
 
       // Parse SSE format if present
-      if (text.startsWith('event:')) {
+      if (text.startsWith("event:")) {
         // SSE format: "event: message\ndata: {...}\n\n"
         const dataMatch = text.match(/data: (.+)/);
         if (dataMatch) {
@@ -133,32 +158,41 @@ class NimbleToolsQATest {
 
       return JSON.parse(text);
     } catch (error) {
-      if (error instanceof Error && error.message.includes('fetch failed')) {
-        throw new Error(`${method} ${url} failed: ${error.message}\nCause: ${(error as any).cause}`);
+      if (error instanceof Error && error.message.includes("fetch failed")) {
+        throw new Error(
+          `${method} ${url} failed: ${error.message}\nCause: ${(error as any).cause}`
+        );
       }
       throw error;
     }
   }
 
   async createWorkspace(): Promise<string> {
-    const data = await this.request('POST', `${this.getApiUrl()}/v1/workspaces`, {
-      name: `test-qa-${Date.now()}`,
-      description: 'E2E QA test workspace',
-    });
+    const data = await this.request(
+      "POST",
+      `${this.getApiUrl()}/v1/workspaces`,
+      {
+        name: `test-qa-${Date.now()}`,
+        description: "E2E QA test workspace",
+      }
+    );
     return data.workspace_id;
   }
 
   async setSecret(key: string, value: string): Promise<void> {
     await this.request(
-      'PUT',
+      "PUT",
       `${this.getApiUrl()}/v1/workspaces/${this.workspaceId}/secrets/${key}`,
       { secret_value: value }
     );
   }
 
-  async deployServer(serverDef: ServerDefinition, environment: Record<string, string> = {}): Promise<string> {
+  async deployServer(
+    serverDef: ServerDefinition,
+    environment: Record<string, string> = {}
+  ): Promise<string> {
     const data = await this.request(
-      'POST',
+      "POST",
       `${this.getApiUrl()}/v1/workspaces/${this.workspaceId}/servers`,
       { server: serverDef, replicas: 1, environment }
     );
@@ -167,11 +201,11 @@ class NimbleToolsQATest {
 
   async waitForServerReady(timeout = 120000): Promise<void> {
     const startTime = Date.now();
-    let lastStatus = '';
+    let lastStatus = "";
 
     while (Date.now() - startTime < timeout) {
       const data = await this.request(
-        'GET',
+        "GET",
         `${this.getApiUrl()}/v1/workspaces/${this.workspaceId}/servers/${this.serverId}`
       );
 
@@ -188,8 +222,10 @@ class NimbleToolsQATest {
       }
 
       // Fail fast on error states
-      if (data.status.phase === 'Failed') {
-        throw new Error(`Server deployment failed: ${JSON.stringify(data.status)}`);
+      if (data.status.phase === "Failed") {
+        throw new Error(
+          `Server deployment failed: ${JSON.stringify(data.status)}`
+        );
       }
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -201,7 +237,7 @@ class NimbleToolsQATest {
   async testMcpConnection(): Promise<void> {
     // Get the actual service endpoint from the server details
     const serverDetails = await this.request(
-      'GET',
+      "GET",
       `${this.getApiUrl()}/v1/workspaces/${this.workspaceId}/servers/${this.serverId}`
     );
 
@@ -217,24 +253,34 @@ class NimbleToolsQATest {
     // Initialize with retries
     while (retries > 0) {
       try {
-        resp = await this.request('POST', mcpUrl, {
-          jsonrpc: '2.0',
-          id: 1,
-          method: 'initialize',
-          params: {
-            protocolVersion: '2024-11-05',
-            capabilities: {},
-            clientInfo: { name: 'registry-qa-test-client', version: '1.0.0' },
+        resp = await this.request(
+          "POST",
+          mcpUrl,
+          {
+            jsonrpc: "2.0",
+            id: 1,
+            method: "initialize",
+            params: {
+              protocolVersion: "2024-11-05",
+              capabilities: {},
+              clientInfo: { name: "registry-qa-test-client", version: "1.0.0" },
+            },
           },
-        }, true); // isMcp = true
+          true
+        ); // isMcp = true
 
         if (resp.result) break; // Success
       } catch (error) {
         lastError = error as Error;
         retries--;
-        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503'))) {
+        if (
+          error instanceof Error &&
+          (error.message.includes("502") || error.message.includes("503"))
+        ) {
           if (retries > 0) {
-            console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+            console.log(
+              `  Waiting for MCP endpoint... (${retries} retries left)`
+            );
             await new Promise((resolve) => setTimeout(resolve, 5000));
             continue;
           }
@@ -251,15 +297,27 @@ class NimbleToolsQATest {
     retries = 3;
     while (retries > 0) {
       try {
-        await this.request('POST', mcpUrl, {
-          jsonrpc: '2.0',
-          method: 'notifications/initialized',
-        }, true, true); // isMcp = true, isNotification = true
+        await this.request(
+          "POST",
+          mcpUrl,
+          {
+            jsonrpc: "2.0",
+            method: "notifications/initialized",
+          },
+          true,
+          true
+        ); // isMcp = true, isNotification = true
         break;
       } catch (error) {
         retries--;
-        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
-          console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+        if (
+          error instanceof Error &&
+          (error.message.includes("502") || error.message.includes("503")) &&
+          retries > 0
+        ) {
+          console.log(
+            `  Waiting for MCP endpoint... (${retries} retries left)`
+          );
           await new Promise((resolve) => setTimeout(resolve, 5000));
           continue;
         }
@@ -271,16 +329,27 @@ class NimbleToolsQATest {
     retries = 3;
     while (retries > 0) {
       try {
-        resp = await this.request('POST', mcpUrl, {
-          jsonrpc: '2.0',
-          id: 2,
-          method: 'tools/list',
-        }, true); // isMcp = true
+        resp = await this.request(
+          "POST",
+          mcpUrl,
+          {
+            jsonrpc: "2.0",
+            id: 2,
+            method: "tools/list",
+          },
+          true
+        ); // isMcp = true
         break;
       } catch (error) {
         retries--;
-        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
-          console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+        if (
+          error instanceof Error &&
+          (error.message.includes("502") || error.message.includes("503")) &&
+          retries > 0
+        ) {
+          console.log(
+            `  Waiting for MCP endpoint... (${retries} retries left)`
+          );
           await new Promise((resolve) => setTimeout(resolve, 5000));
           continue;
         }
@@ -288,24 +357,35 @@ class NimbleToolsQATest {
       }
     }
 
-    if (!resp.result?.tools?.length) throw new Error('No tools found');
+    if (!resp.result?.tools?.length) throw new Error("No tools found");
 
     // Call first tool with retries
     const toolName = resp.result.tools[0].name;
     retries = 3;
     while (retries > 0) {
       try {
-        resp = await this.request('POST', mcpUrl, {
-          jsonrpc: '2.0',
-          id: 3,
-          method: 'tools/call',
-          params: { name: toolName, arguments: { message: 'Test' } },
-        }, true); // isMcp = true
+        resp = await this.request(
+          "POST",
+          mcpUrl,
+          {
+            jsonrpc: "2.0",
+            id: 3,
+            method: "tools/call",
+            params: { name: toolName, arguments: { message: "Test" } },
+          },
+          true
+        ); // isMcp = true
         break;
       } catch (error) {
         retries--;
-        if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
-          console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+        if (
+          error instanceof Error &&
+          (error.message.includes("502") || error.message.includes("503")) &&
+          retries > 0
+        ) {
+          console.log(
+            `  Waiting for MCP endpoint... (${retries} retries left)`
+          );
           await new Promise((resolve) => setTimeout(resolve, 5000));
           continue;
         }
@@ -313,14 +393,14 @@ class NimbleToolsQATest {
       }
     }
 
-    if (!resp.result) throw new Error('Tool call failed');
+    if (!resp.result) throw new Error("Tool call failed");
   }
 
   async runFixtureTests(fixture: ServerTestFixture): Promise<void> {
     if (!fixture.tests) return;
 
     const serverDetails = await this.request(
-      'GET',
+      "GET",
       `${this.getApiUrl()}/v1/workspaces/${this.workspaceId}/servers/${this.serverId}`
     );
     const mcpUrl = `${this.getMcpUrl()}${serverDetails.status.service_endpoint}`;
@@ -333,17 +413,29 @@ class NimbleToolsQATest {
         // Retry logic for fixture test calls
         while (retries > 0) {
           try {
-            resp = await this.request('POST', mcpUrl, {
-              jsonrpc: '2.0',
-              id: 99,
-              method: 'tools/call',
-              params: { name: test.tool, arguments: test.arguments },
-            }, true);
+            resp = await this.request(
+              "POST",
+              mcpUrl,
+              {
+                jsonrpc: "2.0",
+                id: 99,
+                method: "tools/call",
+                params: { name: test.tool, arguments: test.arguments },
+              },
+              true
+            );
             break;
           } catch (error) {
             retries--;
-            if (error instanceof Error && (error.message.includes('502') || error.message.includes('503')) && retries > 0) {
-              console.log(`  Waiting for MCP endpoint... (${retries} retries left)`);
+            if (
+              error instanceof Error &&
+              (error.message.includes("502") ||
+                error.message.includes("503")) &&
+              retries > 0
+            ) {
+              console.log(
+                `  Waiting for MCP endpoint... (${retries} retries left)`
+              );
               await new Promise((resolve) => setTimeout(resolve, 5000));
               continue;
             }
@@ -368,14 +460,20 @@ class NimbleToolsQATest {
   async cleanup(): Promise<void> {
     if (this.workspaceId) {
       try {
-        await this.request('DELETE', `${this.getApiUrl()}/v1/workspaces/${this.workspaceId}`);
+        await this.request(
+          "DELETE",
+          `${this.getApiUrl()}/v1/workspaces/${this.workspaceId}`
+        );
       } catch (e) {
         console.warn(`Warning: Cleanup failed: ${e}`);
       }
     }
   }
 
-  async testServer(serverPath: string, envVars: Record<string, string>): Promise<boolean> {
+  async testServer(
+    serverPath: string,
+    envVars: Record<string, string>
+  ): Promise<boolean> {
     const serverName = path.basename(path.dirname(serverPath));
 
     try {
@@ -385,11 +483,14 @@ class NimbleToolsQATest {
       this.mcpSessionId = null;
 
       // Load server definition
-      const serverDef = JSON.parse(await fs.readFile(serverPath, 'utf-8')) as ServerDefinition;
+      const serverDef = JSON.parse(
+        await fs.readFile(serverPath, "utf-8")
+      ) as ServerDefinition;
 
-      // Skip non-active servers
-      if (serverDef.status !== 'active') {
-        console.log(`⊘ ${serverName}: Skipped (status: ${serverDef.status})`);
+      // Skip non-active servers (status is in _meta.ai.nimbletools.mcp/v1.status)
+      const serverStatus = serverDef._meta?.["ai.nimbletools.mcp/v1"]?.status;
+      if (serverStatus !== "active") {
+        console.log(`⊘ ${serverName}: Skipped (status: ${serverStatus})`);
         return true;
       }
 
@@ -398,7 +499,9 @@ class NimbleToolsQATest {
 
       // Check if server should be skipped
       if (fixture?.skip) {
-        console.log(`⊘ ${serverName}: Skipped (${fixture.skipReason || 'no reason given'})`);
+        console.log(
+          `⊘ ${serverName}: Skipped (${fixture.skipReason || "no reason given"})`
+        );
         return true;
       }
 
@@ -453,22 +556,22 @@ class NimbleToolsQATest {
 async function main() {
   // Parse arguments
   const args = process.argv.slice(2);
-  let domain = 'qa.nimbletools.ai';
+  let domain = "qa.nimbletools.ai";
   let bearerToken: string | null = null;
   let serverFilter: string | null = null;
   let insecure = false;
   let port: string | null = null;
 
   for (const arg of args) {
-    if (arg.startsWith('--token=')) {
-      bearerToken = arg.substring('--token='.length);
-    } else if (arg.startsWith('--domain=')) {
-      domain = arg.substring('--domain='.length);
-    } else if (arg.startsWith('--server=')) {
-      serverFilter = arg.substring('--server='.length);
-    } else if (arg.startsWith('--port=')) {
-      port = arg.substring('--port='.length);
-    } else if (arg === '--insecure') {
+    if (arg.startsWith("--token=")) {
+      bearerToken = arg.substring("--token=".length);
+    } else if (arg.startsWith("--domain=")) {
+      domain = arg.substring("--domain=".length);
+    } else if (arg.startsWith("--server=")) {
+      serverFilter = arg.substring("--server=".length);
+    } else if (arg.startsWith("--port=")) {
+      port = arg.substring("--port=".length);
+    } else if (arg === "--insecure") {
       insecure = true;
     }
   }
@@ -478,29 +581,39 @@ async function main() {
     bearerToken = process.env.QA_BEARER_TOKEN || null;
   }
 
-  const protocol = insecure ? 'http' : 'https';
+  const protocol = insecure ? "http" : "https";
 
   // Validate required arguments
   if (!bearerToken) {
-    console.error('Error: Bearer token is required (provide via --token flag or QA_BEARER_TOKEN env var)');
-    console.error('\nUsage:');
-    console.error('  ./e2e/test-qa.ts --token=<bearer-token> [--domain=<base-domain>] [--port=<port>] [--server=<server-name>] [--insecure]');
-    console.error('\nExamples:');
-    console.error('  # Test all servers on default QA domain (qa.nimbletools.ai)');
-    console.error('  ./e2e/test-qa.ts --token=my-bearer-token');
-    console.error('\n  # Use environment variable for token');
-    console.error('  export QA_BEARER_TOKEN=my-bearer-token');
-    console.error('  ./e2e/test-qa.ts --server=echo');
-    console.error('\n  # Test all servers on custom domain');
-    console.error('  ./e2e/test-qa.ts --token=my-bearer-token --domain=qa.nimbletools.dev');
-    console.error('\n  # Test specific server');
-    console.error('  ./e2e/test-qa.ts --token=my-bearer-token --server=echo');
-    console.error('\n  # Test with HTTP and custom port for local development');
-    console.error('  ./e2e/test-qa.ts --token=my-bearer-token --domain=nt.dev --port=8080 --insecure');
+    console.error(
+      "Error: Bearer token is required (provide via --token flag or QA_BEARER_TOKEN env var)"
+    );
+    console.error("\nUsage:");
+    console.error(
+      "  ./e2e/test-qa.ts --token=<bearer-token> [--domain=<base-domain>] [--port=<port>] [--server=<server-name>] [--insecure]"
+    );
+    console.error("\nExamples:");
+    console.error(
+      "  # Test all servers on default QA domain (qa.nimbletools.ai)"
+    );
+    console.error("  ./e2e/test-qa.ts --token=my-bearer-token");
+    console.error("\n  # Use environment variable for token");
+    console.error("  export QA_BEARER_TOKEN=my-bearer-token");
+    console.error("  ./e2e/test-qa.ts --server=echo");
+    console.error("\n  # Test all servers on custom domain");
+    console.error(
+      "  ./e2e/test-qa.ts --token=my-bearer-token --domain=qa.nimbletools.dev"
+    );
+    console.error("\n  # Test specific server");
+    console.error("  ./e2e/test-qa.ts --token=my-bearer-token --server=echo");
+    console.error("\n  # Test with HTTP and custom port for local development");
+    console.error(
+      "  ./e2e/test-qa.ts --token=my-bearer-token --domain=nt.dev --port=8080 --insecure"
+    );
     process.exit(1);
   }
 
-  const registryPath = path.join(__dirname, '..', 'servers');
+  const registryPath = path.join(__dirname, "..", "servers");
 
   console.log(`NimbleTools MCP Registry E2E Test (QA Environment)`);
   console.log(`Domain: ${domain}`);
@@ -510,24 +623,21 @@ async function main() {
   if (serverFilter) console.log(`Filter: ${serverFilter}`);
   console.log();
 
-  // Load environment variables for tests
-  const envVars = { ...process.env, ...await loadEnvFile() } as Record<string, string>;
-
   // Test each server
   const tester = new NimbleToolsQATest(bearerToken, domain, protocol, port);
   const results: Array<[string, boolean]> = [];
 
   // Cleanup on exit
   const cleanup = async () => {
-    console.log('\n\nCleaning up...');
+    console.log("\n\nCleaning up...");
     await tester.cleanup();
     process.exit(1);
   };
 
-  process.on('SIGINT', cleanup);
-  process.on('SIGTERM', cleanup);
-  process.on('uncaughtException', async (error) => {
-    console.error('Uncaught exception:', error);
+  process.on("SIGINT", cleanup);
+  process.on("SIGTERM", cleanup);
+  process.on("uncaughtException", async (error) => {
+    console.error("Uncaught exception:", error);
     await cleanup();
   });
 
@@ -540,7 +650,7 @@ async function main() {
         return null;
       }
 
-      const serverPath = path.join(registryPath, dir, 'server.json');
+      const serverPath = path.join(registryPath, dir, "server.json");
       try {
         await fs.access(serverPath);
         return serverPath;
@@ -553,12 +663,19 @@ async function main() {
   const validServerFiles = serverFiles.filter(Boolean) as string[];
 
   if (!validServerFiles.length) {
-    console.log(serverFilter ? `Server '${serverFilter}' not found` : 'No servers found in registry');
+    console.log(
+      serverFilter
+        ? `Server '${serverFilter}' not found`
+        : "No servers found in registry"
+    );
     process.exit(1);
   }
 
   for (const serverFile of validServerFiles.sort()) {
-    const passed = await tester.testServer(serverFile, envVars);
+    const passed = await tester.testServer(
+      serverFile,
+      process.env as Record<string, string>
+    );
     results.push([path.basename(path.dirname(serverFile)), passed]);
     console.log();
   }
@@ -567,12 +684,12 @@ async function main() {
   const passed = results.filter(([, p]) => p).length;
   const total = results.length;
 
-  console.log('='.repeat(50));
+  console.log("=".repeat(50));
   console.log(`Results: ${passed}/${total} passed`);
-  console.log('='.repeat(50));
+  console.log("=".repeat(50));
 
   for (const [name, p] of results) {
-    const status = p ? '✓ PASSED' : '✗ FAILED';
+    const status = p ? "✓ PASSED" : "✗ FAILED";
     console.log(`${status}: ${name}`);
   }
 

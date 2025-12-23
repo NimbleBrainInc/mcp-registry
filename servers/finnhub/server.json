@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/finnhub",
   "version": "1.0.0",
+  "title": "Finnhub",
   "description": "Financial market data API with real-time quotes, company profiles, and news",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/finnhub.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/finnhub.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/NimbleBrainInc/mcp-finnhub",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://finnhub.io/",
   "packages": [
@@ -26,23 +39,22 @@
           "description": "Finnhub API key for accessing financial data (get free key at finnhub.io)",
           "isRequired": true,
           "isSecret": true,
-          "example": "your_finnhub_api_key_here"
+          "placeholder": "your_finnhub_api_key_here"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/health",
           "port": 8000
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -59,8 +71,12 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "Finnhub",
         "category": "data-intelligence",
         "tags": [
           "finance",
@@ -70,10 +86,6 @@
           "news",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/finnhub.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/finnhub.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-finnhub/main/README.md"
         }

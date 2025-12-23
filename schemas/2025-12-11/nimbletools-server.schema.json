@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$id": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "title": "NimbleTools MCP Server",
-  "description": "Extended MCP server schema with NimbleTools runtime requirements",
+  "description": "Extended MCP server schema with NimbleTools runtime requirements. Extends the official MCP server schema (2025-12-11) with deployment, observability, and display metadata.",
 
   "allOf": [
     {
-      "$ref": "https://static.modelcontextprotocol.io/schemas/2025-09-16/server.schema.json"
+      "$ref": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json"
     },
     {
       "type": "object",
@@ -26,8 +26,15 @@
   "definitions": {
     "NimbleToolsRuntime": {
       "type": "object",
-      "description": "NimbleTools-specific runtime configuration",
+      "description": "NimbleTools-specific runtime configuration for deployment and display",
       "properties": {
+        "status": {
+          "type": "string",
+          "description": "Server lifecycle status",
+          "enum": ["active", "deprecated", "beta", "archived"],
+          "default": "active"
+        },
+
         "container": {
           "type": "object",
           "description": "Container-specific configuration (for OCI packages)",
@@ -99,7 +106,7 @@
 
         "resources": {
           "type": "object",
-          "description": "Container resource requirements",
+          "description": "Container resource requirements (Kubernetes-style)",
           "properties": {
             "limits": {
               "type": "object",
@@ -140,7 +147,7 @@
 
         "scaling": {
           "type": "object",
-          "description": "Auto-scaling configuration",
+          "description": "Auto-scaling configuration (HPA)",
           "properties": {
             "enabled": {
               "type": "boolean",
@@ -164,7 +171,6 @@
             }
           }
         },
-
 
         "observability": {
           "type": "object",
@@ -209,7 +215,7 @@
 
         "security": {
           "type": "object",
-          "description": "Security configuration",
+          "description": "Container security configuration",
           "properties": {
             "runAsNonRoot": {
               "type": "boolean",
@@ -280,10 +286,32 @@
           }
         },
 
+        "deployment": {
+          "type": "object",
+          "description": "Deployment runtime configuration",
+          "properties": {
+            "protocol": {
+              "type": "string",
+              "enum": ["http", "stdio"],
+              "description": "Runtime protocol"
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Container port for HTTP protocol"
+            },
+            "mcpPath": {
+              "type": "string",
+              "pattern": "^/.*",
+              "description": "MCP endpoint path for HTTP protocol"
+            }
+          }
+        },
+
         "capabilities": {
           "type": "object",
-          "description": "MCP server capabilities",
-          "required": ["tools", "resources", "prompts"],
+          "description": "MCP server capabilities (can be auto-detected at runtime)",
           "properties": {
             "tools": {
               "type": "boolean",
@@ -300,15 +328,22 @@
           }
         },
 
+        "repository": {
+          "type": "object",
+          "description": "Extended repository metadata not in core schema",
+          "properties": {
+            "branch": {
+              "type": "string",
+              "description": "Default branch name",
+              "default": "main"
+            }
+          }
+        },
+
         "display": {
           "type": "object",
-          "description": "Display configuration for how the server is presented in the registry",
+          "description": "Display configuration for registry UI (complements core title/icons)",
           "properties": {
-            "name": {
-              "type": "string",
-              "description": "Human-readable display name for the server (e.g., 'Echo', 'Finnhub')",
-              "maxLength": 50
-            },
             "category": {
               "type": "string",
               "description": "Primary category for this server",
@@ -333,18 +368,8 @@
             },
             "branding": {
               "type": "object",
-              "description": "Branding and visual assets",
+              "description": "Additional branding (colors). Icons moved to core schema.",
               "properties": {
-                "logoUrl": {
-                  "type": "string",
-                  "format": "uri",
-                  "description": "URL to logo image (SVG, PNG, or WebP preferred, max 500KB)"
-                },
-                "iconUrl": {
-                  "type": "string",
-                  "format": "uri",
-                  "description": "URL to square icon for smaller displays (64x64 or 128x128)"
-                },
                 "primaryColor": {
                   "type": "string",
                   "pattern": "^#[0-9A-Fa-f]{6}$",
@@ -359,12 +384,12 @@
             },
             "documentation": {
               "type": "object",
-              "description": "Documentation and content configuration",
+              "description": "Documentation and content URLs",
               "properties": {
                 "readmeUrl": {
                   "type": "string",
                   "format": "uri",
-                  "description": "URL to README file (markdown format, auto-fetched from repository if not specified)"
+                  "description": "URL to README file (markdown format)"
                 },
                 "changelogUrl": {
                   "type": "string",

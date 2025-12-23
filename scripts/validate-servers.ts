@@ -5,7 +5,7 @@
  */
 
 import Ajv from 'ajv';
-import addFormats from 'ajv-formats';
+import ajvFormats from 'ajv-formats';
 import { readdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -14,7 +14,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const SERVERS_DIR = join(__dirname, '..', 'servers');
-const SCHEMA_PATH = join(__dirname, '..', 'schemas', '2025-09-22', 'nimbletools-server.schema.json');
+const SCHEMAS_DIR = join(__dirname, '..', 'schemas');
+
+// Current schema version
+const SCHEMA_VERSION = '2025-12-11';
 
 // Colors for console output
 const colors = {
@@ -26,11 +29,12 @@ const colors = {
 };
 
 async function loadSchema() {
+  const schemaPath = join(SCHEMAS_DIR, SCHEMA_VERSION, 'nimbletools-server.schema.json');
   try {
-    const schemaContent = await readFile(SCHEMA_PATH, 'utf-8');
+    const schemaContent = await readFile(schemaPath, 'utf-8');
     return JSON.parse(schemaContent);
   } catch (error) {
-    console.error(`${colors.red}❌ Failed to load schema from ${SCHEMA_PATH}${colors.reset}`);
+    console.error(`${colors.red}❌ Failed to load schema from ${schemaPath}${colors.reset}`);
     throw error;
   }
 }
@@ -50,10 +54,8 @@ async function fetchExternalSchema(url: string) {
 }
 
 async function validateServers() {
-  console.log(`${colors.blue}🔍 Validating server definitions...${colors.reset}\n`);
-
-  // Load schema
-  const schema = await loadSchema();
+  console.log(`${colors.blue}🔍 Validating server definitions...${colors.reset}`);
+  console.log(`${colors.blue}   Schema version: ${SCHEMA_VERSION}${colors.reset}\n`);
 
   // Initialize AJV with formats support and external schema loading
   const ajv = new Ajv({
@@ -62,16 +64,13 @@ async function validateServers() {
     strict: false, // Allow additional properties
     loadSchema: fetchExternalSchema // Function to load external schemas
   });
-  addFormats(ajv);
+  ajvFormats(ajv);
 
-  // Compile schema with async loading of external schemas
-  let validate;
-  try {
-    validate = await ajv.compileAsync(schema);
-  } catch (error) {
-    console.error(`${colors.red}❌ Failed to compile schema:${colors.reset}`, error);
-    process.exit(1);
-  }
+  // Compile validator
+  console.log(`${colors.blue}📦 Loading schema ${SCHEMA_VERSION}...${colors.reset}`);
+  const schema = await loadSchema();
+  const validate = await ajv.compileAsync(schema);
+  console.log(`${colors.green}   ✓ Schema compiled${colors.reset}\n`);
 
   // Get all server directories
   const entries = await readdir(SERVERS_DIR, { withFileTypes: true });
@@ -92,11 +91,24 @@ async function validateServers() {
 
       totalServers++;
 
+      // Check schema version matches
+      const schemaUrl = serverData.$schema;
+      if (schemaUrl && !schemaUrl.includes(SCHEMA_VERSION)) {
+        invalidServers++;
+        console.log(`${colors.red}❌ ${dir.name}${colors.reset} - Wrong schema version: ${schemaUrl}`);
+        console.log(`   ${colors.yellow}└─ Expected: ${SCHEMA_VERSION}${colors.reset}`);
+        errors.push({
+          server: dir.name,
+          errors: [{ message: `Wrong schema version. Expected ${SCHEMA_VERSION}, got ${schemaUrl}` }]
+        });
+        continue;
+      }
+
       const valid = validate(serverData);
 
       if (valid) {
         validServers++;
-        console.log(`${colors.green}✅ ${dir.name}${colors.reset} - Valid`);
+        console.log(`${colors.green}✅ ${dir.name}${colors.reset}`);
       } else {
         invalidServers++;
         console.log(`${colors.red}❌ ${dir.name}${colors.reset} - Invalid`);

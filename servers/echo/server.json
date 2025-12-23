@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/echo",
   "version": "1.0.0",
+  "title": "Echo",
   "description": "Simple echo service for testing MCP protocol functionality, debugging, and development workflows",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/echo.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/echo.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/NimbleBrainInc/mcp-echo",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://www.nimblebrain.ai",
   "packages": [
@@ -24,16 +37,15 @@
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/health",
           "port": 8000
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -50,8 +62,12 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "Echo",
         "category": "developer-tools",
         "tags": [
           "testing",
@@ -61,10 +77,6 @@
         ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-echo/main/README.md"
-        },
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/echo.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/echo.png"
         }
       }
     }

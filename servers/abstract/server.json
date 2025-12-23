@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/abstract",
   "version": "1.0.0",
+  "title": "Abstract API",
   "description": "Abstract API: email validation, phone validation, IP geolocation, VAT validation, and utilities",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/abstract.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/abstract.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/NimbleBrainInc/mcp-abstract",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://www.abstractapi.com/",
   "packages": [
@@ -26,86 +39,85 @@
           "description": "Abstract API key for email validation service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_email_validation_key"
+          "placeholder": "your_email_validation_key"
         },
         {
           "name": "ABSTRACT_PHONE_API_KEY",
           "description": "Abstract API key for phone validation service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_phone_validation_key"
+          "placeholder": "your_phone_validation_key"
         },
         {
           "name": "ABSTRACT_VAT_API_KEY",
           "description": "Abstract API key for VAT validation service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_vat_validation_key"
+          "placeholder": "your_vat_validation_key"
         },
         {
           "name": "ABSTRACT_IP_API_KEY",
           "description": "Abstract API key for IP geolocation service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_ip_geolocation_key"
+          "placeholder": "your_ip_geolocation_key"
         },
         {
           "name": "ABSTRACT_TIMEZONE_API_KEY",
           "description": "Abstract API key for timezone service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_timezone_key"
+          "placeholder": "your_timezone_key"
         },
         {
           "name": "ABSTRACT_HOLIDAYS_API_KEY",
           "description": "Abstract API key for holidays service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_holidays_key"
+          "placeholder": "your_holidays_key"
         },
         {
           "name": "ABSTRACT_EXCHANGE_API_KEY",
           "description": "Abstract API key for exchange rates service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_exchange_rates_key"
+          "placeholder": "your_exchange_rates_key"
         },
         {
           "name": "ABSTRACT_COMPANY_API_KEY",
           "description": "Abstract API key for company enrichment service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_company_enrichment_key"
+          "placeholder": "your_company_enrichment_key"
         },
         {
           "name": "ABSTRACT_SCRAPE_API_KEY",
           "description": "Abstract API key for web scraping service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_web_scraping_key"
+          "placeholder": "your_web_scraping_key"
         },
         {
           "name": "ABSTRACT_SCREENSHOT_API_KEY",
           "description": "Abstract API key for screenshot service",
           "isRequired": false,
           "isSecret": true,
-          "example": "your_screenshot_key"
+          "placeholder": "your_screenshot_key"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/health",
           "port": 8000
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -122,8 +134,12 @@
         "port": 8000,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "Abstract API",
         "category": "data-intelligence",
         "tags": [
           "abstract-api",
@@ -137,10 +153,6 @@
           "exchange-rates",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/abstract.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/abstract.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-abstract/main/README.md"
         }

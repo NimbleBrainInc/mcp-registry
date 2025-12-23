@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/nationalparks-mcp",
   "version": "1.0.0",
+  "title": "National Parks",
   "description": "National Parks Service API for U.S. park info, alerts, campgrounds, and events",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/nationalparks.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/nationalparks.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/NimbleBrainInc/mcp-server-nationalparks",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://www.nps.gov/subjects/developer/api-documentation.htm",
   "packages": [
@@ -49,12 +62,11 @@
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
-      "container": {},
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
+      "status": "active",
+      "repository": {
+        "branch": "main"
       },
+      "container": {},
       "resources": {
         "limits": {
           "memory": "512Mi",
@@ -68,8 +80,12 @@
       "deployment": {
         "protocol": "stdio"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "National Parks",
         "category": "data-intelligence",
         "tags": [
           "government-data",
@@ -79,10 +95,6 @@
           "alerts",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/nationalparks.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/nationalparks.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-server-nationalparks/main/README.md"
         }

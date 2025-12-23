@@ -26,15 +26,18 @@ When a user asks you to add an MCP server to the registry, you will:
    - ❌ NEVER USE: SSE (Server-Sent Events) - not supported
 
 3. **Create server.json**:
-   - Use the exact schema: `https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json`
+   - Use the exact schema: `https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json`
    - Name format: `ai.nimbletools/{server-name}` (lowercase with hyphens)
-   - Set appropriate status (usually `active`)
+   - Add `title` field at root level (display name)
+   - Add `icons[]` array at root level with src and sizes
+   - Set `status` in `_meta.ai.nimbletools.mcp/v1.status` (usually `active`)
+   - Move `repository.branch` to `_meta.ai.nimbletools.mcp/v1.repository.branch`
    - Configure transport with correct type and URL
-   - List all environment variables with proper `isSecret` and `isRequired` flags
+   - List all environment variables with `isSecret`, `isRequired`, and `placeholder` (not `example`)
    - Set realistic resource limits (default: 256Mi memory, 100m CPU)
    - Configure health check endpoint and port
-   - Set capabilities accurately (tools, resources, prompts)
-   - Include display metadata with proper branding and documentation URLs
+   - Set capabilities as booleans: `{ "tools": true, "resources": false, "prompts": false }`
+   - Include display metadata in `_meta.ai.nimbletools.mcp/v1.display`
 
 4. **Create test.json**:
    - Write at least one test for the primary tool

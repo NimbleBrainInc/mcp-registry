@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('Server Validation', () => {
-  const SCHEMA_PATH = join(__dirname, '..', '..', 'schemas', '2025-09-22', 'nimbletools-server.schema.json');
+  const SCHEMA_PATH = join(__dirname, '..', '..', 'schemas', '2025-12-11', 'nimbletools-server.schema.json');
 
   async function loadSchema() {
     const schemaContent = await readFile(SCHEMA_PATH, 'utf-8');
@@ -42,15 +42,17 @@ describe('Server Validation', () => {
     const validate = await ajv.compileAsync(schema);
 
     const validServer = {
-      "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+      "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
       name: 'ai.nimbletools/test-server',
       version: '1.0.0',
+      title: 'Test Server',
       description: 'A test server',
-      status: 'active',
+      icons: [
+        { src: 'https://static.nimbletools.ai/icons/test.png', sizes: ['64x64'] }
+      ],
       repository: {
         url: 'https://github.com/test/test-server',
-        source: 'github',
-        branch: 'main'
+        source: 'github'
       },
       packages: [
         {
@@ -66,6 +68,10 @@ describe('Server Validation', () => {
       ],
       _meta: {
         'ai.nimbletools.mcp/v1': {
+          status: 'active',
+          repository: {
+            branch: 'main'
+          },
           capabilities: {
             tools: true,
             resources: false,
@@ -146,15 +152,17 @@ describe('Server Validation', () => {
     const validate = await ajv.compileAsync(schema);
 
     const serverWithSecrets = {
-      "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+      "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
       name: 'ai.nimbletools/test-server-with-secrets',
       version: '1.0.0',
+      title: 'Test Server with Secrets',
       description: 'A test server with secrets',
-      status: 'active',
+      icons: [
+        { src: 'https://static.nimbletools.ai/icons/test.png', sizes: ['64x64'] }
+      ],
       repository: {
         url: 'https://github.com/test/test-server',
-        source: 'github',
-        branch: 'main'
+        source: 'github'
       },
       packages: [
         {
@@ -164,17 +172,25 @@ describe('Server Validation', () => {
           version: '1.0.0',
           transport: {
             type: 'streamable-http',
-            url: 'https://test.example.com/mcp',
-            env: {
-              API_KEY: {
-                secret: true
-              }
+            url: 'https://test.example.com/mcp'
+          },
+          environmentVariables: [
+            {
+              name: 'API_KEY',
+              description: 'API key for the service',
+              isSecret: true,
+              isRequired: true,
+              placeholder: 'your_api_key_here'
             }
-          }
+          ]
         }
       ],
       _meta: {
         'ai.nimbletools.mcp/v1': {
+          status: 'active',
+          repository: {
+            branch: 'main'
+          },
           capabilities: {
             tools: true,
             resources: false,

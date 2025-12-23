@@ -1,13 +1,26 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/ref-tools-mcp",
   "version": "1.0.0",
+  "title": "Ref Tools",
   "description": "Token-efficient documentation search for AI agents with web content extraction",
-  "status": "active",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/ref.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/ref.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/ref-tools/ref-tools-mcp",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://github.com/ref-tools/ref-tools-mcp",
   "packages": [
@@ -26,23 +39,22 @@
           "description": "API key for accessing documentation search services",
           "isRequired": true,
           "isSecret": true,
-          "example": "ref_1234567890abcdef"
+          "placeholder": "ref_1234567890abcdef"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/ping",
           "port": 8080
         }
-      },
-      "capabilities": {
-        "tools": true,
-        "resources": false,
-        "prompts": false
       },
       "resources": {
         "limits": {
@@ -59,8 +71,12 @@
         "port": 8080,
         "mcpPath": "/mcp"
       },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
       "display": {
-        "name": "Ref Tools",
         "category": "developer-tools",
         "tags": [
           "documentation",
@@ -69,10 +85,6 @@
           "code-reference",
           "requires-api-key"
         ],
-        "branding": {
-          "logoUrl": "https://static.nimbletools.ai/logos/ref.png",
-          "iconUrl": "https://static.nimbletools.ai/icons/ref.png"
-        },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/ref-tools/ref-tools-mcp/main/README.md"
         }
