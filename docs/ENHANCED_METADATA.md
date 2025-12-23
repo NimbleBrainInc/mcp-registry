@@ -40,29 +40,35 @@ The registry supports the following standard categories:
 
 ## Usage Example
 
-Add the enhanced metadata to your `server.json` file within the `_meta["ai.nimbletools.mcp/v1"].registry` section:
+Add the enhanced metadata to your `server.json` file. Note the 2025-12-11 schema structure with `title`, `icons[]` at root level and extension fields in `_meta["ai.nimbletools.mcp/v1"]`:
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
+  "title": "Your Server Display Name",
   "description": "Your MCP server description",
+  "icons": [
+    { "src": "https://example.com/icon.png", "sizes": ["64x64"] },
+    { "src": "https://example.com/logo.svg", "sizes": ["256x256"] }
+  ],
   "repository": {
     "url": "https://github.com/yourusername/your-server",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "_meta": {
     "ai.nimbletools.mcp/v1": {
-      "registry": {
-        "categories": ["development", "productivity"],
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
+      "display": {
+        "category": "development",
         "tags": ["code", "automation", "assistant", "tools"],
-        "branding": {
-          "logoUrl": "https://example.com/logo.svg",
-          "iconUrl": "https://example.com/icon.png",
-          "primaryColor": "#0066CC",
-          "accentColor": "#FF6B6B"
+        "colors": {
+          "primary": "#0066CC",
+          "accent": "#FF6B6B"
         },
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/yourusername/your-server/main/README.md",
@@ -107,9 +113,10 @@ The README content is:
 
 2. **Tags**: Use lowercase, hyphenated tags. Keep them relevant and searchable.
 
-3. **Logos**:
-   - Use SVG for logos when possible (scalable, small file size)
-   - Provide both logo (wide) and icon (square) versions
+3. **Icons**:
+   - Use the `icons[]` array at root level (not in `_meta`)
+   - Provide multiple sizes: 64x64 for icons, 256x256 for logos
+   - Use SVG when possible (scalable, small file size)
    - Keep file sizes under 500KB
 
 4. **Screenshots**:
@@ -130,17 +137,21 @@ When fetching server details, the enhanced metadata is included in the response:
 {
   "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
+  "title": "Your Server",
   "description": "Your server description",
+  "icons": [
+    { "src": "https://example.com/icon.png", "sizes": ["64x64"] }
+  ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
-      "registry": {
-        "categories": ["development"],
+      "status": "active",
+      "display": {
+        "category": "development",
         "tags": ["code", "tools"],
         "documentation": {
           "readmeContent": "# Your Server\n\nFull markdown content...",
           "readmeUrl": "https://..."
         }
-        // ... other metadata
       }
     }
   }
@@ -149,13 +160,15 @@ When fetching server details, the enhanced metadata is included in the response:
 
 ## Migration Guide
 
-To migrate existing servers to use enhanced metadata:
+To migrate existing servers to the 2025-12-11 schema:
 
-1. Update your `server.json` schema reference to the latest version
-2. Add the `registry` section under `_meta["ai.nimbletools.mcp/v1"]`
-3. Start with categories and tags (most important for discoverability)
-4. Add branding assets as they become available
-5. The README will be fetched automatically if you have a repository URL
+1. Update `$schema` to `https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json`
+2. Add `title` field at root level (display name)
+3. Move branding icons to `icons[]` array at root level
+4. Move `status` from root to `_meta.ai.nimbletools.mcp/v1.status`
+5. Move `repository.branch` to `_meta.ai.nimbletools.mcp/v1.repository.branch`
+6. Rename `example` to `placeholder` in environment variables
+7. Add display metadata under `_meta.ai.nimbletools.mcp/v1.display`
 
 ## Validation
 

@@ -38,15 +38,18 @@ Create `servers/{server-name}/server.json` following this template:
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/{server-name}",
   "version": "1.0.0",
+  "title": "Display Name",
   "description": "Brief description of what the server does",
-  "status": "active",
+  "icons": [
+    { "src": "https://static.nimbletools.ai/icons/{server-name}.png", "sizes": ["64x64"] },
+    { "src": "https://static.nimbletools.ai/logos/{server-name}.png", "sizes": ["256x256"] }
+  ],
   "repository": {
     "url": "https://github.com/owner/repo",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "websiteUrl": "https://github.com/owner/repo",
   "packages": [
@@ -64,13 +67,18 @@ Create `servers/{server-name}/server.json` following this template:
           "name": "API_KEY",
           "description": "API key for the service",
           "isRequired": true,
-          "isSecret": true
+          "isSecret": true,
+          "placeholder": "your_api_key_here"
         }
       ]
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
       "container": {
         "healthCheck": {
           "path": "/health",
@@ -98,12 +106,10 @@ Create `servers/{server-name}/server.json` following this template:
         "mcpPath": "/mcp"
       },
       "display": {
-        "name": "Display Name",
+        "category": "developer-tools",
+        "tags": ["example"],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/owner/repo/main/README.md"
-        },
-        "branding": {
-          "iconUrl": "https://example.com/icon.png"
         }
       }
     }
@@ -113,13 +119,25 @@ Create `servers/{server-name}/server.json` following this template:
 
 ### Key Fields
 
-**Required fields**:
+**Required fields (core schema)**:
 - `name`: Format `ai.nimbletools/{server-name}` (use lowercase with hyphens)
 - `version`: Semantic version of the server
-- `description`: Clear, concise description (max 200 chars)
-- `status`: Usually `"active"`
+- `description`: Clear, concise description (max 100 chars)
 - `packages[0].identifier`: Container image name
 - `packages[0].transport.type`: `"streamable-http"` or `"stdio"`
+
+**Recommended fields (core schema)**:
+- `title`: Human-readable display name
+- `icons`: Array of icon objects with `src` and `sizes`
+- `repository`: GitHub/source code location
+
+**NimbleTools extension fields** (`_meta.ai.nimbletools.mcp/v1`):
+- `status`: Server lifecycle (`active`, `deprecated`, `beta`)
+- `repository.branch`: Git branch (moved from core)
+- `container`: Health check configuration
+- `capabilities`: MCP capability flags
+- `display.category`: Taxonomy category
+- `display.tags`: Searchable tags
 
 **Transport types**:
 
@@ -149,8 +167,9 @@ For `stdio` (fallback):
     {
       "name": "API_KEY",
       "description": "Description of the variable",
-      "isRequired": true,    // true if server won't work without it
-      "isSecret": true       // true for API keys, tokens, passwords
+      "isRequired": true,      // true if server won't work without it
+      "isSecret": true,        // true for API keys, tokens, passwords
+      "placeholder": "your_api_key_here"  // example value for documentation
     }
   ]
 }
@@ -265,31 +284,33 @@ npm run test:e2e -- --server={server-name}
 `servers/echo/server.json`:
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-09-22/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/echo",
   "version": "1.0.0",
+  "title": "Echo",
   "description": "Simple echo service for testing",
-  "status": "active",
+  "icons": [
+    { "src": "https://static.nimbletools.ai/icons/echo.png", "sizes": ["64x64"] }
+  ],
   "repository": {
     "url": "https://github.com/NimbleBrainInc/mcp-echo",
-    "source": "github",
-    "branch": "main"
+    "source": "github"
   },
   "packages": [{
     "registryType": "oci",
     "identifier": "nimbletools/mcp-echo",
     "version": "1.0.0",
     "transport": {
-      "type": "streamable-http"
+      "type": "streamable-http",
+      "url": "https://mcp.nimbletools.ai/mcp"
     }
   }],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "status": "active",
+      "repository": { "branch": "main" },
       "container": {
-        "healthCheck": {
-          "path": "/health",
-          "port": 8000
-        }
+        "healthCheck": { "path": "/health", "port": 8000 }
       },
       "deployment": {
         "protocol": "http",
@@ -318,19 +339,28 @@ npm run test:e2e -- --server={server-name}
 `servers/finnhub/server.json`:
 ```json
 {
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/finnhub",
+  "version": "1.0.0",
+  "title": "Finnhub",
+  "description": "Real-time stock prices, company financials, and market data",
+  "icons": [
+    { "src": "https://static.nimbletools.ai/icons/finnhub.png", "sizes": ["64x64"] }
+  ],
   "packages": [{
     "registryType": "oci",
     "identifier": "nimbletools/mcp-finnhub",
     "version": "1.0.0",
     "transport": {
-      "type": "streamable-http"
+      "type": "streamable-http",
+      "url": "https://mcp.nimbletools.ai/mcp"
     },
     "environmentVariables": [{
       "name": "FINNHUB_API_KEY",
       "description": "Finnhub API key",
       "isRequired": true,
-      "isSecret": true
+      "isSecret": true,
+      "placeholder": "your_finnhub_api_key"
     }]
   }]
 }
