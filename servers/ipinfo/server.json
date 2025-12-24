@@ -1,7 +1,7 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/ipinfo",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "title": "IPInfo",
   "description": "IP geolocation, network intelligence, ASN lookup, privacy detection, and WHOIS queries",
   "icons": [
@@ -25,13 +25,17 @@
   "websiteUrl": "https://ipinfo.io/",
   "packages": [
     {
-      "registryType": "oci",
-      "registryBaseUrl": "https://docker.io",
-      "identifier": "nimbletools/mcp-ipinfo",
-      "version": "0.2.0",
+      "registryType": "mcpb",
+      "registryBaseUrl": "https://github.com/NimbleBrainInc/mcp-ipinfo/releases/download",
+      "identifier": "mcp-ipinfo",
+      "version": "1.0.0",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "sha256": {
+        "linux-amd64": "6cc67df4f648474614b687376c47d67fe4dffd9089ef7b982585c058e257626d",
+        "linux-arm64": "124c0230061c61c3e65757c60e552d5012f121d683f40ce9726b2f9df91b51ee"
       },
       "environmentVariables": [
         {
@@ -46,6 +50,7 @@
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "runtime": "python:3.14",
       "status": "active",
       "repository": {
         "branch": "main"
