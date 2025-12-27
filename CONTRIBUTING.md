@@ -9,7 +9,9 @@ Thank you for your interest in contributing MCP servers to the NimbleTools regis
 Before submitting a server, ensure it:
 - Implements the [Model Context Protocol](https://modelcontextprotocol.io) specification
 - Has a public GitHub repository
-- Is packaged as a Docker container
+- Is packaged as either:
+  - **OCI container** (Docker image that exposes HTTP endpoints), OR
+  - **MCPB bundle** (GitHub release with `.mcpb` artifacts)
 - Has clear documentation and examples
 
 ### 2. Create Server Definition
@@ -125,7 +127,7 @@ curl -sSL https://raw.githubusercontent.com/NimbleBrainInc/nimbletools-core/refs
 
 #### Running E2E Tests
 
-Run all tests:
+Run all tests (parallel by default):
 ```bash
 npm run test:e2e
 ```
@@ -134,6 +136,8 @@ Run individual server tests:
 ```bash
 npm run test:e2e -- --server=github
 ```
+
+See `npm run test:e2e -- --help` for all CLI options including `--concurrency`, `--domain`, and `--insecure`.
 
 #### Test Definition
 
@@ -186,18 +190,20 @@ Create a `test.json` file alongside your `server.json`:
 - `version`: Semantic version (e.g., `1.0.0`, not `latest`)
 - `description`: Clear, concise description (max 100 characters)
 - `packages`: At least one package definition with:
-  - `registryType`: Usually `"oci"` for Docker containers
-  - `identifier`: Docker image name
+  - `registryType`: `"oci"` for Docker containers or `"mcpb"` for bundles
+  - `identifier`: Docker image name (OCI) or bundle identifier (MCPB)
   - `version`: Specific version (not `latest`)
-  - `transport`: Either `"stdio"` or `"http"`
+  - `transport.type`: `"streamable-http"`
+  - For MCPB: `fileSha256` checksum (one package entry per architecture)
 
 ### NimbleTools Metadata
 
 The `_meta["ai.nimbletools.mcp/v1"]` section should include:
 
+- **runtime** (MCPB only): Base runtime for the bundle (e.g., `python:3.13`, `node:24`, `supergateway-python:3.14`, `binary`)
 - **capabilities**: List of tools, resources, and prompts your server provides
 - **resources**: Memory and CPU limits/requests for Kubernetes
-- **container**: Health check configuration for HTTP servers
+- **container**: Health check configuration
 - **deployment**: Protocol and port configuration
 
 ## Guidelines

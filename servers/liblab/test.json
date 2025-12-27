@@ -1,0 +1,28 @@
+{
+  "tests": [
+    {
+      "name": "Get dog breeds",
+      "tool": "get_breeds",
+      "arguments": {},
+      "expect": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "Get dog facts",
+      "tool": "get_facts",
+      "arguments": {},
+      "expect": {
+        "type": "any"
+      }
+    },
+    {
+      "name": "Get breed groups",
+      "tool": "get_groups",
+      "arguments": {},
+      "expect": {
+        "type": "any"
+      }
+    }
+  ]
+}

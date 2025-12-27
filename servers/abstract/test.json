@@ -1,17 +1,17 @@
 {
   "environment": {
-    "ABSTRACT_EMAIL_API_KEY": "${ABSTRACT_EMAIL_API_KEY}"
+    "ABSTRACT_EXCHANGE_API_KEY": "${ABSTRACT_EXCHANGE_API_KEY}"
   },
   "tests": [
     {
-      "name": "Validate Email",
-      "tool": "validate_email",
+      "name": "Get Exchange Rates",
+      "tool": "get_exchange_rates",
       "arguments": {
-        "email": "test@example.com"
+        "base": "USD"
       },
       "expect": {
         "type": "json",
-        "field": "is_valid_format"
+        "field": "exchange_rates"
       }
     }
   ]

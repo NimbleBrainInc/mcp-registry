@@ -21,7 +21,7 @@ This registry provides a REST API for discovering MCP servers, implementing a su
 
 - **Curated Selection**: Only includes servers tested and optimized for NimbleBrain's runtime
 - **Extended Metadata**: Adds platform-specific configuration for health checks, resource limits, and deployment settings
-- **Container-Ready**: All servers are packaged as OCI containers for seamless deployment
+- **Deployment-Ready**: Servers are packaged as OCI containers or MCPB bundles for seamless deployment
 - **API Compatibility**: Implements the core MCP Registry API for easy integration
 
 ## API Endpoints
@@ -176,15 +176,30 @@ npm run test:e2e -- --server=echo   # Test specific server
 The registry includes a comprehensive E2E testing framework that validates servers from deployment through MCP connectivity:
 
 ```bash
-# Test all servers
+# Test all servers in parallel (4 concurrent by default)
 npm run test:e2e
+
+# Test with higher parallelism
+npm run test:e2e -- --concurrency=8
 
 # Test a specific server
 npm run test:e2e -- --server=echo
 
-# Test against a different API endpoint
-npm run test:e2e http://api.custom.dev
+# Test against a custom domain/port
+npm run test:e2e -- --domain=nimbletools.dev --port=80 --insecure
 ```
+
+**CLI Options**:
+
+| Option | Description |
+|--------|-------------|
+| `--domain=<domain>` | Base domain (default: `nimbletools.dev`) |
+| `--port=<port>` | Custom port |
+| `--server=<name>` | Test only this server |
+| `--concurrency=<n>` | Run up to N tests in parallel (default: 4) |
+| `--sequential` | Run tests one at a time |
+| `--insecure` | Use HTTP instead of HTTPS |
+| `--skip-cleanup` | Don't delete workspace after test (for debugging) |
 
 **Test Fixtures**: Each server can define custom tests in `servers/{name}/test.json`:
 
@@ -263,6 +278,44 @@ docker build -t nimbletools-registry .
 
 # Run container
 docker run -p 8080:8080 nimbletools-registry
+```
+
+## Releasing
+
+The registry uses semantic versioning. The version is stored in `package.json` and exposed via the root API endpoint.
+
+### Creating a Release
+
+Use `npm version` to bump the version and create a git tag in one step:
+
+```bash
+# Bump to specific version
+npm version 0.2.0
+
+# Or use semantic shortcuts
+npm version patch   # 1.0.0 -> 1.0.1 (bug fixes)
+npm version minor   # 1.0.0 -> 1.1.0 (new features)
+npm version major   # 1.0.0 -> 2.0.0 (breaking changes)
+```
+
+This automatically:
+1. Updates `version` in `package.json`
+2. Creates a git commit with the version change
+3. Creates a git tag (e.g., `v0.2.0`)
+
+### Push the Release
+
+```bash
+git push && git push --tags
+```
+
+### Verify
+
+After deployment, the root endpoint will reflect the new version:
+
+```bash
+curl https://registry.nimbletools.ai/
+# Returns: { "version": "v0.2.0", ... }
 ```
 
 ## Contributing

@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Resolve library ID for React",
+      "tool": "resolve-library-id",
+      "arguments": {
+        "libraryName": "react"
+      },
+      "expect": {
+        "type": "text",
+        "contains": "react"
+      }
+    }
+  ]
+}

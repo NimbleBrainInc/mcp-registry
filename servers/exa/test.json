@@ -1,0 +1,17 @@
+{
+  "environment": {
+    "EXA_API_KEY": "${EXA_API_KEY}"
+  },
+  "tests": [
+    {
+      "name": "Web search for MCP protocol",
+      "tool": "web_search_exa",
+      "arguments": {
+        "query": "Model Context Protocol MCP"
+      },
+      "expect": {
+        "type": "any"
+      }
+    }
+  ]
+}

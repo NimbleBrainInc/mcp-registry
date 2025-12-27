@@ -6,20 +6,40 @@ This guide helps you add new MCP servers to the NimbleTools registry. Follow the
 
 Before adding a server, you need:
 1. A GitHub repository URL for the MCP server
-2. An OCI container image (Docker Hub, GHCR, etc.)
+2. A package source: either an OCI container image OR an MCPB bundle release
 3. Knowledge of the server's tools/capabilities
 4. Any required environment variables/API keys
+
+## Package Types
+
+The registry supports two package types:
+
+### OCI (Pre-built HTTP containers)
+Use OCI when the server already exposes `streamable-http` in its container:
+- Server has a Dockerfile that runs an HTTP server
+- Container exposes `/mcp` endpoint directly
+- Examples: servers with built-in FastAPI, Express, or HTTP frameworks
+
+### MCPB (MCP Bundles)
+Use MCPB when the server needs a runtime provided by NimbleTools:
+- **python:3.13** / **python:3.14** - Python servers using FastMCP or similar
+- **node:24** - Node.js/TypeScript servers
+- **supergateway-python:3.14** - Python stdio servers wrapped with HTTP
+- **binary** - Pre-compiled Go/Rust binaries
+
+For stdio-based MCP servers that don't expose HTTP natively, use MCPB with the `supergateway-python` runtime which wraps stdio to HTTP.
 
 ## Step 1: Analyze the MCP Server
 
 Review the GitHub repository to understand:
 
-- **Transport type**: Does it support HTTP (`streamable-http`) or only `stdio`?
-  - ✅ Prefer `streamable-http` (runs as HTTP server)
-  - ⚠️ Use `stdio` only if HTTP not available
+- **Package type**: Does it have an HTTP server or need a runtime?
+  - ✅ Has HTTP server → Use OCI
+  - ✅ Python/Node source → Use MCPB with appropriate runtime
+  - ✅ Stdio only → Use MCPB with `supergateway-python` runtime
   - ❌ SSE is NOT supported
 
-- **Container details**:
+- **Container/runtime details**:
   - Health check endpoint (usually `/health`)
   - Port (usually `8000`)
   - MCP endpoint path (usually `/mcp`)
@@ -123,8 +143,9 @@ Create `servers/{server-name}/server.json` following this template:
 - `name`: Format `ai.nimbletools/{server-name}` (use lowercase with hyphens)
 - `version`: Semantic version of the server
 - `description`: Clear, concise description (max 100 chars)
-- `packages[0].identifier`: Container image name
-- `packages[0].transport.type`: `"streamable-http"` or `"stdio"`
+- `packages[0].registryType`: `"oci"` or `"mcpb"`
+- `packages[0].identifier`: Container image name (OCI) or bundle identifier (MCPB)
+- `packages[0].transport.type`: `"streamable-http"`
 
 **Recommended fields (core schema)**:
 - `title`: Human-readable display name
@@ -139,11 +160,15 @@ Create `servers/{server-name}/server.json` following this template:
 - `display.category`: Taxonomy category
 - `display.tags`: Searchable tags
 
-**Transport types**:
+**Package configuration by type**:
 
-For `streamable-http` (preferred):
+For OCI packages:
 ```json
 {
+  "registryType": "oci",
+  "registryBaseUrl": "https://docker.io",
+  "identifier": "owner/image-name",
+  "version": "1.0.0",
   "transport": {
     "type": "streamable-http",
     "url": "https://mcp.nimbletools.ai/mcp"
@@ -151,14 +176,24 @@ For `streamable-http` (preferred):
 }
 ```
 
-For `stdio` (fallback):
+For MCPB packages (one entry per architecture):
 ```json
 {
+  "registryType": "mcpb",
+  "identifier": "https://github.com/owner/repo/releases/download/v1.0.0/bundle-v1.0.0-linux-amd64.mcpb",
+  "version": "1.0.0",
+  "fileSha256": "sha256-hash-for-this-architecture",
   "transport": {
-    "type": "stdio"
+    "type": "streamable-http",
+    "url": "http://localhost:8000/mcp"
   }
 }
 ```
+
+MCPB bundles require:
+- One package entry per architecture (linux-amd64, linux-arm64)
+- `identifier` as the full download URL
+- `fileSha256` for integrity verification (compute with `shasum -a 256 bundle.mcpb`)
 
 **Environment variables**:
 ```json
@@ -382,17 +417,82 @@ npm run test:e2e -- --server={server-name}
 }
 ```
 
+### Example 3: MCPB bundle (ipinfo)
+
+`servers/ipinfo/server.json` (showing both architecture packages):
+```json
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/ipinfo",
+  "version": "0.1.0",
+  "title": "IPInfo",
+  "description": "IP geolocation, ASN, and network information via IPInfo API",
+  "icons": [
+    { "src": "https://static.nimbletools.ai/icons/ipinfo.png", "sizes": ["64x64"] }
+  ],
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-ipinfo",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-ipinfo/releases/download/v0.1.0/mcp-ipinfo-v0.1.0-linux-amd64.mcpb",
+      "version": "0.1.0",
+      "fileSha256": "5e5627aa28fc0fbac041090ffe9c9524e6afe7d701e3f02efed8897487e81495",
+      "transport": { "type": "streamable-http", "url": "http://localhost:8000/mcp" },
+      "environmentVariables": [{
+        "name": "IPINFO_API_TOKEN",
+        "description": "IPInfo API token",
+        "isRequired": false,
+        "isSecret": true
+      }]
+    },
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-ipinfo/releases/download/v0.1.0/mcp-ipinfo-v0.1.0-linux-arm64.mcpb",
+      "version": "0.1.0",
+      "fileSha256": "3ec1fb06719c378c47120ad240d827195e206af10e1afd84107b2832fdd41c23",
+      "transport": { "type": "streamable-http", "url": "http://localhost:8000/mcp" },
+      "environmentVariables": [{
+        "name": "IPINFO_API_TOKEN",
+        "description": "IPInfo API token",
+        "isRequired": false,
+        "isSecret": true
+      }]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "runtime": "python:3.14",
+      "status": "active",
+      "container": { "healthCheck": { "path": "/health", "port": 8000 } },
+      "deployment": { "protocol": "http", "port": 8000, "mcpPath": "/mcp" }
+    }
+  }
+}
+```
+
+Note the key differences from OCI:
+- `registryType`: `"mcpb"` instead of `"oci"`
+- `identifier`: Full download URL for the bundle
+- `fileSha256`: Checksum for this specific architecture bundle
+- One package entry per architecture (amd64 and arm64)
+- `runtime`: Specified in `_meta` (e.g., `python:3.14`, `node:24`, `supergateway-python:3.14`)
+
 ## Checklist
 
 Before submitting:
 
 - [ ] `server.json` validates with schema
-- [ ] Transport type is `streamable-http` (or `stdio` if no HTTP support)
+- [ ] Package type is `oci` or `mcpb` with appropriate configuration
+- [ ] For MCPB: One package entry per architecture with correct `fileSha256`
+- [ ] For MCPB: Runtime is specified in `_meta.ai.nimbletools.mcp/v1.runtime`
 - [ ] Health check endpoint is correct
 - [ ] Environment variables marked as `isSecret` and `isRequired` appropriately
 - [ ] `test.json` includes at least one basic test
 - [ ] Test runs successfully with `npm run test:e2e -- --server={name}`
-- [ ] Container image is publicly accessible
+- [ ] Container image (OCI) or GitHub releases (MCPB) are publicly accessible
 - [ ] README URL points to valid documentation
 
 ## Common Issues
@@ -410,9 +510,14 @@ Before submitting:
 - Check tool response format matches expectation
 - Use `"type": "any"` for initial testing, then refine
 
-**Issue**: stdio transport not working
-- Ensure container entrypoint executes MCP server correctly
-- stdio transport requires wrapper/adapter for HTTP communication
+**Issue**: MCPB checksum mismatch
+- Re-download the bundle from GitHub releases
+- Compute SHA256: `shasum -a 256 bundle.mcpb`
+- Update `fileSha256` in the corresponding package entry
+
+**Issue**: Stdio server not working
+- For stdio-based servers, use MCPB with `supergateway-python:3.14` runtime
+- The supergateway runtime wraps stdio servers to expose HTTP
 
 ## Getting Help
 
@@ -426,16 +531,22 @@ Before submitting:
 If you are an AI agent adding a server:
 
 1. **Fetch repository**: Clone or analyze the GitHub repo
-2. **Identify transport**: Check if server supports HTTP endpoints (look for Express, Fastify, HTTP server code)
-3. **Find container**: Look for Dockerfile, docker-compose.yml, or published images on Docker Hub/GHCR
+2. **Identify package type**:
+   - Has Dockerfile with HTTP server? → Use OCI
+   - Python/Node source code? → Use MCPB with appropriate runtime
+   - Stdio-only server? → Use MCPB with `supergateway-python:3.14` runtime
+3. **Find package source**:
+   - OCI: Look for published images on Docker Hub/GHCR
+   - MCPB: Check for GitHub releases with `.mcpb` bundles
 4. **Extract tools**: Read server code or documentation to list available MCP tools
 5. **Map environment variables**: Find all required configuration/secrets
-6. **Generate server.json**: Use the template above
-7. **Create test.json**: Write at least one test for the primary tool
-8. **Validate**: Run `npm run validate-servers`
+6. **Generate server.json**: Use the appropriate template (OCI or MCPB)
+7. **For MCPB**: Download bundles and compute SHA256 checksums
+8. **Create test.json**: Write at least one test for the primary tool
+9. **Validate**: Run `npm run validate-servers`
 
 When in doubt, prefer:
-- `streamable-http` over `stdio`
+- MCPB over OCI (simpler to maintain)
 - Simple tests with `"type": "any"` expectations
 - Conservative resource limits (256Mi/100m)
 - Marking variables as `isSecret: true` if they look sensitive
