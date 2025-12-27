@@ -1,6 +1,6 @@
 {
   "name": "nimbletools-mcp-registry",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "NimbleBrain MCP Registry API",
   "type": "module",
   "license": "Apache-2.0",
