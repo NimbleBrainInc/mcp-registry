@@ -1,9 +1,9 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/clickhouse",
-  "version": "1.0.0",
+  "version": "0.1.13-mcpb.1",
   "title": "ClickHouse",
-  "description": "OLAP database for real-time analytics and data warehousing queries",
+  "description": "ClickHouse database connectivity with read-only SQL queries, schema exploration, and chDB support",
   "icons": [
     {
       "src": "https://static.nimbletools.ai/icons/clickhouse.png",
@@ -25,10 +25,10 @@
   "websiteUrl": "https://clickhouse.com",
   "packages": [
     {
-      "registryType": "oci",
-      "registryBaseUrl": "https://docker.io",
-      "identifier": "nimbletools/mcp-clickhouse",
-      "version": "1.0.0",
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-clickhouse/releases/download/v0.1.13-mcpb.1/mcp-clickhouse-v0.1.13-mcpb.1-linux-amd64.mcpb",
+      "version": "0.1.13-mcpb.1",
+      "fileSha256": "3ad1bf8ed972ea45792a00a2426be194d401d718da464ef90081eb5fdb5f99fb",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
@@ -37,10 +37,9 @@
         {
           "name": "CLICKHOUSE_HOST",
           "description": "ClickHouse server hostname",
-          "isRequired": false,
+          "isRequired": true,
           "isSecret": false,
-          "default": "0.0.0.0",
-          "placeholder": "127.0.0.1"
+          "placeholder": "sql-clickhouse.clickhouse.com"
         },
         {
           "name": "CLICKHOUSE_USER",
@@ -51,10 +50,73 @@
         },
         {
           "name": "CLICKHOUSE_PASSWORD",
-          "description": "ClickHouse password for authentication",
-          "isRequired": true,
+          "description": "ClickHouse password for authentication (can be empty for some servers)",
+          "isRequired": false,
           "isSecret": true,
-          "placeholder": "your_password_here"
+          "placeholder": ""
+        },
+        {
+          "name": "CLICKHOUSE_PORT",
+          "description": "ClickHouse server port (default: 8443 for HTTPS, 8123 for HTTP)",
+          "isRequired": false,
+          "isSecret": false,
+          "placeholder": "8443"
+        },
+        {
+          "name": "CLICKHOUSE_DATABASE",
+          "description": "Default database to connect to",
+          "isRequired": false,
+          "isSecret": false,
+          "placeholder": "default"
+        },
+        {
+          "name": "CLICKHOUSE_MCP_BIND_HOST",
+          "description": "The MCP transport",
+          "default": "0.0.0.0",
+          "isRequired": false,
+          "isSecret": false,
+          "placeholder": "127.0.0.1"
+        },
+        {
+          "name": "CLICKHOUSE_MCP_SERVER_TRANSPORT",
+          "description": "The MCP transport",
+          "default": "http",
+          "isRequired": false,
+          "isSecret": false,
+          "placeholder": "http"
+        }
+      ]
+    },
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-clickhouse/releases/download/v0.1.13-mcpb.1/mcp-clickhouse-v0.1.13-mcpb.1-linux-arm64.mcpb",
+      "version": "0.1.13-mcpb.1",
+      "fileSha256": "4a00d4a8ad8be96a1c0868289ed8ed34bc044361c36bebc5f8b27617a44f8d32",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "CLICKHOUSE_HOST",
+          "description": "ClickHouse server hostname",
+          "isRequired": true,
+          "isSecret": false,
+          "placeholder": "sql-clickhouse.clickhouse.com"
+        },
+        {
+          "name": "CLICKHOUSE_USER",
+          "description": "ClickHouse username for authentication",
+          "isRequired": true,
+          "isSecret": false,
+          "placeholder": "default"
+        },
+        {
+          "name": "CLICKHOUSE_PASSWORD",
+          "description": "ClickHouse password for authentication (can be empty for some servers)",
+          "isRequired": false,
+          "isSecret": true,
+          "placeholder": ""
         },
         {
           "name": "CLICKHOUSE_PORT",
@@ -91,13 +153,15 @@
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "runtime": "python:3.14",
       "status": "active",
       "repository": {
         "branch": "main"
       },
       "container": {
         "healthCheck": {
-          "enabled": false
+          "path": "/health",
+          "port": 8000
         }
       },
       "resources": {
@@ -117,8 +181,8 @@
       },
       "capabilities": {
         "tools": true,
-        "resources": false,
-        "prompts": false
+        "resources": true,
+        "prompts": true
       },
       "display": {
         "category": "infrastructure-data",
@@ -130,7 +194,7 @@
           "sql",
           "real-time",
           "enterprise",
-          "requires-api-key"
+          "chdb"
         ],
         "documentation": {
           "readmeUrl": "https://raw.githubusercontent.com/ClickHouse/mcp-clickhouse/main/README.md"

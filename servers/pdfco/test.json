@@ -34,7 +34,7 @@
       },
       "expect": {
         "type": "object",
-        "hasKeys": ["uri", "name", "mimeType", "type"]
+        "hasKeys": ["url"]
       }
     },
     {
@@ -49,7 +49,7 @@
       },
       "expect": {
         "type": "object",
-        "hasKeys": ["uri", "name", "mimeType", "type"]
+        "hasKeys": ["url"]
       }
     },
     {
@@ -61,14 +61,14 @@
       },
       "expect": {
         "type": "object",
-        "hasKeys": ["result"]
+        "hasKeys": ["urls"]
       }
     },
     {
       "name": "Test barcode generation",
       "tool": "barcode_generate",
       "arguments": {
-        "type": "qrcode",
+        "barcode_type": "QRCode",
         "value": "https://nimblebrain.ai"
       },
       "expect": {
@@ -81,7 +81,7 @@
       "tool": "barcode_read",
       "arguments": {
         "url": "https://static.nimbletools.ai/test_artifacts/hello_world_barcode.jpg",
-        "types": "Code128,Code39,QRCode,DataMatrix,EAN13"
+        "barcode_types": ["Code128", "Code39", "QRCode", "DataMatrix", "EAN13"]
       },
       "expect": {
         "type": "object",

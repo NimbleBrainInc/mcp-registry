@@ -18,6 +18,7 @@
     "test:ui": "vitest --ui",
     "test:e2e": "tsx e2e/test.ts",
     "validate-servers": "tsx scripts/validate-servers.ts",
+    "bump-server": "tsx scripts/bump-server.ts",
     "bundle-schema": "tsx scripts/bundle-schema.ts",
     "generate-types": "tsx scripts/generate-types.ts",
     "verify": "npm run typecheck && npm run test:run && npm run validate-servers && npm run test:e2e",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/postgres-mcp",
-  "version": "0.3.0",
+  "version": "0.3.0-mcpb.1",
   "title": "PostgreSQL",
   "description": "PostgreSQL MCP server with configurable read/write access and performance analysis",
   "icons": [
@@ -25,24 +25,32 @@
   "websiteUrl": "https://github.com/crystaldba/postgres-mcp",
   "packages": [
     {
-      "registryType": "oci",
-      "registryBaseUrl": "https://docker.io",
-      "identifier": "nimbletools/universal-adapter",
-      "version": "dev",
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/postgres-mcp/releases/download/v0.3.0-mcpb.1/mcp-postgres-v0.3.0-mcpb.1-linux-amd64.mcpb",
+      "version": "0.3.0-mcpb.1",
+      "fileSha256": "8655d758628bc883d6b13ff728e75e0d8e2f2400303aaae0378e0b099bd49b46",
       "transport": {
-        "type": "stdio"
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
       },
-      "runtimeHint": "uvx",
-      "runtimeArguments": [
+      "environmentVariables": [
         {
-          "type": "positional",
-          "value": "postgres-mcp"
-        },
-        {
-          "type": "positional",
-          "value": "--access-mode=unrestricted"
+          "name": "DATABASE_URI",
+          "description": "PostgreSQL connection string (e.g., postgresql://username:password@localhost:5432/dbname)",
+          "isRequired": true,
+          "isSecret": true
         }
-      ],
+      ]
+    },
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/postgres-mcp/releases/download/v0.3.0-mcpb.1/mcp-postgres-v0.3.0-mcpb.1-linux-arm64.mcpb",
+      "version": "0.3.0-mcpb.1",
+      "fileSha256": "74e99693f82bd565ee7c0d8f48d883adffbef1edfc857f6f067ea1a208754478",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
       "environmentVariables": [
         {
           "name": "DATABASE_URI",
@@ -55,13 +63,15 @@
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "runtime": "supergateway-python:3.14",
       "status": "active",
       "repository": {
         "branch": "main"
       },
       "container": {
         "healthCheck": {
-          "enabled": false
+          "path": "/health",
+          "port": 8000
         }
       },
       "resources": {

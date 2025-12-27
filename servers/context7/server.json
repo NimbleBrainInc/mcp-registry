@@ -1,0 +1,60 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "name": "io.context7/mcp",
+  "version": "1.0.13",
+  "title": "Context7",
+  "description": "Up-to-date documentation and code examples for any library, fetched directly into your prompts",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/upstash/context7/master/public/icon.png",
+      "sizes": [
+        "64x64"
+      ]
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/upstash/context7",
+    "source": "github"
+  },
+  "websiteUrl": "https://context7.com",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.context7.com/mcp",
+      "description": "Hosted Context7 MCP server for library documentation lookup",
+      "headers": [
+        {
+          "name": "Context7-API-Key",
+          "value": "{CONTEXT7_API_KEY}"
+        }
+      ],
+      "variables": {
+        "CONTEXT7_API_KEY": {
+          "description": "Optional API key for higher rate limits (get at context7.com)",
+          "isRequired": false,
+          "isSecret": true
+        }
+      }
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "serverType": "remote",
+      "status": "active",
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "display": {
+        "category": "developer-tools",
+        "tags": [
+          "documentation",
+          "code-examples",
+          "library-lookup",
+          "free-tier"
+        ]
+      }
+    }
+  }
+}

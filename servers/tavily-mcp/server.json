@@ -1,90 +1,52 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
-  "name": "ai.nimbletools/tavily-mcp",
-  "version": "0.2.9",
+  "name": "io.tavily/mcp",
+  "version": "2.14.1",
   "title": "Tavily",
-  "description": "Real-time web search, extract, map & crawl capabilities for web intelligence",
+  "description": "Real-time web search, extract, map and crawl capabilities for web intelligence",
   "icons": [
     {
       "src": "https://static.nimbletools.ai/icons/tavily.png",
-      "sizes": [
-        "64x64"
-      ]
+      "sizes": ["64x64"]
     },
     {
       "src": "https://static.nimbletools.ai/logos/tavily.png",
-      "sizes": [
-        "256x256"
-      ]
+      "sizes": ["256x256"]
     }
   ],
   "repository": {
     "url": "https://github.com/tavily-ai/tavily-mcp",
     "source": "github"
   },
-  "websiteUrl": "https://github.com/tavily-ai/tavily-mcp",
-  "packages": [
+  "websiteUrl": "https://tavily.com",
+  "remotes": [
     {
-      "registryType": "oci",
-      "registryBaseUrl": "https://docker.io",
-      "identifier": "nimbletools/universal-adapter",
-      "version": "1.0.0",
-      "transport": {
-        "type": "stdio"
-      },
-      "runtimeHint": "npx",
-      "runtimeArguments": [
+      "type": "sse",
+      "url": "https://mcp.tavily.com/mcp",
+      "description": "Hosted Tavily MCP server for web search and intelligence",
+      "headers": [
         {
-          "type": "named",
-          "name": "-y",
-          "value": ""
-        },
-        {
-          "type": "positional",
-          "value": "tavily-mcp"
+          "name": "Authorization",
+          "value": "Bearer {TAVILY_API_KEY}"
         }
       ],
-      "environmentVariables": [
-        {
-          "name": "TAVILY_API_KEY",
-          "description": "Tavily API key for accessing search and extraction services (get free key at tavily.com)",
+      "variables": {
+        "TAVILY_API_KEY": {
+          "description": "Tavily API key (get free key at tavily.com)",
           "isRequired": true,
-          "isSecret": true,
-          "placeholder": "tvly-1234567890abcdef"
-        },
-        {
-          "name": "LOG_LEVEL",
-          "description": "Logging level (optional, defaults to info)",
-          "isRequired": false,
-          "placeholder": "info"
+          "isSecret": true
         }
-      ]
+      }
     }
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
+      "serverType": "remote",
       "status": "active",
-      "repository": {
-        "branch": "main"
-      },
-      "container": {},
-      "resources": {
-        "limits": {
-          "memory": "512Mi",
-          "cpu": "500m"
-        },
-        "requests": {
-          "memory": "128Mi",
-          "cpu": "50m"
-        }
-      },
-      "deployment": {
-        "protocol": "stdio"
-      },
       "capabilities": {
         "tools": true,
-        "resources": false,
-        "prompts": false
+        "resources": true,
+        "prompts": true
       },
       "display": {
         "category": "data-intelligence",

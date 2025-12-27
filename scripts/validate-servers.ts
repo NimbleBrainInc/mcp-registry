@@ -4,7 +4,7 @@
  * Validate all server.json files against the nimbletools-server.schema.json
  */
 
-import Ajv from 'ajv';
+import Ajv2020 from 'ajv/dist/2020.js';
 import ajvFormats from 'ajv-formats';
 import { readdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
@@ -29,7 +29,8 @@ const colors = {
 };
 
 async function loadSchema() {
-  const schemaPath = join(SCHEMAS_DIR, SCHEMA_VERSION, 'nimbletools-server.schema.json');
+  // Use bundled schema (all $refs resolved) to avoid network fetches
+  const schemaPath = join(SCHEMAS_DIR, SCHEMA_VERSION, 'nimbletools-server.bundled.schema.json');
   try {
     const schemaContent = await readFile(schemaPath, 'utf-8');
     return JSON.parse(schemaContent);
@@ -39,37 +40,22 @@ async function loadSchema() {
   }
 }
 
-async function fetchExternalSchema(url: string) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    const schema = await response.json();
-    return schema;
-  } catch (error) {
-    console.error(`${colors.yellow}⚠️  Failed to fetch external schema from ${url}${colors.reset}`);
-    throw error;
-  }
-}
-
 async function validateServers() {
   console.log(`${colors.blue}🔍 Validating server definitions...${colors.reset}`);
   console.log(`${colors.blue}   Schema version: ${SCHEMA_VERSION}${colors.reset}\n`);
 
-  // Initialize AJV with formats support and external schema loading
-  const ajv = new Ajv({
+  // Initialize AJV with draft 2020-12 support (for unevaluatedProperties)
+  const ajv = new Ajv2020({
     allErrors: true,
     verbose: true,
-    strict: false, // Allow additional properties
-    loadSchema: fetchExternalSchema // Function to load external schemas
+    strict: false
   });
   ajvFormats(ajv);
 
-  // Compile validator
+  // Compile validator (bundled schema has all $refs resolved)
   console.log(`${colors.blue}📦 Loading schema ${SCHEMA_VERSION}...${colors.reset}`);
   const schema = await loadSchema();
-  const validate = await ajv.compileAsync(schema);
+  const validate = ajv.compile(schema);
   console.log(`${colors.green}   ✓ Schema compiled${colors.reset}\n`);
 
   // Get all server directories

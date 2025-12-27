@@ -4,6 +4,11 @@ import { createServer } from './server-factory.js';
 import { statSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const pkg = require('../package.json');
+const EXPECTED_VERSION = `v${pkg.version}`;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,7 +35,7 @@ describe('Server Factory - API Endpoints', () => {
       expect(response.statusCode).toBe(200);
       const json = response.json();
       expect(json).toHaveProperty('name', 'NimbleTools MCP Registry API');
-      expect(json).toHaveProperty('version', 'v0.1');
+      expect(json).toHaveProperty('version', EXPECTED_VERSION);
       expect(json).toHaveProperty('endpoints');
       expect(json).toHaveProperty('documentation', '/docs');
     });

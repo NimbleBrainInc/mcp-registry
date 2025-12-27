@@ -11,6 +11,11 @@ import { readdir, readFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { v4 as uuidv4 } from 'uuid';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const pkg = require('../package.json');
+const REGISTRY_VERSION = `v${pkg.version}`;
 import type {
   ErrorResponse,
   MCPServerDetail,
@@ -112,7 +117,7 @@ export async function createServer(): Promise<FastifyInstance> {
       info: {
         title: 'NimbleTools MCP Registry API',
         description: 'A curated registry of Model Context Protocol servers. Compatible with MCP Registry API v0.1.',
-        version: 'v0.1'
+        version: REGISTRY_VERSION
       },
       servers: [
         {
@@ -140,7 +145,7 @@ export async function createServer(): Promise<FastifyInstance> {
   fastify.get('/', async () => {
     return {
       name: 'NimbleTools MCP Registry API',
-      version: 'v0.1',
+      version: REGISTRY_VERSION,
       endpoints: {
         listServers: '/v0.1/servers',
         getServer: '/v0.1/servers/{name}/versions/{version}',

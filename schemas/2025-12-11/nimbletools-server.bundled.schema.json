@@ -1,9 +1,10 @@
 {
-  "$comment": "AUTO-GENERATED: This is a bundled schema with all $refs resolved. Do not edit directly. Generated at 2025-12-22T19:06:16.613Z",
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "AUTO-GENERATED: This is a bundled schema with all $refs resolved. Do not edit directly. Generated at 2025-12-27T16:36:38.161Z",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.bundled.schema.json",
   "title": "NimbleTools MCP Server",
   "description": "Extended MCP server schema with NimbleTools runtime requirements. Extends the official MCP server schema (2025-12-11) with deployment, observability, and display metadata.",
+  "unevaluatedProperties": false,
   "allOf": [
     {
       "$comment": "This file is auto-generated from docs/reference/api/openapi.yaml. Do not edit manually. Run 'make generate-schema' to update.",
@@ -6520,6 +6521,11 @@
               "type": "object",
               "description": "NimbleTools-specific runtime configuration for deployment and display",
               "properties": {
+                "runtime": {
+                  "type": "string",
+                  "description": "Base image runtime for MCPB bundles (e.g., 'python:3.14', 'node:24', 'binary')",
+                  "pattern": "^((python|node|supergateway-python):[0-9]+\\.?[0-9]*|binary(:.+)?)$"
+                },
                 "status": {
                   "type": "string",
                   "description": "Server lifecycle status",
@@ -6530,6 +6536,15 @@
                     "archived"
                   ],
                   "default": "active"
+                },
+                "serverType": {
+                  "type": "string",
+                  "description": "Server hosting type: 'remote' for third-party hosted servers, 'bundle' for MCPB deployable packages",
+                  "enum": [
+                    "remote",
+                    "bundle"
+                  ],
+                  "default": "bundle"
                 },
                 "container": {
                   "type": "object",
@@ -6787,10 +6802,9 @@
                     "protocol": {
                       "type": "string",
                       "enum": [
-                        "http",
-                        "stdio"
+                        "http"
                       ],
-                      "description": "Runtime protocol"
+                      "description": "Runtime protocol (HTTP only, stdio servers use supergateway runtime)"
                     },
                     "port": {
                       "type": "integer",
@@ -6951,6 +6965,48 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "packages": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "registryType": {
+                  "const": "mcpb"
+                }
+              },
+              "required": [
+                "registryType"
+              ]
+            }
+          }
+        },
+        "required": [
+          "packages"
+        ]
+      },
+      "then": {
+        "properties": {
+          "_meta": {
+            "type": "object",
+            "properties": {
+              "ai.nimbletools.mcp/v1": {
+                "required": [
+                  "runtime"
+                ]
+              }
+            },
+            "required": [
+              "ai.nimbletools.mcp/v1"
+            ]
+          }
+        },
+        "required": [
+          "_meta"
+        ]
+      }
     }
   ],
   "definitions": {
@@ -6958,6 +7014,11 @@
       "type": "object",
       "description": "NimbleTools-specific runtime configuration for deployment and display",
       "properties": {
+        "runtime": {
+          "type": "string",
+          "description": "Base image runtime for MCPB bundles (e.g., 'python:3.14', 'node:24', 'binary')",
+          "pattern": "^((python|node|supergateway-python):[0-9]+\\.?[0-9]*|binary(:.+)?)$"
+        },
         "status": {
           "type": "string",
           "description": "Server lifecycle status",
@@ -6968,6 +7029,15 @@
             "archived"
           ],
           "default": "active"
+        },
+        "serverType": {
+          "type": "string",
+          "description": "Server hosting type: 'remote' for third-party hosted servers, 'bundle' for MCPB deployable packages",
+          "enum": [
+            "remote",
+            "bundle"
+          ],
+          "default": "bundle"
         },
         "container": {
           "type": "object",
@@ -7225,10 +7295,9 @@
             "protocol": {
               "type": "string",
               "enum": [
-                "http",
-                "stdio"
+                "http"
               ],
-              "description": "Runtime protocol"
+              "description": "Runtime protocol (HTTP only, stdio servers use supergateway runtime)"
             },
             "port": {
               "type": "integer",

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "name": "io.liblab/mcp",
+  "version": "1.0.0",
+  "title": "liblab",
+  "description": "SDK generation and API documentation tools",
+  "repository": {
+    "url": "https://github.com/liblaber/liblab-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://liblab.com",
+  "remotes": [
+    {
+      "type": "sse",
+      "url": "https://mcp.liblab.io/liblab",
+      "description": "Hosted liblab MCP server for API SDK generation"
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "serverType": "remote",
+      "status": "active",
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "display": {
+        "category": "developer-tools",
+        "tags": [
+          "sdk-generation",
+          "api-tools",
+          "free"
+        ]
+      }
+    }
+  }
+}
