@@ -37,7 +37,7 @@
         {
           "name": "IPINFO_API_TOKEN",
           "description": "IPInfo API token for accessing geolocation services (get free token at ipinfo.io)",
-          "isRequired": false,
+          "isRequired": true,
           "isSecret": true,
           "placeholder": "your_ipinfo_token_here"
         }
@@ -56,7 +56,7 @@
         {
           "name": "IPINFO_API_TOKEN",
           "description": "IPInfo API token for accessing geolocation services (get free token at ipinfo.io)",
-          "isRequired": false,
+          "isRequired": true,
           "isSecret": true,
           "placeholder": "your_ipinfo_token_here"
         }
