@@ -1,0 +1,118 @@
+{
+  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "name": "ai.nimbletools/folk",
+  "version": "0.1.5",
+  "title": "Folk",
+  "description": "Folk CRM: manage contacts, companies, notes, reminders, and interactions",
+  "icons": [
+    {
+      "src": "https://static.nimbletools.ai/icons/folk.png",
+      "sizes": [
+        "64x64"
+      ]
+    },
+    {
+      "src": "https://static.nimbletools.ai/logos/folk.png",
+      "sizes": [
+        "256x256"
+      ]
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/NimbleBrainInc/mcp-folk",
+    "source": "github"
+  },
+  "websiteUrl": "https://www.folk.app/",
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-folk/releases/download/v0.1.5/nimblebraininc-folk-0.1.5-linux-amd64.mcpb",
+      "version": "0.1.5",
+      "fileSha256": "30e432f0a98f443c4a2eea14f6e5daa188e4fd2d116c95efffdefd3b627554d3",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "FOLK_API_KEY",
+          "description": "Folk API key (get from https://app.folk.app/settings/api)",
+          "isRequired": true,
+          "isSecret": true,
+          "placeholder": "your_folk_api_key_here"
+        }
+      ]
+    },
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-folk/releases/download/v0.1.5/nimblebraininc-folk-0.1.5-linux-arm64.mcpb",
+      "version": "0.1.5",
+      "fileSha256": "c700e8f4373696b4f0ec320ee9350ff96c33d90f0af713021d6dc16e292a7701",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "FOLK_API_KEY",
+          "description": "Folk API key (get from https://app.folk.app/settings/api)",
+          "isRequired": true,
+          "isSecret": true,
+          "placeholder": "your_folk_api_key_here"
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "ai.nimbletools.mcp/v1": {
+      "runtime": "python:3.13",
+      "status": "active",
+      "repository": {
+        "branch": "main"
+      },
+      "container": {
+        "healthCheck": {
+          "path": "/health",
+          "port": 8000,
+          "initialDelaySeconds": 10
+        }
+      },
+      "resources": {
+        "requests": {
+          "cpu": "250m",
+          "memory": "256Mi"
+        },
+        "limits": {
+          "cpu": "1000m",
+          "memory": "512Mi"
+        }
+      },
+      "deployment": {
+        "protocol": "http",
+        "port": 8000,
+        "mcpPath": "/mcp"
+      },
+      "capabilities": {
+        "tools": true,
+        "resources": false,
+        "prompts": false
+      },
+      "display": {
+        "category": "communication-collaboration",
+        "tags": [
+          "folk",
+          "crm",
+          "contacts",
+          "companies",
+          "notes",
+          "reminders",
+          "interactions",
+          "requires-api-key"
+        ],
+        "documentation": {
+          "readmeUrl": "https://raw.githubusercontent.com/NimbleBrainInc/mcp-folk/main/README.md"
+        }
+      }
+    }
+  }
+}
