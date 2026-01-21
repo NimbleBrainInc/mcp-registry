@@ -1,7 +1,7 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
-  "name": "@nimblebraininc/pdfco",
-  "version": "0.1.2",
+  "name": "ai.nimbletools/pdfco",
+  "version": "0.2.0",
   "title": "PDF.co",
   "description": "PDF.co API: PDF manipulation, conversion, OCR, text extraction, and document automation",
   "icons": [
@@ -26,9 +26,9 @@
   "packages": [
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/NimbleBrainInc/mcp-pdfco/releases/download/v0.1.2/nimblebraininc-pdfco-0.1.2-linux-amd64.mcpb",
-      "version": "0.1.2",
-      "fileSha256": "3ac46f2da5b211bd097d6c36200ea9554dff7bff8e6636bcf90d5a66081e0f25",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-pdfco/releases/download/v0.2.0/nimblebraininc-pdfco-0.2.0-linux-amd64.mcpb",
+      "version": "0.2.0",
+      "fileSha256": "08ab95e1595b8ed885691e70a1db9d4984bc2da8412d1a3dc0af2c0f27b1f59f",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
@@ -45,9 +45,28 @@
     },
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/NimbleBrainInc/mcp-pdfco/releases/download/v0.1.2/nimblebraininc-pdfco-0.1.2-linux-arm64.mcpb",
-      "version": "0.1.2",
-      "fileSha256": "1b06fee6df9081c425a130f86839e326e723814dd4884786fb4f6a1cb2297980",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-pdfco/releases/download/v0.2.0/nimblebraininc-pdfco-0.2.0-linux-arm64.mcpb",
+      "version": "0.2.0",
+      "fileSha256": "75fa62ef3da386b93b478a25659e2fdb52c76c064739183f276eef38cc9fa443",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.nimbletools.ai/mcp"
+      },
+      "environmentVariables": [
+        {
+          "name": "PDFCO_API_KEY",
+          "description": "PDF.co API key (get from https://app.pdf.co/dashboard)",
+          "isRequired": true,
+          "isSecret": true,
+          "placeholder": "your_pdfco_api_key_here"
+        }
+      ]
+    },
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-pdfco/releases/download/v0.2.0/nimblebraininc-pdfco-0.2.0-darwin-arm64.mcpb",
+      "version": "0.2.0",
+      "fileSha256": "3eafcbeaec6c4fa6a7b86bac4fc05059a0c72f35b3ca52af6a4b21c4c92d6e71",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
@@ -65,7 +84,7 @@
   ],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
-      "runtime": "python:3.14",
+      "runtime": "python:3.13",
       "status": "active",
       "repository": {
         "branch": "main"
@@ -78,12 +97,12 @@
       },
       "resources": {
         "limits": {
-          "memory": "256Mi",
-          "cpu": "100m"
+          "memory": "512Mi",
+          "cpu": "1000m"
         },
         "requests": {
-          "memory": "128Mi",
-          "cpu": "50m"
+          "memory": "256Mi",
+          "cpu": "250m"
         }
       },
       "deployment": {
@@ -95,6 +114,11 @@
         "tools": true,
         "resources": false,
         "prompts": false
+      },
+      "skill": {
+        "source": "mpak",
+        "name": "@nimblebraininc/pdfco",
+        "version": "1.1.0"
       },
       "display": {
         "category": "developer-tools",

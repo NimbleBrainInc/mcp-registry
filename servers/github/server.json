@@ -93,11 +93,11 @@
       "resources": {
         "limits": {
           "memory": "512Mi",
-          "cpu": "200m"
+          "cpu": "1000m"
         },
         "requests": {
           "memory": "256Mi",
-          "cpu": "100m"
+          "cpu": "250m"
         }
       },
       "deployment": {

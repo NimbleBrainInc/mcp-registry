@@ -107,12 +107,12 @@
       },
       "resources": {
         "limits": {
-          "memory": "256Mi",
-          "cpu": "100m"
+          "memory": "512Mi",
+          "cpu": "1000m"
         },
         "requests": {
-          "memory": "128Mi",
-          "cpu": "50m"
+          "memory": "256Mi",
+          "cpu": "250m"
         }
       },
       "deployment": {
