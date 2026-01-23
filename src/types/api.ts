@@ -61,3 +61,48 @@ export interface RegistryMetadata {
   updatedAt: string;
   isLatest: boolean;
 }
+
+/**
+ * Base fields shared by all skill reference types
+ */
+interface SkillReferenceBase {
+  /** Skill artifact identifier (e.g., '@nimbletools/folk-crm') */
+  name: string;
+  /** Semver version (e.g., '1.0.0') */
+  version: string;
+  /** SHA256 integrity hash (format: 'sha256-hexdigest') */
+  integrity?: string;
+}
+
+/**
+ * Skill reference from mpak registry
+ */
+export interface MpakSkillReference extends SkillReferenceBase {
+  source: 'mpak';
+}
+
+/**
+ * Skill reference from GitHub repository
+ */
+export interface GithubSkillReference extends SkillReferenceBase {
+  source: 'github';
+  /** GitHub repository (owner/repo) */
+  repo: string;
+  /** Path to skill file in repo */
+  path: string;
+}
+
+/**
+ * Skill reference from direct URL
+ */
+export interface UrlSkillReference extends SkillReferenceBase {
+  source: 'url';
+  /** Direct download URL */
+  url: string;
+}
+
+/**
+ * Discriminated union of skill reference types
+ * Used in server metadata to point to associated skill content
+ */
+export type SkillReference = MpakSkillReference | GithubSkillReference | UrlSkillReference;

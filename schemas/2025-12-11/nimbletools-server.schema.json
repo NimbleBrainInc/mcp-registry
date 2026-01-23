@@ -3,9 +3,7 @@
   "$id": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "title": "NimbleTools MCP Server",
   "description": "Extended MCP server schema with NimbleTools runtime requirements. Extends the official MCP server schema (2025-12-11) with deployment, observability, and display metadata.",
-
   "unevaluatedProperties": false,
-
   "allOf": [
     {
       "$ref": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json"
@@ -30,13 +28,19 @@
             "contains": {
               "type": "object",
               "properties": {
-                "registryType": { "const": "mcpb" }
+                "registryType": {
+                  "const": "mcpb"
+                }
               },
-              "required": ["registryType"]
+              "required": [
+                "registryType"
+              ]
             }
           }
         },
-        "required": ["packages"]
+        "required": [
+          "packages"
+        ]
       },
       "then": {
         "properties": {
@@ -44,17 +48,22 @@
             "type": "object",
             "properties": {
               "ai.nimbletools.mcp/v1": {
-                "required": ["runtime"]
+                "required": [
+                  "runtime"
+                ]
               }
             },
-            "required": ["ai.nimbletools.mcp/v1"]
+            "required": [
+              "ai.nimbletools.mcp/v1"
+            ]
           }
         },
-        "required": ["_meta"]
+        "required": [
+          "_meta"
+        ]
       }
     }
   ],
-
   "definitions": {
     "NimbleToolsRuntime": {
       "type": "object",
@@ -65,21 +74,26 @@
           "description": "Base image runtime for MCPB bundles (e.g., 'python:3.14', 'node:24', 'binary')",
           "pattern": "^((python|node|supergateway-python):[0-9]+\\.?[0-9]*|binary(:.+)?)$"
         },
-
         "status": {
           "type": "string",
           "description": "Server lifecycle status",
-          "enum": ["active", "deprecated", "beta", "archived"],
+          "enum": [
+            "active",
+            "deprecated",
+            "beta",
+            "archived"
+          ],
           "default": "active"
         },
-
         "serverType": {
           "type": "string",
           "description": "Server hosting type: 'remote' for third-party hosted servers, 'bundle' for MCPB deployable packages",
-          "enum": ["remote", "bundle"],
+          "enum": [
+            "remote",
+            "bundle"
+          ],
           "default": "bundle"
         },
-
         "container": {
           "type": "object",
           "description": "Container-specific configuration (for OCI packages)",
@@ -148,7 +162,6 @@
             }
           }
         },
-
         "resources": {
           "type": "object",
           "description": "Container resource requirements (Kubernetes-style)",
@@ -189,7 +202,6 @@
             }
           }
         },
-
         "scaling": {
           "type": "object",
           "description": "Auto-scaling configuration (HPA)",
@@ -216,7 +228,6 @@
             }
           }
         },
-
         "observability": {
           "type": "object",
           "description": "Monitoring and logging configuration",
@@ -257,7 +268,6 @@
             }
           }
         },
-
         "security": {
           "type": "object",
           "description": "Container security configuration",
@@ -281,7 +291,6 @@
             }
           }
         },
-
         "networking": {
           "type": "object",
           "description": "Network configuration",
@@ -317,7 +326,11 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+                  "enum": [
+                    "ClusterIP",
+                    "NodePort",
+                    "LoadBalancer"
+                  ],
                   "default": "ClusterIP"
                 },
                 "annotations": {
@@ -330,14 +343,15 @@
             }
           }
         },
-
         "deployment": {
           "type": "object",
           "description": "Deployment runtime configuration",
           "properties": {
             "protocol": {
               "type": "string",
-              "enum": ["http"],
+              "enum": [
+                "http"
+              ],
               "description": "Runtime protocol (HTTP only, stdio servers use supergateway runtime)"
             },
             "port": {
@@ -353,7 +367,6 @@
             }
           }
         },
-
         "capabilities": {
           "type": "object",
           "description": "MCP server capabilities (can be auto-detected at runtime)",
@@ -372,7 +385,6 @@
             }
           }
         },
-
         "repository": {
           "type": "object",
           "description": "Extended repository metadata not in core schema",
@@ -384,7 +396,6 @@
             }
           }
         },
-
         "display": {
           "type": "object",
           "description": "Display configuration for registry UI (complements core title/icons)",
@@ -482,7 +493,9 @@
                         "description": "Optional thumbnail URL for faster loading"
                       }
                     },
-                    "required": ["url"]
+                    "required": [
+                      "url"
+                    ]
                   },
                   "maxItems": 5
                 },
@@ -494,6 +507,112 @@
               }
             }
           }
+        },
+        "skill": {
+          "description": "Reference to an associated skill artifact.",
+          "oneOf": [
+            {
+              "type": "object",
+              "description": "Skill from mpak registry",
+              "properties": {
+                "source": {
+                  "const": "mpak"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Skill artifact identifier (e.g., '@nimblebraininc/echo')"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Semver version (e.g., '1.0.0')"
+                },
+                "integrity": {
+                  "type": "string",
+                  "pattern": "^sha256-[a-f0-9]{64}$",
+                  "description": "SHA256 integrity hash"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "version"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "description": "Skill from GitHub repository",
+              "properties": {
+                "source": {
+                  "const": "github"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Skill artifact identifier"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Semver version or git ref"
+                },
+                "integrity": {
+                  "type": "string",
+                  "pattern": "^sha256-[a-f0-9]{64}$",
+                  "description": "SHA256 integrity hash"
+                },
+                "repo": {
+                  "type": "string",
+                  "pattern": "^[\\w.-]+/[\\w.-]+$",
+                  "description": "GitHub repository (owner/repo)"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path to skill file in repo"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "version",
+                "repo",
+                "path"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "description": "Skill from direct URL",
+              "properties": {
+                "source": {
+                  "const": "url"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Skill artifact identifier"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Semver version"
+                },
+                "integrity": {
+                  "type": "string",
+                  "pattern": "^sha256-[a-f0-9]{64}$",
+                  "description": "SHA256 integrity hash"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Direct download URL"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "version",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          ]
         }
       }
     }

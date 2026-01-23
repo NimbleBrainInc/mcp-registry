@@ -1,5 +1,5 @@
 {
-  "$comment": "AUTO-GENERATED: This is a bundled schema with all $refs resolved. Do not edit directly. Generated at 2025-12-27T16:36:38.161Z",
+  "$comment": "AUTO-GENERATED: This is a bundled schema with all $refs resolved. Do not edit directly. Generated at 2026-01-16T09:23:27.403Z",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.bundled.schema.json",
   "title": "NimbleTools MCP Server",
@@ -6959,6 +6959,112 @@
                       }
                     }
                   }
+                },
+                "skill": {
+                  "description": "Reference to an associated skill artifact.",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "description": "Skill from mpak registry",
+                      "properties": {
+                        "source": {
+                          "const": "mpak"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Skill artifact identifier (e.g., '@nimblebraininc/echo')"
+                        },
+                        "version": {
+                          "type": "string",
+                          "description": "Semver version (e.g., '1.0.0')"
+                        },
+                        "integrity": {
+                          "type": "string",
+                          "pattern": "^sha256-[a-f0-9]{64}$",
+                          "description": "SHA256 integrity hash"
+                        }
+                      },
+                      "required": [
+                        "source",
+                        "name",
+                        "version"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "description": "Skill from GitHub repository",
+                      "properties": {
+                        "source": {
+                          "const": "github"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Skill artifact identifier"
+                        },
+                        "version": {
+                          "type": "string",
+                          "description": "Semver version or git ref"
+                        },
+                        "integrity": {
+                          "type": "string",
+                          "pattern": "^sha256-[a-f0-9]{64}$",
+                          "description": "SHA256 integrity hash"
+                        },
+                        "repo": {
+                          "type": "string",
+                          "pattern": "^[\\w.-]+/[\\w.-]+$",
+                          "description": "GitHub repository (owner/repo)"
+                        },
+                        "path": {
+                          "type": "string",
+                          "description": "Path to skill file in repo"
+                        }
+                      },
+                      "required": [
+                        "source",
+                        "name",
+                        "version",
+                        "repo",
+                        "path"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "description": "Skill from direct URL",
+                      "properties": {
+                        "source": {
+                          "const": "url"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Skill artifact identifier"
+                        },
+                        "version": {
+                          "type": "string",
+                          "description": "Semver version"
+                        },
+                        "integrity": {
+                          "type": "string",
+                          "pattern": "^sha256-[a-f0-9]{64}$",
+                          "description": "SHA256 integrity hash"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri",
+                          "description": "Direct download URL"
+                        }
+                      },
+                      "required": [
+                        "source",
+                        "name",
+                        "version",
+                        "url"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
                 }
               }
             }
@@ -7452,6 +7558,112 @@
               }
             }
           }
+        },
+        "skill": {
+          "description": "Reference to an associated skill artifact.",
+          "oneOf": [
+            {
+              "type": "object",
+              "description": "Skill from mpak registry",
+              "properties": {
+                "source": {
+                  "const": "mpak"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Skill artifact identifier (e.g., '@nimblebraininc/echo')"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Semver version (e.g., '1.0.0')"
+                },
+                "integrity": {
+                  "type": "string",
+                  "pattern": "^sha256-[a-f0-9]{64}$",
+                  "description": "SHA256 integrity hash"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "version"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "description": "Skill from GitHub repository",
+              "properties": {
+                "source": {
+                  "const": "github"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Skill artifact identifier"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Semver version or git ref"
+                },
+                "integrity": {
+                  "type": "string",
+                  "pattern": "^sha256-[a-f0-9]{64}$",
+                  "description": "SHA256 integrity hash"
+                },
+                "repo": {
+                  "type": "string",
+                  "pattern": "^[\\w.-]+/[\\w.-]+$",
+                  "description": "GitHub repository (owner/repo)"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path to skill file in repo"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "version",
+                "repo",
+                "path"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "description": "Skill from direct URL",
+              "properties": {
+                "source": {
+                  "const": "url"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Skill artifact identifier"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Semver version"
+                },
+                "integrity": {
+                  "type": "string",
+                  "pattern": "^sha256-[a-f0-9]{64}$",
+                  "description": "SHA256 integrity hash"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Direct download URL"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "version",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          ]
         }
       }
     }
