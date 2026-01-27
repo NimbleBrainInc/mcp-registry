@@ -1,7 +1,7 @@
 {
   "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/folk",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "title": "Folk",
   "description": "Folk CRM: manage contacts, companies, notes, reminders, and interactions",
   "icons": [
@@ -26,9 +26,9 @@
   "packages": [
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/NimbleBrainInc/mcp-folk/releases/download/v0.1.6/nimblebraininc-folk-0.1.6-linux-amd64.mcpb",
-      "version": "0.1.6",
-      "fileSha256": "ba6240e7d66d76309438795cdc3041d714f0e521d40aeaee46ae250c14cd16ce",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-folk/releases/download/v0.1.8/nimblebraininc-folk-0.1.8-linux-amd64.mcpb",
+      "version": "0.1.8",
+      "fileSha256": "306bfd10ecde884878f570271c3af69ef8e5622f95539dbc6dd3389cf5931e8e",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
@@ -45,9 +45,9 @@
     },
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/NimbleBrainInc/mcp-folk/releases/download/v0.1.6/nimblebraininc-folk-0.1.6-linux-arm64.mcpb",
-      "version": "0.1.6",
-      "fileSha256": "7f33f68ee72dd5c78a0cf749ea807d369a0348381513555db50fe9dd5eb43328",
+      "identifier": "https://github.com/NimbleBrainInc/mcp-folk/releases/download/v0.1.8/nimblebraininc-folk-0.1.8-linux-arm64.mcpb",
+      "version": "0.1.8",
+      "fileSha256": "772606ce22a8ac5a3bdf8c132957c21a70e9607fd0e287d992a84e5fc385ec3b",
       "transport": {
         "type": "streamable-http",
         "url": "https://mcp.nimbletools.ai/mcp"
@@ -100,7 +100,7 @@
       "skill": {
         "source": "mpak",
         "name": "@nimblebraininc/folk-crm",
-        "version": "1.4.0"
+        "version": "1.5.0"
       },
       "display": {
         "category": "communication-collaboration",
