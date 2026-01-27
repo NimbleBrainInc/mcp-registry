@@ -96,6 +96,11 @@
         "resources": false,
         "prompts": false
       },
+      "skill": {
+        "source": "mpak",
+        "name": "@nimblebraininc/ipinfo",
+        "version": "1.1.0"
+      },
       "display": {
         "category": "data-intelligence",
         "tags": [
