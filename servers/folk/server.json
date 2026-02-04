@@ -100,7 +100,7 @@
       "skill": {
         "source": "mpak",
         "name": "@nimblebraininc/folk-crm",
-        "version": "1.5.0"
+        "version": "1.6.0"
       },
       "display": {
         "category": "communication-collaboration",
