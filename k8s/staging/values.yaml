@@ -10,8 +10,8 @@ service:
   port: 8080
 
 ingress:
-  host: registry.preview.nimbletools.ai
-  certificateArn: arn:aws:acm:us-east-1:533267450054:certificate/4b761e1d-f101-4d06-907f-43eb69efece3
+  host: registry.preview.nimblebrain.ai
+  certificateArn: arn:aws:acm:us-east-1:533267450054:certificate/9d77bd52-139e-4e05-8ded-c8ccaf9b35b8
 
 healthCheck:
   path: /v0.1/health

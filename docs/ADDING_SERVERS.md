@@ -58,7 +58,7 @@ Create `servers/{server-name}/server.json` following this template:
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/{server-name}",
   "version": "1.0.0",
   "title": "Display Name",
@@ -319,7 +319,7 @@ npm run test:e2e -- --server={server-name}
 `servers/echo/server.json`:
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/echo",
   "version": "1.0.0",
   "title": "Echo",
@@ -374,7 +374,7 @@ npm run test:e2e -- --server={server-name}
 `servers/finnhub/server.json`:
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/finnhub",
   "version": "1.0.0",
   "title": "Finnhub",
@@ -422,7 +422,7 @@ npm run test:e2e -- --server={server-name}
 `servers/ipinfo/server.json` (showing both architecture packages):
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/ipinfo",
   "version": "0.1.0",
   "title": "IPInfo",
@@ -522,7 +522,7 @@ Before submitting:
 ## Getting Help
 
 - Review existing servers in `servers/` directory for examples
-- Check schema documentation: https://registry.nimbletools.ai/schemas
+- Check schema documentation: https://registry.nimblebrain.ai/schemas
 - Test locally with `npm run test:e2e` before submitting
 - Open an issue if you need assistance
 

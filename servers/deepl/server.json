@@ -1,5 +1,5 @@
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/deepl",
   "version": "0.1.0",
   "title": "DeepL",

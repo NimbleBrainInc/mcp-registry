@@ -121,7 +121,7 @@ export async function createServer(): Promise<FastifyInstance> {
       },
       servers: [
         {
-          url: process.env.API_URL || 'https://registry.nimbletools.ai'
+          url: process.env.API_URL || 'https://registry.nimblebrain.ai'
         }
       ]
     }

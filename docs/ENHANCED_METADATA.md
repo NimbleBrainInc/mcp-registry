@@ -44,7 +44,7 @@ Add the enhanced metadata to your `server.json` file. Note the 2025-12-11 schema
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
   "title": "Your Server Display Name",
@@ -162,7 +162,7 @@ When fetching server details, the enhanced metadata is included in the response:
 
 To migrate existing servers to the 2025-12-11 schema:
 
-1. Update `$schema` to `https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json`
+1. Update `$schema` to `https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json`
 2. Add `title` field at root level (display name)
 3. Move branding icons to `icons[]` array at root level
 4. Move `status` from root to `_meta.ai.nimbletools.mcp/v1.status`

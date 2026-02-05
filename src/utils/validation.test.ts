@@ -1,9 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import AjvModule from 'ajv';
-import type { AnySchemaObject } from 'ajv';
+import Ajv2020Module from 'ajv/dist/2020';
 import addFormatsModule from 'ajv-formats';
 
-const Ajv = AjvModule.default || AjvModule;
+const Ajv = Ajv2020Module.default || Ajv2020Module;
 const addFormats = addFormatsModule.default || addFormatsModule;
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -14,19 +13,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 describe('Server Validation', () => {
-  const SCHEMA_PATH = join(__dirname, '..', '..', 'schemas', '2025-12-11', 'nimbletools-server.schema.json');
+  // Use bundled schema (has all $refs resolved, no external fetches needed)
+  const SCHEMA_PATH = join(__dirname, '..', '..', 'schemas', '2025-12-11', 'nimbletools-server.bundled.schema.json');
 
   async function loadSchema() {
     const schemaContent = await readFile(SCHEMA_PATH, 'utf-8');
     return JSON.parse(schemaContent);
-  }
-
-  async function fetchExternalSchema(url: string): Promise<AnySchemaObject> {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    return await response.json() as AnySchemaObject;
   }
 
   it('should validate a valid server definition', async () => {
@@ -34,15 +26,14 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false,
-      loadSchema: fetchExternalSchema
+      strict: false
     });
     addFormats(ajv);
 
-    const validate = await ajv.compileAsync(schema);
+    const validate = ajv.compile(schema);
 
     const validServer = {
-      "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+      "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
       name: 'ai.nimbletools/test-server',
       version: '1.0.0',
       title: 'Test Server',
@@ -91,12 +82,11 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false,
-      loadSchema: fetchExternalSchema
+      strict: false
     });
     addFormats(ajv);
 
-    const validate = await ajv.compileAsync(schema);
+    const validate = ajv.compile(schema);
 
     const invalidServer = {
       name: 'test-server'
@@ -114,12 +104,11 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false,
-      loadSchema: fetchExternalSchema
+      strict: false
     });
     addFormats(ajv);
 
-    const validate = await ajv.compileAsync(schema);
+    const validate = ajv.compile(schema);
 
     const invalidServer = {
       name: 'test-server',
@@ -144,15 +133,14 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false,
-      loadSchema: fetchExternalSchema
+      strict: false
     });
     addFormats(ajv);
 
-    const validate = await ajv.compileAsync(schema);
+    const validate = ajv.compile(schema);
 
     const serverWithSecrets = {
-      "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+      "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
       name: 'ai.nimbletools/test-server-with-secrets',
       version: '1.0.0',
       title: 'Test Server with Secrets',

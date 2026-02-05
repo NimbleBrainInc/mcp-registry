@@ -60,8 +60,8 @@ Deployed to AWS EKS via Helm. Uses shared `web-app` chart from ECR OCI registry.
 
 | Environment | Domain | Command |
 |-------------|--------|---------|
-| Staging | `registry.preview.nimbletools.ai` | `make deploy` |
-| Production | `registry.nimbletools.ai` | `make deploy ENV=production` |
+| Staging | `registry.preview.nimblebrain.ai` | `make deploy` |
+| Production | `registry.nimblebrain.ai` | `make deploy ENV=production` |
 
 ```bash
 make deploy ENV=production   # Full deploy: build, push, helm

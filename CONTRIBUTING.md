@@ -30,7 +30,7 @@ Your `server.json` must follow the 2025-12-11 schema:
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/your-server",
   "version": "1.0.0",
   "title": "Your Server Display Name",

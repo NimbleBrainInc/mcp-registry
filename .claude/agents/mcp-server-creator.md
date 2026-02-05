@@ -26,7 +26,7 @@ When a user asks you to add an MCP server to the registry, you will:
    - ❌ NEVER USE: SSE (Server-Sent Events) - not supported
 
 3. **Create server.json**:
-   - Use the exact schema: `https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json`
+   - Use the exact schema: `https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json`
    - Name format: `ai.nimbletools/{server-name}` (lowercase with hyphens)
    - Add `title` field at root level (display name)
    - Add `icons[]` array at root level with src and sizes

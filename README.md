@@ -1,17 +1,16 @@
 # NimbleBrain MCP Registry
 
-[![Live Registry](https://img.shields.io/badge/Live%20Registry-registry.nimbletools.ai-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjE3TDEyIDIyTDIyIDE3VjdMMTIgMloiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=)](https://registry.nimbletools.ai)
+[![Live Registry](https://img.shields.io/badge/Live%20Registry-registry.nimblebrain.ai-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiA3VjE3TDEyIDIyTDIyIDE3VjdMMTIgMloiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4=)](https://registry.nimblebrain.ai)
 
 ![GitHub License](https://img.shields.io/github/license/NimbleBrainInc/mcp-registry)
 [![Actions status](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/ci.yml/badge.svg)](https://github.com/NimbleBrainInc/mcp-registry/actions)
-[![E2E Tests](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/qa-e2e.yml/badge.svg)](https://github.com/NimbleBrainInc/mcp-registry/actions/workflows/qa-e2e.yml)
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?logo=discord&logoColor=white)](https://www.nimbletools.ai/discord?utm_source=github&utm_medium=readme&utm_campaign=mcp-registry&utm_content=header-badge)
 
 A curated registry of Model Context Protocol (MCP) servers optimized for the NimbleBrain runtime platform.
 
-🌐 **Live at: https://registry.nimbletools.ai**
+🌐 **Live at: https://registry.nimblebrain.ai**
 
-📚 **API Docs: https://registry.nimbletools.ai/docs**
+📚 **API Docs: https://registry.nimblebrain.ai/docs**
 
 ## Overview
 
@@ -26,17 +25,12 @@ This registry provides a REST API for discovering MCP servers, implementing a su
 
 ## API Endpoints
 
-The registry implements the [MCP Registry API v0.1](https://github.com/modelcontextprotocol/registry/) specification:
-
 ```
 GET /                                              # API info and available endpoints
 GET /v0.1/servers                                  # List all servers (with search, pagination)
 GET /v0.1/servers/{name}/versions/{version}        # Get specific server version
-GET /v0.1/servers/{server_id}                      # Get server by ID (legacy)
 GET /v0.1/health                                   # Health check
 GET /schemas                                       # List available schema versions
-GET /schemas/latest/{filename}                     # Get latest schema
-GET /schemas/{version}/{filename}                  # Get specific schema version
 GET /docs                                          # Interactive API documentation (Swagger UI)
 ```
 
@@ -46,146 +40,57 @@ GET /docs                                          # Interactive API documentati
 |-----------|-------------|
 | `search` | Case-insensitive search on name, title, description |
 | `version` | Filter by version (`latest` supported) |
-| `updated_since` | RFC3339 timestamp filter |
-| `cursor` | Pagination cursor |
 | `limit` | Results per page (default 100, max 500) |
-
-**Base URL:** `https://registry.nimbletools.ai`
-**API Documentation:** `https://registry.nimbletools.ai/docs` (Interactive Swagger UI)
+| `cursor` | Pagination cursor |
 
 ### Example API Calls
 
 ```bash
 # List all servers
-curl https://registry.nimbletools.ai/v0.1/servers
+curl https://registry.nimblebrain.ai/v0.1/servers
 
 # Search for servers
-curl "https://registry.nimbletools.ai/v0.1/servers?search=weather"
+curl "https://registry.nimblebrain.ai/v0.1/servers?search=weather"
 
 # Get specific server version
-curl https://registry.nimbletools.ai/v0.1/servers/ai.nimbletools%2Ffinnhub/versions/latest
+curl https://registry.nimblebrain.ai/v0.1/servers/ai.nimbletools%2Ffinnhub/versions/latest
 
 # Check health
-curl https://registry.nimbletools.ai/v0.1/health
+curl https://registry.nimblebrain.ai/v0.1/health
 ```
 
 ## Server Schema
 
-Our servers follow the [MCP server schema (2025-12-11)](https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json) with additional NimbleBrain-specific metadata:
+Servers follow the [MCP server schema (2025-12-11)](https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json) with additional NimbleBrain-specific metadata:
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/example",
   "version": "1.0.0",
   "title": "Example Server",
   "description": "Example MCP server",
-  "icons": [
-    { "src": "https://example.com/icon.png", "sizes": ["64x64"] }
-  ],
-  "repository": {
-    "url": "https://github.com/example/repo",
-    "source": "github"
-  },
   "packages": [{
-    "registryType": "oci",
-    "identifier": "nimbletools/example",
+    "registryType": "mcpb",
+    "identifier": "https://github.com/example/releases/download/v1.0.0/example.mcpb",
     "version": "1.0.0",
-    "transport": { "type": "streamable-http", "url": "https://mcp.example.com/mcp" },
+    "transport": { "type": "streamable-http" },
     "environmentVariables": [{
       "name": "API_KEY",
       "isRequired": true,
-      "isSecret": true,
-      "placeholder": "your_api_key"
+      "isSecret": true
     }]
   }],
   "_meta": {
     "ai.nimbletools.mcp/v1": {
-      "status": "active",
-      "container": {
-        "healthCheck": { "path": "/health", "port": 8000 }
-      },
-      "resources": {
-        "limits": { "memory": "256Mi", "cpu": "100m" }
-      },
-      "capabilities": { "tools": true, "resources": false, "prompts": false },
-      "display": {
-        "category": "developer-tools",
-        "tags": ["example", "demo"]
-      }
+      "runtime": "python:3.14",
+      "status": "active"
     }
   }
 }
 ```
 
-### Schema Versions
-
-| Version | Status | Description |
-|---------|--------|-------------|
-| `2025-12-11` | **Current** | Latest MCP schema with `title`, `icons[]`, `placeholder` |
-
-## Deployment
-
-The registry is deployed to Kubernetes on AWS EKS.
-
-| Environment | URL | Domain |
-|-------------|-----|--------|
-| Production | https://registry.nimbletools.ai | `registry.nimbletools.ai` |
-| Staging | https://registry.preview.nimbletools.ai | `registry.preview.nimbletools.ai` |
-
-### Infrastructure
-- **Hosting:** AWS EKS (Kubernetes)
-- **Region:** us-east-1
-- **Container Registry:** AWS ECR
-- **Helm Chart:** `web-app` v0.3.0 (OCI registry)
-- **DNS:** Route53 via ExternalDNS
-- **TLS:** AWS ACM certificates
-- **API:** Fastify + Node.js 22
-
-### Manual Deployment
-
-```bash
-# Deploy to staging (default)
-make deploy
-
-# Deploy to production
-make deploy ENV=production
-
-# Deploy specific version
-make deploy ENV=production TAG=abc1234
-
-# Check deployment status
-make status
-
-# View logs
-make logs
-```
-
-### Makefile Targets
-
-| Target | Description |
-|--------|-------------|
-| `make build` | Build Docker image for linux/amd64 |
-| `make push` | Push image to ECR |
-| `make helm` | Deploy with Helm |
-| `make deploy` | Full deploy: build, push, helm |
-| `make status` | Check pod and ingress status |
-| `make logs` | Tail pod logs |
-| `make dry-run` | Show what would be built |
-
-### CI/CD
-
-- **CI** (`ci.yml`): Runs on push/PR to main. Validates types, tests, and server definitions.
-- **QA E2E** (`qa-e2e.yml`): Runs on PRs that modify `servers/*/server.json` or `test.json`.
-
 ## Development
-
-### Prerequisites
-
-- Node.js 22+
-- Docker (for building server images)
-
-### Setup
 
 ```bash
 # Install dependencies
@@ -197,162 +102,40 @@ npm run dev
 # Validate all server definitions
 npm run validate-servers
 
-# Build for production
-npm run build
-
 # Run tests
 npm test
-
-# Run end-to-end tests
-npm run test:e2e                    # Test all servers
-npm run test:e2e -- --server=echo   # Test specific server
 ```
 
-### End-to-End Testing
-
-The registry includes a comprehensive E2E testing framework that validates servers from deployment through MCP connectivity:
+## Deployment
 
 ```bash
-# Test all servers in parallel (4 concurrent by default)
-npm run test:e2e
+# Deploy to production
+make deploy ENV=production
 
-# Test with higher parallelism
-npm run test:e2e -- --concurrency=8
+# Check deployment status
+make status
 
-# Test a specific server
-npm run test:e2e -- --server=echo
-
-# Test against a custom domain/port
-npm run test:e2e -- --domain=nimbletools.dev --port=80 --insecure
-```
-
-**CLI Options**:
-
-| Option | Description |
-|--------|-------------|
-| `--domain=<domain>` | Base domain (default: `nimbletools.dev`) |
-| `--port=<port>` | Custom port |
-| `--server=<name>` | Test only this server |
-| `--concurrency=<n>` | Run up to N tests in parallel (default: 4) |
-| `--sequential` | Run tests one at a time |
-| `--insecure` | Use HTTP instead of HTTPS |
-| `--skip-cleanup` | Don't delete workspace after test (for debugging) |
-
-**Test Fixtures**: Each server can define custom tests in `servers/{name}/test.json`:
-
-```json
-{
-  "environment": {
-    "API_KEY": "${API_KEY}"
-  },
-  "tests": [{
-    "name": "Test description",
-    "tool": "tool_name",
-    "arguments": { "param": "value" },
-    "expect": { "type": "text", "contains": "expected" }
-  }]
-}
-```
-
-**Environment Variables**: Create `.env.e2e` for secrets:
-
-```bash
-cp .env.e2e.example .env.e2e
-# Edit .env.e2e with your API keys
-```
-
-The test runner automatically:
-- Creates workspaces
-- Sets secrets from fixtures
-- Deploys servers
-- Validates MCP connectivity
-- Runs custom tool tests
-- Cleans up resources
-
-#### QA Environment Testing
-
-For testing in QA/CI environments that use bearer token authentication:
-
-**Setup**: Add your bearer token to `.env.e2e`:
-
-```bash
-# .env.e2e
-QA_BEARER_TOKEN=your_bearer_token_here
-```
-
-**Run tests**:
-
-```bash
-# Test all servers on default QA domain (qa.nimbletools.ai)
-npx tsx e2e/test-qa.ts
-
-# Test all servers on custom domain
-npx tsx e2e/test-qa.ts --domain=qa.nimbletools.dev
-
-# Test specific server
-npx tsx e2e/test-qa.ts --domain=qa.nimbletools.dev --server=echo
-
-# Test with HTTP and custom port for local development
-npx tsx e2e/test-qa.ts --domain=nt.dev --port=8080 --insecure
-
-# Override token via CLI (takes precedence over .env.e2e)
-npx tsx e2e/test-qa.ts --token=YOUR_BEARER_TOKEN --domain=qa.nimbletools.dev
-```
-
-The QA test script (`test-qa.ts`) provides the same functionality as the standard test script but:
-- Uses bearer token authentication (from `QA_BEARER_TOKEN` in `.env.e2e` or `--token` flag)
-- Takes a base domain and automatically constructs API (`api.<domain>`) and MCP (`mcp.<domain>`) URLs
-- Defaults to `qa.nimbletools.ai` domain
-- Supports `--insecure` flag to use HTTP instead of HTTPS for local testing
-- Supports `--port` flag to specify a custom port
-- Suitable for automated CI/CD testing environments
-
-### Docker
-
-```bash
-# Build Docker image
-docker build -t nimbletools-registry .
-
-# Run container
-docker run -p 8080:8080 nimbletools-registry
+# View logs
+make logs
 ```
 
 ## Releasing
 
-The registry uses semantic versioning. The version is stored in `package.json` and exposed via the root API endpoint.
-
-### Creating a Release
-
-Use `npm version` to bump the version and create a git tag in one step:
+Use `npm version` to bump the version and create a git tag:
 
 ```bash
-# Bump to specific version
-npm version 0.2.0
-
-# Or use semantic shortcuts
 npm version patch   # 1.0.0 -> 1.0.1 (bug fixes)
 npm version minor   # 1.0.0 -> 1.1.0 (new features)
 npm version major   # 1.0.0 -> 2.0.0 (breaking changes)
-```
 
-This automatically:
-1. Updates `version` in `package.json`
-2. Creates a git commit with the version change
-3. Creates a git tag (e.g., `v0.2.0`)
-
-### Push the Release
-
-```bash
 git push && git push --tags
 ```
 
-### Verify
-
-After deployment, the root endpoint will reflect the new version:
+Verify after deployment:
 
 ```bash
-curl https://registry.nimbletools.ai/
-# Returns: { "version": "v0.2.0", ... }
+curl https://registry.nimblebrain.ai/
+# Returns: { "version": "v0.2.1", ... }
 ```
 
 ## Contributing

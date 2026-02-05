@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$id": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "title": "NimbleTools MCP Server",
   "description": "Extended MCP server schema with NimbleTools runtime requirements. Extends the official MCP server schema (2025-12-11) with deployment, observability, and display metadata.",
   "unevaluatedProperties": false,

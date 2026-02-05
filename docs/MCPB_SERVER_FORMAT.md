@@ -12,7 +12,7 @@ All servers in the registry use MCPB (MCP Bundle) format with streamable-http tr
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/echo",
   "version": "1.0.0",
   "title": "Echo Server",
@@ -134,7 +134,7 @@ The `_meta.ai.nimbletools.mcp/v1.runtime` field determines which base image to u
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/echo",
   "version": "1.0.0",
   "title": "Echo Server",
@@ -215,7 +215,7 @@ The `_meta.ai.nimbletools.mcp/v1.runtime` field determines which base image to u
 
 ```json
 {
-  "$schema": "https://registry.nimbletools.ai/schemas/2025-12-11/nimbletools-server.schema.json",
+  "$schema": "https://registry.nimblebrain.ai/schemas/2025-12-11/nimbletools-server.schema.json",
   "name": "ai.nimbletools/github",
   "version": "1.0.0",
   "title": "GitHub",
