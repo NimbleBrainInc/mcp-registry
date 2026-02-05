@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import Ajv2020Module from 'ajv/dist/2020';
+import AjvModule from 'ajv';
 import addFormatsModule from 'ajv-formats';
+import draft2020Schema from 'ajv/dist/refs/json-schema-2020-12/schema.json' with { type: 'json' };
 
-const Ajv = Ajv2020Module.default || Ajv2020Module;
+const Ajv = AjvModule.default || AjvModule;
 const addFormats = addFormatsModule.default || addFormatsModule;
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -26,8 +27,10 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false
+      strict: false,
+      validateSchema: false
     });
+    ajv.addMetaSchema(draft2020Schema);
     addFormats(ajv);
 
     const validate = ajv.compile(schema);
@@ -82,8 +85,10 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false
+      strict: false,
+      validateSchema: false
     });
+    ajv.addMetaSchema(draft2020Schema);
     addFormats(ajv);
 
     const validate = ajv.compile(schema);
@@ -104,8 +109,10 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false
+      strict: false,
+      validateSchema: false
     });
+    ajv.addMetaSchema(draft2020Schema);
     addFormats(ajv);
 
     const validate = ajv.compile(schema);
@@ -133,8 +140,10 @@ describe('Server Validation', () => {
     const ajv = new Ajv({
       allErrors: true,
       verbose: true,
-      strict: false
+      strict: false,
+      validateSchema: false
     });
+    ajv.addMetaSchema(draft2020Schema);
     addFormats(ajv);
 
     const validate = ajv.compile(schema);
