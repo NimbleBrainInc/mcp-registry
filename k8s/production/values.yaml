@@ -1,0 +1,30 @@
+replicaCount: 2
+
+image:
+  repository: 533267450054.dkr.ecr.us-east-1.amazonaws.com/mcp-registry
+  # tag is set by Makefile via --set image.tag=
+
+containerPort: 8080
+
+service:
+  port: 8080
+
+ingress:
+  host: registry.nimbletools.ai
+  certificateArn: arn:aws:acm:us-east-1:533267450054:certificate/c266057e-f47e-40a3-921d-938a1837ea7c
+
+healthCheck:
+  path: /v0.1/health
+
+env:
+  NODE_ENV: "production"
+  LOG_LEVEL: "info"
+
+externalSecret:
+  enabled: false
+
+serviceMonitor:
+  enabled: true
+
+grafanaDashboard:
+  enabled: true

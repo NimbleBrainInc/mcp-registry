@@ -126,20 +126,57 @@ Our servers follow the [MCP server schema (2025-12-11)](https://static.modelcont
 
 ## Deployment
 
-This registry is automatically deployed to **https://registry.nimbletools.ai** via GitHub Actions on every push to the main branch.
+The registry is deployed to Kubernetes on AWS EKS.
+
+| Environment | URL | Domain |
+|-------------|-----|--------|
+| Production | https://registry.nimbletools.ai | `registry.nimbletools.ai` |
+| Staging | https://registry.preview.nimbletools.ai | `registry.preview.nimbletools.ai` |
 
 ### Infrastructure
-- **Hosting:** Fly.io
-- **Region:** Global (auto-scaled)
+- **Hosting:** AWS EKS (Kubernetes)
+- **Region:** us-east-1
+- **Container Registry:** AWS ECR
+- **Helm Chart:** `web-app` v0.3.0 (OCI registry)
+- **DNS:** Route53 via ExternalDNS
+- **TLS:** AWS ACM certificates
 - **API:** Fastify + Node.js 22
-- **CI/CD:** GitHub Actions
 
-### Deployment Process
-1. Push to `main` branch triggers CI/CD pipeline
-2. Tests and type checking run
-3. Docker image built and pushed to registry
-4. Automatic deployment to Fly.io
-5. Health checks verify deployment
+### Manual Deployment
+
+```bash
+# Deploy to staging (default)
+make deploy
+
+# Deploy to production
+make deploy ENV=production
+
+# Deploy specific version
+make deploy ENV=production TAG=abc1234
+
+# Check deployment status
+make status
+
+# View logs
+make logs
+```
+
+### Makefile Targets
+
+| Target | Description |
+|--------|-------------|
+| `make build` | Build Docker image for linux/amd64 |
+| `make push` | Push image to ECR |
+| `make helm` | Deploy with Helm |
+| `make deploy` | Full deploy: build, push, helm |
+| `make status` | Check pod and ingress status |
+| `make logs` | Tail pod logs |
+| `make dry-run` | Show what would be built |
+
+### CI/CD
+
+- **CI** (`ci.yml`): Runs on push/PR to main. Validates types, tests, and server definitions.
+- **QA E2E** (`qa-e2e.yml`): Runs on PRs that modify `servers/*/server.json` or `test.json`.
 
 ## Development
 

@@ -25,7 +25,7 @@ Get hash: `curl -sL <url> -o /tmp/file.mcpb && shasum -a 256 /tmp/file.mcpb`
    ```
    The Docker container runs as a non-root user and cannot read `600` files.
 4. Run `npm run validate-servers` to verify
-5. Deploy with `fly deploy`
+5. Deploy with `make deploy ENV=production`
 
 ## Resource Specs
 
@@ -53,3 +53,21 @@ gh release view <tag> --repo NimbleBrainInc/<repo> --json assets -q '.assets[].n
 npm run validate-servers   # Validate server.json files
 npm run typecheck          # Type checking
 ```
+
+## Deployment
+
+Deployed to AWS EKS via Helm. Uses shared `web-app` chart from ECR OCI registry.
+
+| Environment | Domain | Command |
+|-------------|--------|---------|
+| Staging | `registry.preview.nimbletools.ai` | `make deploy` |
+| Production | `registry.nimbletools.ai` | `make deploy ENV=production` |
+
+```bash
+make deploy ENV=production   # Full deploy: build, push, helm
+make status                  # Check pods and ingress
+make logs                    # Tail logs
+make dry-run                 # Show what would be built
+```
+
+DNS is managed automatically by ExternalDNS based on ingress host.
